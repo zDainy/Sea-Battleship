@@ -93,19 +93,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{3c7c9702-c3cb-4d4a-9587-5ef28e278217}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Core\Core.csproj">
-      <Project>{6ef054a3-b61c-4a8d-b4cc-fbaa7930ef7f}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Network\Network.csproj">
-      <Project>{f7c1559c-c78e-42ba-810a-08690ef7db3c}</Project>
-      <Name>Network</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
