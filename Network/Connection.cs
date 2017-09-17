@@ -13,7 +13,7 @@ namespace Network
             Server = new SocketServer();
             try
             {
-                IPAddress ip = ServerUtils.GetIP();                
+                IPAddress ip = ServerUtils.GetIP();
                 Server.Open(ip);
             }
             catch (Exception e)

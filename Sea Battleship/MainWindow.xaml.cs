@@ -12,11 +12,6 @@ namespace Sea_Battleship
         public MainWindow()
         {
             InitializeComponent();
-            // Временно
-            LogService.InitInitialize();
-            Connection c = new Connection();
-            c.CreateLobby();
-            LogService.Close();
         }
     }
 }
