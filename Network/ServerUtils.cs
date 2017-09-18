@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using Common;
+using System.Net.Sockets;
 
 namespace Network
 {
@@ -15,11 +16,11 @@ namespace Network
         /// <summary>
         /// Получает внешний IP-адрес
         /// </summary>
-        public static IPAddress GetIP()
+        public static IPAddress GetExternalIP()
         {
+            LogService.Trace("Получаем внешний IP-адрес с сайта...");
             try
             {
-                LogService.Trace("Пытаемся получить внешний IP-адрес с сайта");
                 WebClient wClient = new WebClient();
                 _stream = wClient.OpenRead("http://www.ip-ping.ru/");
                 _sr = new StreamReader(_stream);
@@ -32,18 +33,37 @@ namespace Network
                     if (str != "")
                     {
                         _ip = IPAddress.Parse(str);
-                        LogService.Trace($"IP-адрес получен: {str}");
+                        LogService.Trace($"Внешний IP-адрес получен: {str}");
                     }
                 }
             }
             catch (Exception e)
             {
-                LogService.Trace($"Ошибка получения IP-адреса: {e}");
+                LogService.Trace($"Ошибка получения внешнего IP-адреса: {e}");
             }
             finally
             {
                 _sr.Close();
                 _stream.Close();
+            }
+            return _ip;
+        }
+
+        /// <summary>
+        /// Получает внутрений IP-адрес
+        /// </summary>
+        public static IPAddress GetInternalIP()
+        {
+            LogService.Trace("Получаем внутрений IP-адрес...");
+            try
+            {
+                string host = Dns.GetHostName();
+                _ip = Array.Find(Dns.GetHostEntry(host).AddressList, a => a.AddressFamily == AddressFamily.InterNetwork);
+                LogService.Trace($"Внутрений IP-адрес получен: {_ip.ToString()}");
+            }
+            catch (Exception e)
+            {
+                LogService.Trace($"Ошибка получения внутреннего IP-адреса: {e}");
             }
             return _ip;
         }

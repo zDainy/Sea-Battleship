@@ -6,15 +6,15 @@ namespace Network
 {
     public class Connection
     {
-        public SocketServer Server { get; set; }
+        public Server Server { get; set; }
 
         public void CreateLobby()
         {
-            Server = new SocketServer();
             try
             {
-                IPAddress ip = ServerUtils.GetIP();
-                Server.Open(ip);
+                Server = new Server();
+                IPAddress ip = ServerUtils.GetInternalIP();
+                Server.Create(ip);
             }
             catch (Exception e)
             {
@@ -22,8 +22,8 @@ namespace Network
             }
             finally
             {
-                // Останавливаем TcpListener.
-                Server.Stop();
+                // Останавливаем сервер
+                Server.Close();
             }
         }
     }
