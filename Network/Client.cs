@@ -5,7 +5,7 @@ using Common;
 
 namespace Network
 {
-    class Client
+    public class Client
     {
         // Устанавливаем порт для сокета
         private int _port = 27015;
