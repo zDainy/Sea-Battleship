@@ -74,8 +74,6 @@ namespace Network
             LogService.Trace("Отключаем сервер...");
             try
             {
-                //Отключает передачу и прием на Socket.
-                _server.Shutdown(SocketShutdown.Both);
                 _server.Close();
                 LogService.Trace("Сервер отключен");
             }

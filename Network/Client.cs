@@ -9,7 +9,6 @@ namespace Network
     {
         // Устанавливаем порт для сокета
         private int _port = 27015;
-        private Socket _server;
         private Socket _client;
         private IPAddress _ipAddress;
         private IPEndPoint _ipEndPoint;
@@ -61,8 +60,6 @@ namespace Network
             LogService.Trace("Отключаемся от сервера...");
             try
             {
-                //Отключает передачу и прием на Socket.
-                _client.Shutdown(SocketShutdown.Both);
                 _client.Close();
                 LogService.Trace("Соединение завершено");
             }
