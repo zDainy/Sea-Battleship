@@ -43,25 +43,14 @@
     <Compile Include="Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerUtils.cs" />
-    <Compile Include="SocketClient.cs" />
-    <Compile Include="SocketServer.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="Server.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{3c7c9702-c3cb-4d4a-9587-5ef28e278217}</Project>
       <Name>Common</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="NATUPNPLib">
-      <Guid>{1C565858-F302-471E-B409-F180AA4ABEC6}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
