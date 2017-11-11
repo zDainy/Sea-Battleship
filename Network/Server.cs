@@ -27,10 +27,10 @@ namespace Network
                 _ipEndPoint = new IPEndPoint(_ipAddress, _port);
                 // Создаем сокет Tcp/Ip
                 _server = new Socket(_ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                // Связываем Socket с локальной конечной точки.
+                // Связываем Socket с локальной конечной точкой.
                 _server.Bind(_ipEndPoint);
 
-                LogService.Trace("Сервер создан");
+                LogService.Trace("Сервер создан: " + ServerUtils.GetExternalIP() + ":" + _port);
 
                 // Cлушаем входящие сокеты
                 _server.Listen(10);
@@ -42,6 +42,7 @@ namespace Network
                     // Ожидаем входящее соединение
                     _client = _server.Accept();
                     LogService.Trace("Клиент подключен");
+                    break;
                 }
             }
             catch (SocketException e)

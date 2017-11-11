@@ -18,7 +18,7 @@ namespace Network
         /// </summary>
         public static IPAddress GetExternalIP()
         {
-            LogService.Trace("Получаем внешний IP-адрес с сайта...");
+           // LogService.Trace("Получаем внешний IP-адрес с сайта...");
             try
             {
                 WebClient wClient = new WebClient();
@@ -33,7 +33,7 @@ namespace Network
                     if (str != "")
                     {
                         _ip = IPAddress.Parse(str);
-                        LogService.Trace($"Внешний IP-адрес получен: {str}");
+               //         LogService.Trace($"Внешний IP-адрес получен: {str}");
                     }
                 }
             }
