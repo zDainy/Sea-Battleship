@@ -8,6 +8,7 @@ namespace ConsoleApp3
 {
     class FileSystem
     {
+        private static Random random = new Random();
         private static T[] Lining<T>(T[,] input)
         {
             int n = input.GetLength(0);
@@ -41,8 +42,7 @@ namespace ConsoleApp3
             bool[] result = new bool[size];
             for (int i = 0; i < size; i++)
             {
-                Random r = new Random(DateTime.Now.Millisecond ^ DateTime.Now.Second);
-                result[i] = r.NextDouble() < 0.5;
+                result[i] = random.NextDouble() < 0.5;
             }
             return result;
         }
@@ -81,7 +81,7 @@ namespace ConsoleApp3
             return result;
         }
 
-        public static byte GetHash(byte[] input, int type)
+        private static byte GetHash(byte[] input, int type)
         {
             if (input.Length == 2)
             {
@@ -193,6 +193,32 @@ namespace ConsoleApp3
                 }
             }
             return 0x00;
+        }
+
+        private static byte BoolToByte(bool[] input)
+        {
+            if (input.Length != 8) throw new ArgumentException("Incorrect array size");
+            byte result = 0;
+            for (int i =0;i<8;i++)
+            {
+                if (input[7 - i]) result += (byte)Math.Pow(2, i);
+            }
+            return result;
+        }
+
+        private static bool[] ByteToBool(byte input)
+        {
+            bool[] result = new bool[8];
+            byte sum = 0;
+            for (int i =7;i>=0;i--)
+            {
+                if (Math.Pow(2, i) + sum <= input)
+                {
+                    result[7 - i] = true;
+                    sum += (byte)Math.Pow(2, i);
+                }
+            }
+            return result;
         }
     }
 }
