@@ -220,5 +220,17 @@ namespace ConsoleApp3
             }
             return result;
         }
+
+        private static string ByteToHex(byte input)
+        {
+            if (input < 16)
+            return '0' + input.ToString("X");
+            return input.ToString("X");
+        }
+
+        private static byte HexToByte(string input)
+        {
+            return Convert.ToByte(input, 16);
+        }
     }
 }
