@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace ConsoleApp3
     class FileSystem
     {
         private static Random random = new Random();
+
         private static T[] Lining<T>(T[,] input)
         {
             int n = input.GetLength(0);
@@ -199,7 +201,7 @@ namespace ConsoleApp3
         {
             if (input.Length != 8) throw new ArgumentException("Incorrect array size");
             byte result = 0;
-            for (int i =0;i<8;i++)
+            for (int i = 0; i < 8; i++)
             {
                 if (input[7 - i]) result += (byte)Math.Pow(2, i);
             }
@@ -210,7 +212,7 @@ namespace ConsoleApp3
         {
             bool[] result = new bool[8];
             byte sum = 0;
-            for (int i =7;i>=0;i--)
+            for (int i = 7; i >= 0; i--)
             {
                 if (Math.Pow(2, i) + sum <= input)
                 {
@@ -224,13 +226,122 @@ namespace ConsoleApp3
         private static string ByteToHex(byte input)
         {
             if (input < 16)
-            return '0' + input.ToString("X");
+                return '0' + input.ToString("X");
             return input.ToString("X");
         }
 
         private static byte HexToByte(string input)
         {
             return Convert.ToByte(input, 16);
+        }
+
+        private static byte Vigenere(byte input, byte key)
+        {
+            return (byte)(input + key);
+        }
+
+        private static byte UnVigenere(byte input, byte key)
+        {
+            return (byte)(input - key);
+        }
+
+        private static string saveArrangement(bool[,] input)
+        {
+            bool[] field = Lining<bool>(input);
+            bool[] scrambled = Scramble(field, 4);
+            byte[] bytes = new byte[13];
+            for (int i = 0; i < 13; i++)
+            {
+                bool[] tmp = new bool[8];
+                for (int j = 0; j < 8; j++)
+                {
+                    tmp[j] = scrambled[8 * i + j];
+                }
+                bytes[i] = BoolToByte(tmp);
+            }
+            byte[] result = new byte[36];
+            result[26] = GetHash(new byte[3] { bytes[0], bytes[3], bytes[6] }, 1);
+            result[27] = GetHash(new byte[3] { bytes[9], bytes[1], bytes[4] }, 2);
+            result[28] = GetHash(new byte[3] { bytes[8], bytes[11], bytes[2] }, 3);
+            result[29] = GetHash(new byte[3] { bytes[0], bytes[9], bytes[7] }, 4);
+            result[30] = GetHash(new byte[3] { bytes[3], bytes[1], bytes[11] }, 5);
+            result[31] = GetHash(new byte[3] { bytes[6], bytes[4], bytes[2] }, 6);
+            result[32] = GetHash(new byte[2] { bytes[5], bytes[7] }, 1);
+            result[33] = GetHash(new byte[2] { bytes[10], bytes[12] }, 2);
+            result[34] = GetHash(new byte[2] { bytes[5], bytes[10] }, 3);
+            result[35] = GetHash(new byte[2] { bytes[7], bytes[12] }, 4);
+            byte[] keys = new byte[13];
+            random.NextBytes(keys);
+            for (int i = 0; i < 13; i++)
+            {
+                result[2 * i] = Vigenere(bytes[i], keys[i]);
+                result[2 * i + 1] = keys[i];
+            }
+            string res = "";
+            for (int i = 0; i < result.Length; i++)
+            {
+                res += ByteToHex(result[i]);
+            }
+            return res;
+        }
+
+        public static void SaveArrangement(string name, bool[,]input)
+        {
+            string s = saveArrangement(input);
+            FileStream fileStream = new FileStream(name, FileMode.Create);
+            Encoding e = Encoding.ASCII;
+            fileStream.Write(e.GetBytes(s), 0, 72);
+            fileStream.Close();
+        }
+
+        private static bool[,] loadArrangement(string input)
+        {
+            if (input.Length != 72) throw new LoadingArrangementException();
+            byte[] result = new byte[36];
+            for (int i = 0; i < 36; i++)
+            {
+                result[i] = HexToByte(input[2 * i].ToString() + input[2 * i + 1]);
+            }
+            byte[] bytes = new byte[13];
+            for (int i = 0; i < 13; i++)
+            {
+                bytes[i] = UnVigenere(result[2 * i], result[2 * i + 1]);
+            }
+            if (result[26] != GetHash(new byte[3] { bytes[0], bytes[3], bytes[6] }, 1)) throw new LoadingArrangementException();
+            if (result[27] != GetHash(new byte[3] { bytes[9], bytes[1], bytes[4] }, 2)) throw new LoadingArrangementException();
+            if (result[28] != GetHash(new byte[3] { bytes[8], bytes[11], bytes[2] }, 3)) throw new LoadingArrangementException();
+            if (result[29] != GetHash(new byte[3] { bytes[0], bytes[9], bytes[7] }, 4)) throw new LoadingArrangementException();
+            if (result[30] != GetHash(new byte[3] { bytes[3], bytes[1], bytes[11] }, 5)) throw new LoadingArrangementException();
+            if (result[31] != GetHash(new byte[3] { bytes[6], bytes[4], bytes[2] }, 6)) throw new LoadingArrangementException();
+            if (result[32] != GetHash(new byte[2] { bytes[5], bytes[7] }, 1)) throw new LoadingArrangementException();
+            if (result[33] != GetHash(new byte[2] { bytes[10], bytes[12] }, 2)) throw new LoadingArrangementException();
+            if (result[34] != GetHash(new byte[2] { bytes[5], bytes[10] }, 3)) throw new LoadingArrangementException();
+            if (result[35] != GetHash(new byte[2] { bytes[7], bytes[12] }, 4)) throw new LoadingArrangementException();
+            bool[] scrambled = new bool[104];
+            for (int i = 0; i < 13; i++)
+            {
+                bool[] q;
+                q = ByteToBool(bytes[i]);
+                for (int j = 0; j < 8; j++)
+                {
+                    scrambled[8 * i + j] = q[j];
+                }
+            }
+            bool[] field = Unscramble(scrambled, 4);
+            bool[,] fin = Bending<bool>(field, 10, 10);
+            return fin;
+        }
+
+        public static bool[,] LoadArrangement(string name)
+        {
+            if (!File.Exists(name)) throw new LoadingArrangementException();
+            FileStream fileStream = new FileStream(name,FileMode.Open);
+            byte[] bytes = new byte[72];
+            fileStream.Read(bytes, 0, 72);
+            Encoding e = Encoding.ASCII;
+            string s = e.GetString(bytes);
+            fileStream.Close();
+            return loadArrangement(s);
         }
     }
 }
