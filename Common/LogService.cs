@@ -13,7 +13,7 @@ namespace Common
         /// </summary>
         public static void Debug(object obj)
         {
-            _sr.WriteLine($"[{DateTime.Now}]: " + $"[{obj.GetType()}] " + obj.ToString());
+            _sr.WriteLine($"[{DateTime.Now}]: [{obj.GetType()}] {obj}");
             _sr.Flush();
         }
 
@@ -22,7 +22,7 @@ namespace Common
         /// </summary>
         public static void Trace(string str)
         {
-            _sr.WriteLine($"[{DateTime.Now}]: " + str);
+            _sr.WriteLine($"[{DateTime.Now}]: {str}");
             _sr.Flush();
         }
 
