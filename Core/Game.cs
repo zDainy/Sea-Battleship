@@ -6,25 +6,22 @@ namespace Core
     {
         public ShipArrangement ServerShipArrangement { get; set; }
         public ShipArrangement ClientShipArrangement { get; set; }
-        public GameStatus GameStatus { get; set; }
-        private bool _isServerTurn;
-        private readonly bool _isOnline;
+        public GameConfig GameConfig { get; set; }
+        private PlayerRole _turnOwner;
 
         /// <summary>
         /// Инициализирует объект игра
         /// </summary>
         /// <param name="serverShipArr">Расстановка кораблей сервера</param>
         /// <param name="clientShipArr">Расстановка кораблей клиента</param>
-        /// <param name="isOnline">Флаг, показывающий находится ли игра в режиме "по сети"</param>
-        /// <param name="isServerTurn">Флаг, показывающий является ли текущий ход - ходом сервера</param>
-        /// <param name="gStatus">Состояние игры</param>
-        public Game(ShipArrangement serverShipArr, ShipArrangement clientShipArr, bool isOnline = false, bool isServerTurn = true, GameStatus gStatus = GameStatus.Game)
+        /// <param name="gameConfig">Конфигурация игры</param>
+        /// <param name="turnOwner"></param>
+        public Game(ShipArrangement serverShipArr, ShipArrangement clientShipArr, GameConfig gameConfig, PlayerRole turnOwner = PlayerRole.Server)
         {
             ServerShipArrangement = serverShipArr;
             ClientShipArrangement = clientShipArr;
-            GameStatus = gStatus;
-            _isServerTurn = isServerTurn;
-            _isOnline = isOnline;
+            GameConfig = gameConfig;
+            _turnOwner = turnOwner;
         }
 
         /// <summary>
@@ -33,17 +30,7 @@ namespace Core
         public void ChangeTurn()
         {
             // Первых ход всегда за сервером, за исключением случаев когда игра была сохранена
-            _isServerTurn = !_isServerTurn;
+            _turnOwner = _turnOwner == PlayerRole.Server? PlayerRole.Client : PlayerRole.Server;
         }
-    }
-
-    /// <summary>
-    /// Состояния игры
-    /// </summary>
-    public enum GameStatus
-    {
-        Game,
-        Pause,
-        End
     }
 }

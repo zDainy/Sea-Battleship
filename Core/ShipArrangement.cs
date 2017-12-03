@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Common;
 
 namespace Core
 {
@@ -9,19 +10,19 @@ namespace Core
         public ShipArrangement()
         {
             _arragment = new CellStatе[10, 10];
-            ClearField();
+            ClearFieldbyWater();
         }
 
         /// <summary>
         /// Заполняет игровое поле водой
         /// </summary>
-        public void ClearField()
+        public void ClearFieldbyWater()
         {
             for (int i = 0; i < _arragment.Length; i++)
             {
                 for (int j = 0; j < _arragment.Length; j++)
                 {
-                    _arragment[i, j] = CellStatе.Water;
+                    SetCellState(CellStatе.Water, i, j);
                 }
             }
         }
@@ -81,17 +82,5 @@ namespace Core
             }
         }
 
-    }
-
-    /// <summary>
-    /// Состояния отдельной ячейки на поле
-    /// </summary>
-    public enum CellStatе
-    {
-        Water,
-        WoundedWater,
-        Ship,
-        WoundedShip,
-        DestroyedShip
     }
 }
