@@ -18,9 +18,9 @@ namespace Core
         /// </summary>
         public void ClearFieldbyWater()
         {
-            for (int i = 0; i < _arragment.Length; i++)
+            for (int i = 0; i < _arragment.GetLength(0); i++)
             {
-                for (int j = 0; j < _arragment.Length; j++)
+                for (int j = 0; j < _arragment.GetLength(1); j++)
                 {
                     SetCellState(CellStatе.Water, i, j);
                 }

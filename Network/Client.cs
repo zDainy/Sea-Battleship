@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using Common;
 
 namespace Network
@@ -9,30 +10,25 @@ namespace Network
     {
         // Устанавливаем порт для сокета
         private int _port = 27015;
-        private Socket _client;
-        private IPAddress _ipAddress;
-        private IPEndPoint _ipEndPoint;
+        private TcpClient _client;
+        private NetworkStream _networkStream;
 
         /// <summary>
         /// Подлкючает клиента к серверу
+        /// <param name="ip">Внешний IP</param>
         /// </summary>
         public void Connect(IPAddress ip)
         {
             LogService.Trace("Подключаемся к серверу...");
-            _ipAddress = ip;
             try
             {
-                _ipEndPoint = new IPEndPoint(_ipAddress, _port);
-                // Создаем сокет Tcp/Ip
-                _client = new Socket(_ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                // Соединяем сокет с удаленной точкой
-                _client.Connect(_ipEndPoint);
-
+                _client = new TcpClient(ip.ToString(), _port);
+                _networkStream = _client.GetStream();
                 LogService.Trace("Соединение установлено");
             }
             catch (SocketException e)
             {
-                LogService.Trace($"Не удалось создать сервер: {e}");
+                LogService.Trace($"Не удалось подключиться к серверу: {e}");
             }
         }
 
@@ -41,7 +37,8 @@ namespace Network
         /// </summary>
         public void SendRequest()
         {
-
+            byte[] sendBytes = Encoding.UTF8.GetBytes("Соединение установлено");
+            _networkStream.Write(sendBytes, 0, sendBytes.Length);
         }
 
         /// <summary>

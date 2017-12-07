@@ -27,9 +27,9 @@ namespace Common
         }
 
         /// <summary>
-        /// Инициализирует сервис записи в лог
+        /// Запускает сервис записи в лог
         /// </summary>
-        public static void InitInitialize()
+        public static void Start()
         {
             int count = File.Exists("Logs.log") ? File.ReadAllLines("Logs.log").Length : 0;
             // Если записей в логе слишком много, скопируем его в OldLogs, и очистим текущие логи

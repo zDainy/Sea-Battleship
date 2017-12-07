@@ -16,14 +16,14 @@ namespace Network
         /// <summary>
         /// Получает внешний IP-адрес
         /// </summary>
-        public static IPAddress GetExternalIP()
+        public static IPAddress GetExternalIp()
         {
-           // LogService.Trace("Получаем внешний IP-адрес с сайта...");
+            LogService.Trace("Получаем внешний IP-адрес с сайта...");
             try
             {
                 WebClient wClient = new WebClient();
                 _stream = wClient.OpenRead("http://www.ip-ping.ru/");
-                _sr = new StreamReader(_stream);
+                _sr = new StreamReader(_stream ?? throw new InvalidOperationException());
                 string newLine;
                 Regex regex = new Regex("<div class=\"hc2\">(.*)</div>");
                 while ((newLine = _sr.ReadLine()) != null)
@@ -33,7 +33,7 @@ namespace Network
                     if (str != "")
                     {
                         _ip = IPAddress.Parse(str);
-               //         LogService.Trace($"Внешний IP-адрес получен: {str}");
+                        LogService.Trace($"Внешний IP-адрес получен: {str}");
                     }
                 }
             }
@@ -44,7 +44,7 @@ namespace Network
             finally
             {
                 _sr.Close();
-                _stream.Close();
+                _stream?.Close();
             }
             return _ip;
         }
@@ -52,14 +52,14 @@ namespace Network
         /// <summary>
         /// Получает внутрений IP-адрес
         /// </summary>
-        public static IPAddress GetInternalIP()
+        public static IPAddress GetInternalIp()
         {
             LogService.Trace("Получаем внутрений IP-адрес...");
             try
             {
                 string host = Dns.GetHostName();
                 _ip = Array.Find(Dns.GetHostEntry(host).AddressList, a => a.AddressFamily == AddressFamily.InterNetwork);
-                LogService.Trace($"Внутрений IP-адрес получен: {_ip.ToString()}");
+                LogService.Trace($"Внутрений IP-адрес получен: {_ip}");
             }
             catch (Exception e)
             {
