@@ -15,12 +15,6 @@ namespace Sea_Battleship
             LogService.Trace("==============================================");
             LogService.Trace("Запуск приложения");
             InitializeComponent();
-            Server serv = new Server();
-            serv.Create(ServerUtils.GetInternalIp());
-          //  while (true)
-          //  {
-                serv.GetRequest();
-            //}
             LogService.Trace("==============================================");
             LogService.Close();
         }
