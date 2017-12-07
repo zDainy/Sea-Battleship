@@ -11,12 +11,15 @@ namespace Sea_Battleship
     {
         public MainWindow()
         {
-            LogService.Start();
-            LogService.Trace("==============================================");
-            LogService.Trace("Запуск приложения");
             InitializeComponent();
-            LogService.Trace("==============================================");
-            LogService.Close();
+            //LogService.InitInitialize();
+            //LogService.Trace("==============================================");
+            //LogService.Trace("Запуск приложения");
+            //InitializeComponent();
+            //Connection c = new Connection();
+            //c.CreateLobby();
+            //LogService.Trace("==============================================");
+            //LogService.Close();
         }
     }
 }
