@@ -37,8 +37,7 @@ namespace Network
         /// </summary>
         public void SendRequest()
         {
-            byte[] sendBytes = Encoding.UTF8.GetBytes("Соединение установлено");
-            _networkStream.Write(sendBytes, 0, sendBytes.Length);
+
         }
 
         /// <summary>

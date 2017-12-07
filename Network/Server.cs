@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Common;
+using Newtonsoft.Json;
 
 namespace Network
 {
@@ -30,7 +31,7 @@ namespace Network
 
                 // Cлушаем входящие запросы
                 _server.Start();
-                
+
                 LogService.Trace("Ожидание подключений...");
 
                 while (true)
@@ -49,15 +50,38 @@ namespace Network
         }
 
         /// <summary>
-        /// Принимает запрос
+        /// Принимает запрос 
         /// </summary>
-        public void GetRequest()
+        public IOperation GetRequest()
         {
-            byte[] bytes = new byte[_client.ReceiveBufferSize];
-            int bytesRead = _networkStream.Read(bytes, 0, _client.ReceiveBufferSize);
+            LogService.Trace("Новый запрос");
+            IOperation resultOper = null;
+            try
+            {
+                // Принимаем массив байт от клиента
+                byte[] bytes = new byte[_client.ReceiveBufferSize];
+                _networkStream.Read(bytes, 0, _client.ReceiveBufferSize);
 
-            // Строка, содержащая ответ от сервера
-            string returnData = Encoding.UTF8.GetString(bytes);
+                // Входные данные в формате Json
+                string inData = Encoding.UTF8.GetString(bytes);
+
+                // Общий объект операций
+                JsonData jsonData = JsonConvert.DeserializeObject<JsonData>(inData);
+                LogService.Trace($"Получен JSON: {jsonData}");
+
+                switch (jsonData.Header)
+                {
+                    case OpearationTypes.Shot:
+                        resultOper = JsonConvert.DeserializeObject<Shot>(jsonData.Body);
+                        LogService.Trace($"Запрос {jsonData.Header} принят");
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                LogService.Trace($"Не удалось принять запрос: {e}");
+            }
+            return resultOper;
         }
 
         /// <summary>
