@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net;
-using Common;
+using Core;
 
 namespace Network
 {

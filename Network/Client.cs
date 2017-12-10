@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using Common;
+using Core;
 using Newtonsoft.Json;
 
 namespace Network

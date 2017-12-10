@@ -2,7 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
-using Common;
+using Core;
 using System.Net.Sockets;
 using System.Text;
 using Newtonsoft.Json;
@@ -138,10 +138,10 @@ namespace Network
 
                 // Входные данные в формате Json
                 string inData = Encoding.UTF8.GetString(bytes);
+                LogService.Trace($"Получен JSON: {inData.Trim("\0".ToCharArray())}");
 
                 // Общий объект операций
                 JsonData jsonData = JsonConvert.DeserializeObject<JsonData>(inData);
-                LogService.Trace($"Получен JSON: {jsonData}");
                 operType = jsonData.Header;
                 var resultObj = GetObjectByJson(operType, jsonData.Body);
                 operType = resultObj.Item1;
@@ -149,7 +149,7 @@ namespace Network
             }
             catch (Exception e)
             {
-               throw new Exception(e.Message);
+                throw new Exception(e.Message);
             }
             return Tuple.Create(operType, resultOper);
         }
