@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Common;
 
-namespace Common
+namespace Core
 {
     /// <summary>
     /// Подсистема работы с файлами игры.

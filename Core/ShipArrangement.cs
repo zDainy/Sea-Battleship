@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using Common;
+﻿using System.Runtime.Serialization;
+using System.Windows;
 
 namespace Core
 {
@@ -25,6 +25,15 @@ namespace Core
                     SetCellState(CellStatе.Water, i, j);
                 }
             }
+        }
+
+        /// <summary>
+        /// Возвращает расстановку кораблей
+        /// </summary>
+        /// <returns>Расстановка</returns>
+        public CellStatе[,] GetArrangement()
+        {
+            return _arragment;
         }
 
         /// <summary>

@@ -4,6 +4,8 @@ using System.Net;
 using System.Text.RegularExpressions;
 using Common;
 using System.Net.Sockets;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace Network
 {
@@ -39,7 +41,7 @@ namespace Network
             }
             catch (Exception e)
             {
-                LogService.Trace($"Ошибка получения внешнего IP-адреса: {e}");
+                LogService.Trace($"Ошибка получения внешнего IP-адреса: {e.Message}");
             }
             finally
             {
@@ -63,9 +65,93 @@ namespace Network
             }
             catch (Exception e)
             {
-                LogService.Trace($"Ошибка получения внутреннего IP-адреса: {e}");
+                LogService.Trace($"Ошибка получения внутреннего IP-адреса: {e.Message}");
             }
             return _ip;
+        }
+
+        /// <summary>
+        /// Преобразовывает Json в объект
+        /// </summary>
+        /// <param name="operType">Тип операции</param>
+        /// <param name="jsonData">Json операции</param>
+        /// <returns></returns>
+        public static Tuple<OpearationTypes, IOperation> GetObjectByJson(OpearationTypes operType, string jsonData)
+        {
+            IOperation result = null;
+            OpearationTypes resOperType = operType;
+            try
+            {
+                switch (operType)
+                {
+                    case OpearationTypes.Shot:
+                        result = JsonConvert.DeserializeObject<Shot>(jsonData);
+                        break;
+                    case OpearationTypes.ShotResult:
+                        result = JsonConvert.DeserializeObject<ShotResult>(jsonData);
+                        break;
+                    case OpearationTypes.GameStatus:
+                        result = JsonConvert.DeserializeObject<GameStatus>(jsonData);
+                        break;
+                    case OpearationTypes.StartConfig:
+                        result = JsonConvert.DeserializeObject<StartConfig>(jsonData);
+                        break;
+                    case OpearationTypes.ShipArrangement:
+                        result = JsonConvert.DeserializeObject<ShipArrangement>(jsonData);
+                        break;
+                    case OpearationTypes.Error:
+                        break;
+                    case OpearationTypes.SwitchTurn:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                LogService.Trace($"Запрос {operType} принят");
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                resOperType = OpearationTypes.Error;
+                LogService.Trace($"Указана неверная операция: {e.Message}");
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return Tuple.Create(resOperType, result);
+        }
+
+        /// <summary>
+        /// Получает тип и объект операции
+        /// </summary>
+        /// <param name="client">Сокет клиента</param>
+        /// <param name="networkStream">Поток записи</param>
+        /// <returns>Возвращает кортеж: тип операции и объект результата</returns>
+        public static Tuple<OpearationTypes, IOperation> ReadJsonData(TcpClient client, NetworkStream networkStream)
+        {
+            OpearationTypes operType;
+            IOperation resultOper;
+            try
+            {
+                // Принимаем массив байт от клиента
+                byte[] bytes = new byte[client.ReceiveBufferSize];
+                networkStream.Read(bytes, 0, client.ReceiveBufferSize);
+
+                // Входные данные в формате Json
+                string inData = Encoding.UTF8.GetString(bytes);
+
+                // Общий объект операций
+                JsonData jsonData = JsonConvert.DeserializeObject<JsonData>(inData);
+                LogService.Trace($"Получен JSON: {jsonData}");
+                operType = jsonData.Header;
+                var resultObj = GetObjectByJson(operType, jsonData.Body);
+                operType = resultObj.Item1;
+                resultOper = resultObj.Item2;
+            }
+            catch (Exception e)
+            {
+               throw new Exception(e.Message);
+            }
+            return Tuple.Create(operType, resultOper);
         }
     }
 }

@@ -45,51 +45,59 @@ namespace Network
             }
             catch (SocketException e)
             {
-                LogService.Trace($"Не удалось создать сервер: {e}");
+                LogService.Trace($"Не удалось создать сервер: {e.Message}");
             }
         }
 
         /// <summary>
         /// Принимает запрос 
         /// </summary>
-        public IOperation GetRequest()
+        /// <returns>Возвращает кортеж: тип операции и объект результата</returns>
+        public Tuple<OpearationTypes, IOperation> GetRequest()
         {
-            LogService.Trace("Новый запрос");
+            LogService.Trace("Принимаем запрос");
             IOperation resultOper = null;
+            OpearationTypes operType;
             try
             {
-                // Принимаем массив байт от клиента
-                byte[] bytes = new byte[_client.ReceiveBufferSize];
-                _networkStream.Read(bytes, 0, _client.ReceiveBufferSize);
-
-                // Входные данные в формате Json
-                string inData = Encoding.UTF8.GetString(bytes);
-
-                // Общий объект операций
-                JsonData jsonData = JsonConvert.DeserializeObject<JsonData>(inData);
-                LogService.Trace($"Получен JSON: {jsonData}");
-
-                switch (jsonData.Header)
-                {
-                    case OpearationTypes.Shot:
-                        resultOper = JsonConvert.DeserializeObject<Shot>(jsonData.Body);
-                        LogService.Trace($"Запрос {jsonData.Header} принят");
-                        break;
-                }
+                var resultObj = ServerUtils.ReadJsonData(_client, _networkStream);
+                operType = resultObj.Item1;
+                resultOper = resultObj.Item2;
             }
             catch (Exception e)
             {
-                LogService.Trace($"Не удалось принять запрос: {e}");
+                operType = OpearationTypes.Error;
+                LogService.Trace($"Не удалось принять запрос: {e.Message}");
             }
-            return resultOper;
+            return Tuple.Create(operType, resultOper);
         }
 
         /// <summary>
         /// Отправляет ответ на запрос
         /// </summary>
-        public void SendResponse()
+        /// <param name="operType">Тип операции</param>
+        /// <param name="oper">Объект операции</param>
+        public void SendResponse(OpearationTypes operType, IOperation oper)
         {
+            LogService.Trace("Отправляем ответ");
+            try
+            {
+                // Сериализуем тело ответа в строку Json
+                string bodyJson = oper != null ? JsonConvert.SerializeObject(oper) : "";
+                JsonData jsonData = new JsonData(operType, bodyJson);
 
+                // Сериализуем объект ответа в строку Json
+                string outData = JsonConvert.SerializeObject(jsonData);
+
+                // Отправляем данные клиенту
+                byte[] sendBytes = Encoding.UTF8.GetBytes(outData);
+                _networkStream.Write(sendBytes, 0, sendBytes.Length);
+                LogService.Trace($"Ответ отправлен: {outData}");
+            }
+            catch (Exception e)
+            {
+                LogService.Trace($"Не удалось отправить ответ: {e.Message}");
+            }
         }
 
         /// <summary>
@@ -105,7 +113,7 @@ namespace Network
             }
             catch (SocketException e)
             {
-                LogService.Trace($"Не удалось закрыть сокет сервера: {e}");
+                LogService.Trace($"Не удалось закрыть сокет сервера: {e.Message}");
             }
         }
     }
