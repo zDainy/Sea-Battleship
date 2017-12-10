@@ -10,7 +10,10 @@ namespace Sea_Battleship
 {
     static class WindowConfig
     {
-        private static bool _audio;
+        public enum State {None, Ship1, Ship2, Ship3, Ship4 };
+        public static State ShipState;
+       // public static bool isShipUp = false;
+        private static bool _audio = true;
         public static bool Audio { get => _audio; set => _audio = value; }
         public static void AudioChanged(Image image)
         {

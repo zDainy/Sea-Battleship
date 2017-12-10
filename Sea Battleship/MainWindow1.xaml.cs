@@ -32,14 +32,16 @@ namespace Sea_Battleship
 
         private void Loading_Click(object sender, RoutedEventArgs e)
         {
-            LoadingWindow lw = new LoadingWindow(); lw.Show();
-            this.Hide();
+            LoadingWindow lw = new LoadingWindow();
+            lw.Show();
+            Hide();
         }
-        ///////
 
-        private void MD(object sender, MouseButtonEventArgs e)
+        private void NewGame_MouseLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            PlayField.isis = true;
+            PlacingWindow lw = new PlacingWindow();
+            lw.Show();
+            Hide();
         }
     }
 }

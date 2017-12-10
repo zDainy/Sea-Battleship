@@ -20,20 +20,26 @@ namespace Sea_Battleship
     /// </summary>
     public partial class PlayField : UserControl
     {
+        Ships ships;
+        bool[,] _possibilityToPlace;
 
         public PlayField()
         {
             InitializeComponent();
+            PossibilityToPlace = new bool[10, 10];
+            for (int i = 0; i < 10; i++)
+                for (int j = 0; j < 10; j++)
+                    PossibilityToPlace[i, j] = true;
+            Ships = new Ships(this, PossibilityToPlace);
             for(int y = 0; y<10; y++)
                 for(int x = 0; x<10; x++)
                 {
                     Image img = new Image
                     {
-                        Stretch = Stretch.Fill,
-                        Source = new BitmapImage(new Uri("/Resources/no-audio.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
-                        LayoutTransform = new RotateTransform(90),
+                        Stretch = Stretch.Fill,                       
+                        Source = new BitmapImage(new Uri("/Resources/Water.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
+                        Opacity = 0
                     };
-                    img.MouseLeftButtonUp += Up;
                     img.MouseLeftButtonDown += FieldCell_Click;
                     FieldGrid.Children.Add(img);
                     Grid.SetColumn(img, x);
@@ -41,36 +47,59 @@ namespace Sea_Battleship
                 }
         }
 
-        public void SetCell(int x, int y)
+        public bool[,] PossibilityToPlace { get => _possibilityToPlace; set => _possibilityToPlace = value; }
+        public Ships Ships { get => ships; set => ships = value; }
+
+        public static void DeleteCell(int x, int y, PlayField playField)
         {
-            Image img = new Image
+            Image image = new Image
             {
                 Stretch = Stretch.Fill,
-                Source = new BitmapImage(new Uri("/Resources/no-audio.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
-                LayoutTransform = new RotateTransform(90)             
+                Source = new BitmapImage(new Uri("/Resources/Water.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
+                Opacity = 0
             };
-            FieldGrid.Children.Insert(10*y+x,img);
-            Grid.SetRow(img, y);
-            Grid.SetColumn(img, x);
+            image.MouseLeftButtonDown += playField.FieldCell_Click;
+            playField.FieldGrid.Children.RemoveAt(10 * y + x);
+            playField.FieldGrid.Children.Insert(10 * y + x, image);
+            Grid.SetRow(image, y);
+            Grid.SetColumn(image, x);
+        }
+
+        public static void SetCell(int x, int y, Grid grid, Image image)
+        {
+            grid.Children.RemoveAt(10 * y + x);
+            grid.Children.Insert(10*y+x,image);
+            Grid.SetRow(image, y);
+            Grid.SetColumn(image, x);
         }
 
         private void FieldCell_Click(object sender, MouseButtonEventArgs e)
         {
-            Image im = (Image)sender;
-            int i = Grid.GetColumn(im);
-            int j = Grid.GetRow(im);
-            FieldGrid.Children.RemoveAt(10 * j + i);
-            SetCell(i, j);
-        }
-        public static bool isis = false;
-        private void Up(object sender, MouseButtonEventArgs e)
-        {
-            if(isis)
+            if (WindowConfig.ShipState == WindowConfig.State.Ship4)
             {
-                Image im = (Image)sender;
-                im.Source = new BitmapImage(new Uri("/Resources/audio.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache };
-                im.Opacity = 100;
+                WindowConfig.ShipState = WindowConfig.State.None;
+                foreach (Ship4 ship in Ships.ShipList4)
+                    if (!ship.IsPlaced)
+                    {
+                        ship.Place((Image)sender, this);
+                        break;
+                    }
             }
+            else if (WindowConfig.ShipState == WindowConfig.State.Ship3)
+            {
+                WindowConfig.ShipState = WindowConfig.State.None;
+                foreach (Ship3 ship in Ships.ShipList3)
+                    if (!ship.IsPlaced)
+                    {
+                        ship.Place((Image)sender, this);
+                        break;
+                    }
+            }
+        }
+
+        private void _SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            FieldGrid.Width = FieldGrid.ActualHeight;
         }
     }
 }
