@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace Common
+namespace Core
 {
     public static class LogService
     {
@@ -27,13 +27,13 @@ namespace Common
         }
 
         /// <summary>
-        /// Инициализирует сервис записи в лог
+        /// Запускает сервис записи в лог
         /// </summary>
-        public static void InitInitialize()
+        public static void Start()
         {
             int count = File.Exists("Logs.log") ? File.ReadAllLines("Logs.log").Length : 0;
             // Если записей в логе слишком много, скопируем его в OldLogs, и очистим текущие логи
-            if (count > 20000)
+            if (count > 100)
             {
                 _sr = new StreamWriter("OldLogs.log", false, Encoding.Default);
                 string[] strs = File.ReadAllLines("Logs.log", Encoding.Default);

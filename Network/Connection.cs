@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net;
-using Common;
+using Core;
 
 namespace Network
 {
@@ -13,7 +13,7 @@ namespace Network
             try
             {
                 Server = new Server();
-                IPAddress ip = ServerUtils.GetInternalIP();
+                IPAddress ip = ServerUtils.GetInternalIp();
                 Server.Create(ip);
             }
             catch (Exception e)
@@ -23,7 +23,7 @@ namespace Network
             finally
             {
                 // Останавливаем сервер
-                Server.Close();
+                Server.Stop();
             }
         }
     }
