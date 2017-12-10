@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Sea_Battleship"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Name="FieldGrid">
+    <Grid Name="FieldGrid" SizeChanged="_SizeChanged" ShowGridLines="True" RenderTransformOrigin="0,0" Width="Auto">
         <Grid.Background>
             <ImageBrush ImageSource="Resources/Water.jpg"/>
         </Grid.Background>

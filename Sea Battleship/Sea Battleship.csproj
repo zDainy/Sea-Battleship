@@ -58,12 +58,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AShip.cs" />
     <Compile Include="PlacingWindow.xaml.cs">
       <DependentUpon>PlacingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PlayField.xaml.cs">
       <DependentUpon>PlayField.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Ship3.cs" />
+    <Compile Include="Ship4.cs" />
+    <Compile Include="Ships.cs" />
     <Compile Include="WindowConfig.cs" />
     <Page Include="LoadingWindow.xaml">
       <SubType>Designer</SubType>
@@ -149,6 +153,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Water.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\1.png" />
+    <Resource Include="Resources\2.png" />
+    <Resource Include="Resources\3.png" />
+    <Resource Include="Resources\4.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
