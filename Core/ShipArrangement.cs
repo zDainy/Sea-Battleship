@@ -141,6 +141,415 @@ namespace Core
             }
             return true;
         }
+
+        /// <summary>
+        /// Генерация случайной расстановки
+        /// </summary>        
+        public static ShipArrangement Random()
+        {
+            System.Random random = new System.Random();
+            int n = 15; // количество неудачных попыток до перегенерации поля
+            int k = 0;
+            ShipArrangement arrangement = new ShipArrangement();
+            bool r = false; // флаг необходимости перегенерации поля
+            do
+            {
+                arrangement.ClearFieldbyWater();
+                if (random.NextDouble() < 0.5)  // установка четырехпалубного корабля
+                {
+                    int x = 0;
+                    int y = 0;
+                    do
+                    {
+                        x = random.Next(10);
+                        y = random.Next(7);
+                    }
+                    while (!arrangement.SetShip(x, y, Direction.Right, 4));
+                }
+                else
+                {
+                    int x = 0;
+                    int y = 0;
+                    do
+                    {
+                        x = random.Next(7);
+                        y = random.Next(10);
+                    }
+                    while (arrangement.SetShip(x, y, Direction.Down, 4));
+                }
+
+                for (int i = 0; i < 2; i++) // установка трехпалубных кораблей
+                {
+                    if (!r)
+                    {
+                        if (random.NextDouble() < 0.5)
+                        {
+                            int x = 0;
+                            int y = 0;
+                            do
+                            {
+                                x = random.Next(10);
+                                y = random.Next(7);
+                                r = k++ == n;
+                            }
+                            while (!arrangement.SetShip(x, y, Direction.Right, 3) && !r);
+                        }
+                        else
+                        {
+                            int x = 0;
+                            int y = 0;
+                            do
+                            {
+                                x = random.Next(7);
+                                y = random.Next(10);
+                                r = k++ == n;
+                            }
+                            while (!arrangement.SetShip(x, y, Direction.Down, 3) && !r);
+                        }
+                    }
+                }
+                k = r ? n : 0;
+
+                for (int i = 0; i < 3; i++) // установка двухпалубных кораблей
+                {
+                    if (!r)
+                    {
+                        if (random.NextDouble() < 0.5)
+                        {
+                            int x = 0;
+                            int y = 0;
+                            do
+                            {
+                                x = random.Next(10);
+                                y = random.Next(7);
+                                r = k++ == n;
+                            }
+                            while (!arrangement.SetShip(x, y, Direction.Right, 2) && !r);
+                        }
+                        else
+                        {
+                            int x = 0;
+                            int y = 0;
+                            do
+                            {
+                                x = random.Next(7);
+                                y = random.Next(10);
+                                r = k++ == n;
+                            }
+                            while (!arrangement.SetShip(x, y, Direction.Down, 2) && !r);
+                        }
+                    }
+                }
+                k = r ? n : 0;
+
+                for (int i = 0; i < 4; i++)                    // установка однопалубных кораблей
+                {
+                    if (!r)
+                    {
+                        k = 0;
+                        int x = 0;
+                        int y = 0;
+                        do
+                        {
+                            x = random.Next(7);
+                            y = random.Next(10);
+                            r = k++ == n;
+                        }
+                        while (!arrangement.SetShip(x, y, Direction.Down, 1) && !r);
+                    }
+                }
+            }
+            while (r);
+            return arrangement;
+        }
+
+        /// <summary>
+        /// Генерация расстановки по стратегии
+        /// </summary>
+        /// <returns></returns>
+        public static ShipArrangement Strategy()
+        {
+            ShipArrangement arrangement = new ShipArrangement();
+            System.Random random = new System.Random();
+            int dir = 0;    // определяет сторону, с которой начинается построение 
+            System.Math.DivRem(random.Next(), 4, out dir);
+            switch (dir)    // да, мне то, что сейчас начнется, тоже не нравится, но я не придумал, как это по красоте переделать
+            {
+                case (0):
+                    if (random.NextDouble() < 0.5)
+                    {
+                        System.Collections.Generic.List<int> list = new System.Collections.Generic.List<int>(new int[3] { 4, 2, 2 });
+                        int x = 0;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int n = random.Next(list.Count);
+                            int l = list[n];
+                            list.Remove(l);
+                            arrangement.SetShip(x, 0, Direction.Down, l);
+                            x += l + 1;
+                        }
+                        list = new System.Collections.Generic.List<int>(new int[3] { 3, 2, 3 });
+                        x = 0;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int n = random.Next(list.Count);
+                            int l = list[n];
+                            list.Remove(l);
+                            arrangement.SetShip(x, 2, Direction.Down, l);
+                            x += l + 1;
+                        }
+                        for (int i = 0; i < 4; i++)
+                        {
+                            int y = 0;
+                            do
+                            {
+                                x = random.Next(10);
+                                y = random.Next(10);
+                            }
+                            while (!arrangement.SetShip(x, y, Direction.Down, 1));
+                        }
+                    }
+                    else
+                    {
+                        System.Collections.Generic.List<int> list = new System.Collections.Generic.List<int>(new int[3] { 4, 2, 2 });
+                        int x = 0;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int n = random.Next(list.Count);
+                            int l = list[n];
+                            list.Remove(l);
+                            arrangement.SetShip(x, 2, Direction.Down, l);
+                            x += l + 1;
+                        }
+                        list = new System.Collections.Generic.List<int>(new int[3] { 3, 2, 3 });
+                        x = 0;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int n = random.Next(list.Count);
+                            int l = list[n];
+                            list.Remove(l);
+                            arrangement.SetShip(x, 0, Direction.Down, l);
+                            x += l + 1;
+                        }
+                        for (int i = 0; i < 4; i++)
+                        {
+                            int y = 0;
+                            do
+                            {
+                                x = random.Next(10);
+                                y = random.Next(10);
+                            }
+                            while (!arrangement.SetShip(x, y, Direction.Down, 1));
+                        }
+                    }
+                    break;
+                case (1):
+                    if (random.NextDouble() < 0.5)
+                    {
+                        System.Collections.Generic.List<int> list = new System.Collections.Generic.List<int>(new int[3] { 4, 2, 2 });
+                        int x = 0;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int n = random.Next(list.Count);
+                            int l = list[n];
+                            list.Remove(l);
+                            arrangement.SetShip(x, 7, Direction.Down, l);
+                            x += l + 1;
+                        }
+                        list = new System.Collections.Generic.List<int>(new int[3] { 3, 2, 3 });
+                        x = 0;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int n = random.Next(list.Count);
+                            int l = list[n];
+                            list.Remove(l);
+                            arrangement.SetShip(x, 9, Direction.Down, l);
+                            x += l + 1;
+                        }
+                        for (int i = 0; i < 4; i++)
+                        {
+                            int y = 0;
+                            do
+                            {
+                                x = random.Next(10);
+                                y = random.Next(10);
+                            }
+                            while (!arrangement.SetShip(x, y, Direction.Down, 1));
+                        }
+                    }
+                    else
+                    {
+                        System.Collections.Generic.List<int> list = new System.Collections.Generic.List<int>(new int[3] { 4, 2, 2 });
+                        int x = 0;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int n = random.Next(list.Count);
+                            int l = list[n];
+                            list.Remove(l);
+                            arrangement.SetShip(x, 9, Direction.Down, l);
+                            x += l + 1;
+                        }
+                        list = new System.Collections.Generic.List<int>(new int[3] { 3, 2, 3 });
+                        x = 0;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int n = random.Next(list.Count);
+                            int l = list[n];
+                            list.Remove(l);
+                            arrangement.SetShip(x, 7, Direction.Down, l);
+                            x += l + 1;
+                        }
+                        for (int i = 0; i < 4; i++)
+                        {
+                            int y = 0;
+                            do
+                            {
+                                x = random.Next(10);
+                                y = random.Next(10);
+                            }
+                            while (!arrangement.SetShip(x, y, Direction.Down, 1));
+                        }
+                    }
+                    break;
+                case (2):
+                    if (random.NextDouble() < 0.5)
+                    {
+                        System.Collections.Generic.List<int> list = new System.Collections.Generic.List<int>(new int[3] { 4, 2, 2 });
+                        int x = 0;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int n = random.Next(list.Count);
+                            int l = list[n];
+                            list.Remove(l);
+                            arrangement.SetShip(0, x, Direction.Right, l);
+                            x += l + 1;
+                        }
+                        list = new System.Collections.Generic.List<int>(new int[3] { 3, 2, 3 });
+                        x = 0;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int n = random.Next(list.Count);
+                            int l = list[n];
+                            list.Remove(l);
+                            arrangement.SetShip(2, x, Direction.Right, l);
+                            x += l + 1;
+                        }
+                        for (int i = 0; i < 4; i++)
+                        {
+                            int y = 0;
+                            do
+                            {
+                                x = random.Next(10);
+                                y = random.Next(10);
+                            }
+                            while (!arrangement.SetShip(x, y, Direction.Down, 1));
+                        }
+                    }
+                    else
+                    {
+                        System.Collections.Generic.List<int> list = new System.Collections.Generic.List<int>(new int[3] { 4, 2, 2 });
+                        int x = 0;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int n = random.Next(list.Count);
+                            int l = list[n];
+                            list.Remove(l);
+                            arrangement.SetShip(2, x, Direction.Right, l);
+                            x += l + 1;
+                        }
+                        list = new System.Collections.Generic.List<int>(new int[3] { 3, 2, 3 });
+                        x = 0;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int n = random.Next(list.Count);
+                            int l = list[n];
+                            list.Remove(l);
+                            arrangement.SetShip(0, x, Direction.Right, l);
+                            x += l + 1;
+                        }
+                        for (int i = 0; i < 4; i++)
+                        {
+                            int y = 0;
+                            do
+                            {
+                                x = random.Next(10);
+                                y = random.Next(10);
+                            }
+                            while (!arrangement.SetShip(x, y, Direction.Down, 1));
+                        }
+                    }
+                    break;
+                case (3):
+                    if (random.NextDouble() < 0.5)
+                    {
+                        System.Collections.Generic.List<int> list = new System.Collections.Generic.List<int>(new int[3] { 4, 2, 2 });
+                        int x = 0;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int n = random.Next(list.Count);
+                            int l = list[n];
+                            list.Remove(l);
+                            arrangement.SetShip(9, x, Direction.Right, l);
+                            x += l + 1;
+                        }
+                        list = new System.Collections.Generic.List<int>(new int[3] { 3, 2, 3 });
+                        x = 0;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int n = random.Next(list.Count);
+                            int l = list[n];
+                            list.Remove(l);
+                            arrangement.SetShip(7, x, Direction.Right, l);
+                            x += l + 1;
+                        }
+                        for (int i = 0; i < 4; i++)
+                        {
+                            int y = 0;
+                            do
+                            {
+                                x = random.Next(10);
+                                y = random.Next(10);
+                            }
+                            while (!arrangement.SetShip(x, y, Direction.Down, 1));
+                        }
+                    }
+                    else
+                    {
+                        System.Collections.Generic.List<int> list = new System.Collections.Generic.List<int>(new int[3] { 4, 2, 2 });
+                        int x = 0;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int n = random.Next(list.Count);
+                            int l = list[n];
+                            list.Remove(l);
+                            arrangement.SetShip(7, x, Direction.Right, l);
+                            x += l + 1;
+                        }
+                        list = new System.Collections.Generic.List<int>(new int[3] { 3, 2, 3 });
+                        x = 0;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int n = random.Next(list.Count);
+                            int l = list[n];
+                            list.Remove(l);
+                            arrangement.SetShip(9, x, Direction.Right, l);
+                            x += l + 1;
+                        }
+                        for (int i = 0; i < 4; i++)
+                        {
+                            int y = 0;
+                            do
+                            {
+                                x = random.Next(10);
+                                y = random.Next(10);
+                            }
+                            while (!arrangement.SetShip(x, y, Direction.Down, 1));
+                        }
+                    }
+                    break;
+            }
+            return arrangement;
+        }
     }
     /// <summary>
     /// Указывает направление установки корабля.
