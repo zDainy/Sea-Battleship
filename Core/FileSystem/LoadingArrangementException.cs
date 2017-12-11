@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Common
+namespace Core
 {
     class LoadingArrangementException : Exception
     {
