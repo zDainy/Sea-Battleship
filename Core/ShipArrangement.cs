@@ -91,5 +91,63 @@ namespace Core
             }
         }
 
+        /// <summary>
+        /// Устанавливает корабль по указанным координатам в указанном направлении. Возвращает значение, указывающее, успешна ли операция. 
+        /// </summary>
+        /// <param name="direction">Направление установки.</param>
+        /// <param name="vertical">Координата по вертикали.</param>
+        /// <param name="horizontal">Координата по горизонтали.</param>
+        /// <param name="Length">Длина корабля. Если длина меньше нуля или больше четырех, то установка будет неуспешна.</param>
+        public bool SetShip(int vertical, int horizontal, Direction direction, int Length)
+        {
+            if ((Length < 0) || (Length > 4) || (vertical < 0) || (horizontal < 0) || (vertical > 9) || (horizontal > 9)) return false;
+            if (direction == Direction.Down)
+            {
+                if (vertical + Length > 10) return false;
+                for (int k = 0; k < Length; k++)
+                {
+                    for (int i = -1; i <= 1; i++)
+                    {
+                        for (int j = -1; j <= 1; j++)
+                        {
+                            if ((vertical + i + k >= 0) && (vertical + i + k <= 9) && (horizontal + j >= 0) && (horizontal + j <= 9))   // проверка на выход за границы массива
+                                if (GetCellState(vertical + i + k, horizontal + j) == CellStatе.Ship) return false;     // проверка на наличие корабля рядом с устанавливаемым
+                        }
+                    }
+                }
+                for (int k = 0; k < Length; k++)
+                {
+                    SetCellState(CellStatе.Ship, vertical + k, horizontal);
+                }
+            }
+            else
+            {
+                if (horizontal + Length > 10) return false;
+                for (int k = 0; k < Length; k++)
+                {
+                    for (int i = -1; i <= 1; i++)
+                    {
+                        for (int j = -1; j <= 1; j++)
+                        {
+                            if ((vertical + i >= 0) && (vertical + i <= 9) && (horizontal + j + k >= 0) && (horizontal + j + k <= 9))
+                                if (GetCellState(vertical + i, horizontal + j + k) == CellStatе.Ship) return false;
+                        }
+                    }
+                }
+                for (int k = 0; k < Length; k++)
+                {
+                    SetCellState(CellStatе.Ship, vertical, horizontal + k);
+                }
+            }
+            return true;
+        }
+    }
+    /// <summary>
+    /// Указывает направление установки корабля.
+    /// </summary>
+    public enum Direction
+    {
+        Right,
+        Down
     }
 }
