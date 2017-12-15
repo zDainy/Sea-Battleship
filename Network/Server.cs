@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using Common;
+using System.Text;
+using Core;
+using Newtonsoft.Json;
 
 namespace Network
 {
@@ -10,77 +12,108 @@ namespace Network
     {
         // Устанавливаем порт для сокета
         private int _port = 27015;
-        private Socket _server;
-        private Socket _client;
-        private IPAddress _ipAddress;
-        private IPEndPoint _ipEndPoint;
+        private TcpListener _server;
+        private TcpClient _client;
+        private NetworkStream _networkStream;
 
         /// <summary>
         /// Создает сервер через сокет
+        /// <param name="ip">Внутренний IP</param>
         /// </summary>
         public void Create(IPAddress ip)
         {
             LogService.Trace("Создаем сервер...");
-            _ipAddress = ip;
             try
             {
-                _ipEndPoint = new IPEndPoint(_ipAddress, _port);
-                // Создаем сокет Tcp/Ip
-                _server = new Socket(_ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                // Связываем Socket с локальной конечной точкой.
-                _server.Bind(_ipEndPoint);
+                _server = new TcpListener(ip, _port);
 
-                LogService.Trace("Сервер создан: " + ServerUtils.GetExternalIP() + ":" + _port);
+                LogService.Trace("Сервер создан: " + ServerUtils.GetExternalIp() + ":" + _port);
 
-                // Cлушаем входящие сокеты
-                _server.Listen(10);
+                // Cлушаем входящие запросы
+                _server.Start();
 
                 LogService.Trace("Ожидание подключений...");
 
                 while (true)
                 {
                     // Ожидаем входящее соединение
-                    _client = _server.Accept();
+                    _client = _server.AcceptTcpClient();
+                    _networkStream = _client.GetStream();
                     LogService.Trace("Клиент подключен");
                     break;
                 }
             }
             catch (SocketException e)
             {
-                LogService.Trace($"Не удалось создать сервер: {e}");
+                LogService.Trace($"Не удалось создать сервер: {e.Message}");
             }
         }
 
         /// <summary>
-        /// Принимает запрос
+        /// Принимает запрос 
         /// </summary>
-        public void GetRequest()
+        /// <returns>Возвращает кортеж: тип операции и объект результата</returns>
+        public Tuple<OpearationTypes, IOperation> GetRequest()
         {
-
+            LogService.Trace("Принимаем запрос");
+            IOperation resultOper = null;
+            OpearationTypes operType;
+            try
+            {
+                var resultObj = ServerUtils.ReadJsonData(_client, _networkStream);
+                operType = resultObj.Item1;
+                resultOper = resultObj.Item2;
+            }
+            catch (Exception e)
+            {
+                operType = OpearationTypes.Error;
+                LogService.Trace($"Не удалось принять запрос: {e.Message}");
+            }
+            return Tuple.Create(operType, resultOper);
         }
 
         /// <summary>
         /// Отправляет ответ на запрос
         /// </summary>
-        public void SendResponse()
+        /// <param name="operType">Тип операции</param>
+        /// <param name="oper">Объект операции</param>
+        public void SendResponse(OpearationTypes operType, IOperation oper)
         {
+            LogService.Trace("Отправляем ответ");
+            try
+            {
+                // Сериализуем тело ответа в строку Json
+                string bodyJson = oper != null ? JsonConvert.SerializeObject(oper) : "";
+                JsonData jsonData = new JsonData(operType, bodyJson);
 
+                // Сериализуем объект ответа в строку Json
+                string outData = JsonConvert.SerializeObject(jsonData);
+
+                // Отправляем данные клиенту
+                byte[] sendBytes = Encoding.UTF8.GetBytes(outData);
+                _networkStream.Write(sendBytes, 0, sendBytes.Length);
+                LogService.Trace($"Ответ отправлен: {outData}");
+            }
+            catch (Exception e)
+            {
+                LogService.Trace($"Не удалось отправить ответ: {e.Message}");
+            }
         }
 
         /// <summary>
         /// Закрывает сокет сервера
         /// </summary>
-        public void Close()
+        public void Stop()
         {
             LogService.Trace("Отключаем сервер...");
             try
             {
-                _server.Close();
+                _server.Stop();
                 LogService.Trace("Сервер отключен");
             }
             catch (SocketException e)
             {
-                LogService.Trace($"Не удалось закрыть сокет сервера: {e}");
+                LogService.Trace($"Не удалось закрыть сокет сервера: {e.Message}");
             }
         }
     }
