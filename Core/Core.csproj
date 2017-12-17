@@ -43,10 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileSystem\FileSystem.cs" />
-    <Compile Include="FileSystem\LoadingGameException.cs" />
+    <Compile Include="FileSystem\GameLoadingException.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameConfig.cs" />
-    <Compile Include="FileSystem\LoadingArrangementException.cs" />
+    <Compile Include="FileSystem\ArrangementLoadingException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShipArrangement.cs" />
   </ItemGroup>
