@@ -91,5 +91,207 @@ namespace Core
             }
         }
 
+
+        /// <summary>
+        /// Устанавливает корабль по указанным координатам в указанном направлении. Возвращает значение, указывающее, успешна ли операция. 
+        /// </summary>
+        /// <param name="direction">Направление установки.</param>
+        /// <param name="vertical">Координата по вертикали.</param>
+        /// <param name="horizontal">Координата по горизонтали.</param>
+        /// <param name="Length">Длина корабля. Если длина меньше нуля или больше четырех, то установка будет неуспешна.</param>
+        public bool SetShip(int vertical, int horizontal, Direction direction, int Length)
+        {
+            if ((Length < 0) || (Length > 4) || (vertical < 0) || (horizontal < 0) || (vertical > 9) || (horizontal > 9)) return false;
+            if (direction == Direction.Down)
+            {
+                if (vertical + Length > 10) return false;
+                for (int k = 0; k < Length; k++)
+                {
+                    for (int i = -1; i <= 1; i++)
+                    {
+                        for (int j = -1; j <= 1; j++)
+                        {
+                            if ((vertical + i + k >= 0) && (vertical + i + k <= 9) && (horizontal + j >= 0) && (horizontal + j <= 9))   // проверка на выход за границы массива
+                                if (GetCellState(vertical + i + k, horizontal + j) == CellStatе.Ship) return false;     // проверка на наличие корабля рядом с устанавливаемым
+                        }
+                    }
+                }
+                for (int k = 0; k < Length; k++)
+                {
+                    SetCellState(CellStatе.Ship, vertical + k, horizontal);
+                }
+            }
+            else
+            {
+                if (horizontal + Length > 10) return false;
+                for (int k = 0; k < Length; k++)
+                {
+                    for (int i = -1; i <= 1; i++)
+                    {
+                        for (int j = -1; j <= 1; j++)
+                        {
+                            if ((vertical + i >= 0) && (vertical + i <= 9) && (horizontal + j + k >= 0) && (horizontal + j + k <= 9))
+                                if (GetCellState(vertical + i, horizontal + j + k) == CellStatе.Ship) return false;
+                        }
+                    }
+                }
+                for (int k = 0; k < Length; k++)
+                {
+                    SetCellState(CellStatе.Ship, vertical, horizontal + k);
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Генерация случайной расстановки
+        /// </summary>        
+        public static ShipArrangement Random()
+        {
+            System.Random random = new System.Random();
+            int n = 15; // количество неудачных попыток до перегенерации поля
+            int k = 0;
+            ShipArrangement arrangement = new ShipArrangement();
+            bool r = false; // флаг необходимости перегенерации поля
+            do
+            {
+                arrangement.ClearFieldbyWater();
+                bool dir = random.NextDouble() < 0.5;
+                int x = 0;
+                int y = 0;
+                do
+                {
+                    x = random.Next(dir ? 10 : 7);
+                    y = random.Next(dir ? 7 : 10);
+                }
+                while (!arrangement.SetShip(x, y, dir ? Direction.Right : Direction.Down, 4));
+                for (int i = 0; i < 2; i++) // установка трехпалубных кораблей
+                {
+                    if (!r)
+                    {
+                        dir = random.NextDouble() < 0.5;
+                        do
+                        {
+                            x = random.Next(dir ? 10 : 8);
+                            y = random.Next(dir ? 8 : 10);
+                            r = k++ == n;
+                        }
+                        while (!r && !arrangement.SetShip(x, y, dir ? Direction.Right : Direction.Down, 3));
+                    }
+                }
+                k = r ? n : 0;
+                for (int i = 0; i < 3; i++) // установка двухпалубных кораблей
+                {
+                    if (!r)
+                    {
+                        dir = random.NextDouble() < 0.5;
+                        do
+                        {
+                            x = random.Next(dir ? 10 : 9);
+                            y = random.Next(dir ? 9 : 10);
+                            r = k++ == n;
+                        }
+                        while (!r && !arrangement.SetShip(x, y, dir ? Direction.Right : Direction.Down, 2));
+                    }
+                }
+                k = r ? n : 0;
+                for (int i = 0; i < 4; i++)                    // установка однопалубных кораблей
+                {
+                    if (!r)
+                    {
+                        k = 0;
+                        do
+                        {
+                            x = random.Next(10);
+                            y = random.Next(10);
+                            r = k++ == n;
+                        }
+                        while (!r && !arrangement.SetShip(x, y, Direction.Down, 1));
+                    }
+                }
+            }
+            while (r);
+            return arrangement;
+        }
+
+        /// <summary>
+        /// Генерация расстановки по стратегии
+        /// </summary>
+        /// <returns></returns>
+        public static ShipArrangement Strategy()
+        {
+            ShipArrangement arrangement = new ShipArrangement();
+            System.Random random = new System.Random();
+            int dir = random.Next(4);   // определяет сторону, с которой начинается построение 
+            bool first = random.NextDouble() < 0.5;
+            System.Collections.Generic.List<int> list = new System.Collections.Generic.List<int>(new int[3] { 4, 2, 2 });
+            int x = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                int n = random.Next(list.Count);
+                int l = list[n];
+                list.Remove(l);
+                switch (dir)
+                {
+                    case (0):
+                        arrangement.SetShip(x, first ? 0 : 2, Direction.Down, l);
+                        break;
+                    case (1):
+                        arrangement.SetShip(x, first ? 7 : 9, Direction.Down, l);
+                        break;
+                    case (2):
+                        arrangement.SetShip(first ? 0 : 2, x, Direction.Right, l);
+                        break;
+                    case (3):
+                        arrangement.SetShip(first ? 7 : 9, x, Direction.Right, l);
+                        break;
+                }
+                x += l + 1;
+            }
+            list = new System.Collections.Generic.List<int>(new int[3] { 3, 2, 3 });
+            x = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                int n = random.Next(list.Count);
+                int l = list[n];
+                list.Remove(l);
+                switch (dir)
+                {
+                    case (0):
+                        arrangement.SetShip(x, first ? 2 : 0, Direction.Down, l);
+                        break;
+                    case (1):
+                        arrangement.SetShip(x, first ? 9 : 7, Direction.Down, l);
+                        break;
+                    case (2):
+                        arrangement.SetShip(first ? 2 : 0, x, Direction.Right, l);
+                        break;
+                    case (3):
+                        arrangement.SetShip(first ? 9 : 7, x, Direction.Right, l);
+                        break;
+                }
+                arrangement.SetShip(x, 2, Direction.Down, l);
+                x += l + 1;
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                int y = 0;
+                do
+                {
+                    x = random.Next(10);
+                    y = random.Next(10);
+                }
+                while (!arrangement.SetShip(x, y, Direction.Down, 1));
+            }
+            return arrangement;
+        }
+    }
+    /// <summary>
+    /// Указывает направление установки корабля.
+    /// </summary>
+    public enum Direction
+    {
+        Right,
+        Down
     }
 }

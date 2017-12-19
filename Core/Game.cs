@@ -24,6 +24,12 @@ namespace Core
             _turnOwner = turnOwner;
         }
 
+
+        public PlayerRole GetTurnOwner()
+        {
+            return _turnOwner;
+        }
+
         /// <summary>
         /// Свитчер хода
         /// </summary>
