@@ -1,3 +1,4 @@
+
 ﻿using Core;
 using Core.FileSystem;
 using System;
@@ -11,6 +12,7 @@ namespace Common
     /// Подсистема работы с файлами игры.
     /// </summary>
     public static class FileSystem
+
     {
         private static Random random = new Random();
 
@@ -21,6 +23,7 @@ namespace Common
             T[] result = new T[n * m];
             for (int i = 0; i < n; i++)
             {
+
                 for (int j = 0; j < m; j++)
                 {
                     result[i * m + j] = input[i, j];
@@ -257,13 +260,16 @@ namespace Common
         /// </summary>
         /// <param name="name">Имя файла с указанным расширением.</param>
         /// <param name="input">Расстановка кораблей.</param>
+
         /// 
+
         public static void SaveArrangement(string name, ShipArrangement input)
         {
             bool[,] arrangement = new bool[10, 10];
             for (int i = 0; i < 10; i++)
             {
                 for (int j = 0; j < 10; j++)
+
                 {
                     arrangement[i, j] = input.GetCellState(i, j) == CellStatе.Ship;
                 }
@@ -277,7 +283,9 @@ namespace Common
 
         private static bool[,] loadArrangement(string input)
         {
+
             if (input.Length != 68) throw new LoadingArrangementException();
+
             byte[] byteinput = new byte[input.Length / 2];
             for (int i = 0; i < byteinput.Length; i++)
             {
@@ -319,6 +327,7 @@ namespace Common
         /// </summary>
         /// <param name="name">Имя файла.</param>
         /// <returns></returns>
+
         /// 
         public static ShipArrangement LoadArrangement(string name)
         {
@@ -331,6 +340,7 @@ namespace Common
             fileStream.Close();
             ShipArrangement res = new ShipArrangement();
             bool[,] arrangement = loadArrangement(s);
+
             for (int i = 0; i < 10; i++)
             {
                 for (int j = 0; j < 10; j++)
@@ -340,6 +350,7 @@ namespace Common
             }
             return res;
         }
+
 
         private static byte[,] ArrangementsToByteArray(ShipArrangement a, ShipArrangement b) // да, я знаю, что этот код не самый очевидный. Рекомендую просто игнорировать его существование
         {
