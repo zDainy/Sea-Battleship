@@ -24,10 +24,27 @@ namespace Core
             _turnOwner = turnOwner;
         }
 
-
         public PlayerRole GetTurnOwner()
         {
             return _turnOwner;
+        }
+
+        public MoveResult MakeAMove(int vertical, int horizontal)
+        {
+            switch (_turnOwner==PlayerRole.Server?ClientShipArrangement.GetCellState(vertical,horizontal):ServerShipArrangement.GetCellState(vertical,horizontal))
+            {
+                case (CellStatе.Water):
+                    if (_turnOwner == PlayerRole.Server) ClientShipArrangement.SetCellState(CellStatе.WoundedWater, vertical, horizontal);
+                    else ServerShipArrangement.SetCellState(CellStatе.WoundedWater, vertical, horizontal);
+                    ChangeTurn();
+                    return MoveResult.Miss;
+                case (CellStatе.Ship):
+                    if (_turnOwner == PlayerRole.Server) ClientShipArrangement.SetCellState(CellStatе.WoundedShip, vertical, horizontal);
+                    else ServerShipArrangement.SetCellState(CellStatе.WoundedShip, vertical, horizontal);
+                    return MoveResult.Hit;
+                default:
+                    return MoveResult.Error;
+            }
         }
 
         /// <summary>
@@ -38,5 +55,12 @@ namespace Core
             // Первых ход всегда за сервером, за исключением случаев когда игра была сохранена
             _turnOwner = _turnOwner == PlayerRole.Server? PlayerRole.Client : PlayerRole.Server;
         }
+    }
+
+    public enum MoveResult
+    {
+        Hit,
+        Miss,
+        Error
     }
 }
