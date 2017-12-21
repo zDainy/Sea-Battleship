@@ -29,7 +29,7 @@ namespace Sea_Battleship
             WindowConfig.AudioChanged((Image)sender);
         }
 
-        private void Mouse_Down(object sender, MouseButtonEventArgs e) => WindowConfig.ShipState = WindowConfig.State.Ship4;
-        private void Mouse_Down3(object sender, MouseButtonEventArgs e) => WindowConfig.ShipState = WindowConfig.State.Ship3;
+       // private void Mouse_Down(object sender, MouseButtonEventArgs e) => WindowConfig.ShipState = WindowConfig.State.Ship4;
+       // private void Mouse_Down3(object sender, MouseButtonEventArgs e) => WindowConfig.ShipState = WindowConfig.State.Ship3;
     }
 }

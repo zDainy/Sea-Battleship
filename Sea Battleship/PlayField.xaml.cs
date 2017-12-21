@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Sea_Battleship.ShipFolder;
 
 namespace Sea_Battleship
 {
@@ -21,34 +22,63 @@ namespace Sea_Battleship
     public partial class PlayField : UserControl
     {
         Ships ships;
-        bool[,] _possibilityToPlace;
+        private static bool isHiddenField = true;
 
         public PlayField()
         {
             InitializeComponent();
-            PossibilityToPlace = new bool[10, 10];
-            for (int i = 0; i < 10; i++)
-                for (int j = 0; j < 10; j++)
-                    PossibilityToPlace[i, j] = true;
-            Ships = new Ships(this, PossibilityToPlace);
-            for(int y = 0; y<10; y++)
-                for(int x = 0; x<10; x++)
+            Ships = new Ships(this);
+            if (isHiddenField)
+            {
+                for (int y = 0; y < 10; y++)
                 {
-                    Image img = new Image
+                    for (int x = 0; x < 10; x++)
                     {
-                        Stretch = Stretch.Fill,                       
-                        Source = new BitmapImage(new Uri("/Resources/Water.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
-                        Opacity = 0
-                    };
-                    img.MouseLeftButtonDown += FieldCell_Click;
-                    FieldGrid.Children.Add(img);
-                    Grid.SetColumn(img, x);
-                    Grid.SetRow(img, y);
+                        Image img = new Image
+                        {
+                            Stretch = Stretch.Fill,
+                            Source = new BitmapImage(new Uri("/Resources/Water.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
+                            Opacity = 0
+                        };
+                        img.MouseLeftButtonDown += FieldCell_Click;
+                        FieldGrid.Children.Add(img);
+                        Grid.SetColumn(img, x);
+                        Grid.SetRow(img, y);
+                    }
                 }
+            }
+            else
+            {
+                for (int y = 0; y < 10; y++)
+                {
+                    for (int x = 0; x < 10; x++)
+                    {
+                        Image img = new Image
+                        {
+                            Stretch = Stretch.Fill,
+                            Source = new BitmapImage(new Uri("/Resources/Water.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
+                            Opacity = 0
+                        };
+                        //img.MouseLeftButtonDown += FieldCell_Click;
+                        FieldGrid.Children.Add(img);
+                        Grid.SetColumn(img, x);
+                        Grid.SetRow(img, y);
+                    }
+                }
+            }
+            isHiddenField = !isHiddenField;
+          //  ships.ShipList4[0].Place(this, 0,0, true);
+
+          //  ships.ShipList4[1].Place(this, 5, 5,false);
         }
 
-        public bool[,] PossibilityToPlace { get => _possibilityToPlace; set => _possibilityToPlace = value; }
         public Ships Ships { get => ships; set => ships = value; }
+       // public bool IsHiddenField { get => isHiddenField; set => isHiddenField = value; }
+
+        public void PlaceShips()
+        {
+            //
+        }
 
         public static void DeleteCell(int x, int y, PlayField playField)
         {
@@ -75,26 +105,13 @@ namespace Sea_Battleship
 
         private void FieldCell_Click(object sender, MouseButtonEventArgs e)
         {
-            if (WindowConfig.ShipState == WindowConfig.State.Ship4)
+            Image image = (Image)sender;
+            SetCell(Grid.GetColumn(image), Grid.GetRow(image), FieldGrid, new Image()
             {
-                WindowConfig.ShipState = WindowConfig.State.None;
-                foreach (Ship4 ship in Ships.ShipList4)
-                    if (!ship.IsPlaced)
-                    {
-                        ship.Place((Image)sender, this);
-                        break;
-                    }
-            }
-            else if (WindowConfig.ShipState == WindowConfig.State.Ship3)
-            {
-                WindowConfig.ShipState = WindowConfig.State.None;
-                foreach (Ship3 ship in Ships.ShipList3)
-                    if (!ship.IsPlaced)
-                    {
-                        ship.Place((Image)sender, this);
-                        break;
-                    }
-            }
+                Stretch = Stretch.Fill,
+                Opacity = 100,
+                Source = new BitmapImage(new Uri("/Resources/no-audio.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+            });
         }
 
         private void _SizeChanged(object sender, SizeChangedEventArgs e)
