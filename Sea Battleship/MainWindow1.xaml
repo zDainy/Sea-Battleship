@@ -9,10 +9,7 @@
         mc:Ignorable="d"
         Title="Морской бой" Height="300" Width="866" MinWidth="640" MinHeight="480">
 
-    <Grid Margin="0">
-        <Grid.DataContext>
-            <local:PlayField/>
-        </Grid.DataContext>
+    <Grid Name="MainGrid" MouseMove="Grid_MouseMove" Margin="0">
         <Grid.Background>
             <ImageBrush ImageSource="Resources/main.jpg" Stretch="UniformToFill"/>
         </Grid.Background>
@@ -30,8 +27,8 @@
             <Menu Grid.Column="0" VerticalContentAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Background="{x:Null}" VerticalAlignment="Center">
                 <MenuItem  Header ="Новая игра" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="150" Background="{x:Null}" >
                     <MenuItem Header="Онлайн">
-                        <MenuItem Header="Создать лобби"/>
-                        <MenuItem Header="Подключиться к лобби" />
+                        <MenuItem Header="Создать лобби" Name="CreateLobbyItem" Click="CreateLobby_Click" />
+                        <MenuItem Header="Подключиться к лобби" Name="ConnetToLobbyItem" Click="ConnetToLobbyItem_Click"/>
                     </MenuItem>
                     <MenuItem Header="С компьютером" Click="NewGame_MouseLeftButtonDown"/>
                 </MenuItem>
@@ -43,9 +40,41 @@
                 <MenuItem Header="Правила" />
             </Menu>
             <Menu Margin="0" Grid.Column="3" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
-                <MenuItem Header="Об авторах" />
+                <MenuItem Header="Об авторах" Name="AboutItem" Click="AboutItem_Click" />
             </Menu>
             <Image Grid.Column="4" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"/>
         </Grid>
+        <Grid Name="gr" MouseLeftButtonUp="gr_MouseLeftButtonUp" HorizontalAlignment="Left" Height="300" Margin="55,53,0,0" VerticalAlignment="Top" Width="300" ShowGridLines="True" Panel.ZIndex="1">
+            <Grid.Background>
+                <SolidColorBrush Color="Black" Opacity="0"/>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+        </Grid>
+        <StackPanel Name="st" MouseDown="st_MouseDown" MouseUp="st_MouseUp" Height="30" Margin="411,152,0,0" Width="60" Background="#FFFF6969" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="373,80,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Grid Name="Mainer" HorizontalAlignment="Left" Height="100" Margin="73,327,0,0" VerticalAlignment="Top" Width="100"/>
     </Grid>
 </Window>

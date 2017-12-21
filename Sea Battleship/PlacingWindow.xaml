@@ -45,27 +45,5 @@
             </Menu>
             <Image Grid.Column="6" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"></Image>
         </Grid>
-        <local:PlayField x:Name="f" Margin="51,96,281,53" Foreground="{x:Null}" MinWidth="300" MinHeight="300" />
-        <Label Name="label0" MouseLeftButtonDown="Mouse_Down" Margin="388,96,454,327" Content="{Binding ShipCount, Mode=OneWay}" HorizontalContentAlignment="Stretch" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Stretch">
-            <Label.DataContext>
-                <local:Ships/>
-            </Label.DataContext>
-        </Label>
-        <StackPanel Margin="409,126,0,0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" Width="104">
-            <Image Height="30" Source="Resources/1.png" MouseLeftButtonDown="Mouse_Down"/>
-            <Image Height="30" Source="Resources/2.png"  MouseLeftButtonDown="Mouse_Down"/>
-            <Image Height="30" Source="Resources/3.png" MouseLeftButtonDown="Mouse_Down"/>
-            <Image Height="30" Source="Resources/4.png" MouseLeftButtonDown="Mouse_Down"/>
-        </StackPanel>
-        <Label x:Name="label0_Copy" MouseLeftButtonDown="Mouse_Down" Margin="388,143,0,0" Content="{Binding ShipCount, Mode=OneWay}" HorizontalContentAlignment="Stretch" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Stretch">
-            <Label.DataContext>
-                <local:Ships/>
-            </Label.DataContext>
-        </Label>
-        <StackPanel Margin="409,179,0,0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <Image Height="30" Source="Resources/1.png" MouseLeftButtonDown="Mouse_Down3"/>
-            <Image Height="30" Source="Resources/2.png"  MouseLeftButtonDown="Mouse_Down3"/>
-            <Image Height="30" Source="Resources/4.png" MouseLeftButtonDown="Mouse_Down3"/>
-        </StackPanel>
     </Grid>
 </Window>
