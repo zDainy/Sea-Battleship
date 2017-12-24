@@ -155,6 +155,8 @@ namespace Core
             bool r = false; // флаг необходимости перегенерации поля
             do
             {
+                r = false;
+                k = 0;
                 arrangement.ClearFieldbyWater();
                 bool dir = random.NextDouble() < 0.5;
                 int x = 0;
@@ -270,7 +272,6 @@ namespace Core
                         arrangement.SetShip(first ? 9 : 7, x, Direction.Right, l);
                         break;
                 }
-                arrangement.SetShip(x, 2, Direction.Down, l);
                 x += l + 1;
             }
             for (int i = 0; i < 4; i++)
