@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Core;
+using Sea_Battleship.Engine;
 
 namespace Sea_Battleship
 {
@@ -19,9 +21,12 @@ namespace Sea_Battleship
     /// </summary>
     public partial class PlayWindow : Window
     {
-        public PlayWindow()
+        public OnlineGame OnlineGame { get; set; }
+
+        public PlayWindow(OnlineGame onlineGame)
         {
             InitializeComponent();
+            OnlineGame = onlineGame;
         }
 
         private void audioChanged(object sender, RoutedEventArgs e)

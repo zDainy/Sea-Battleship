@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Sea_Battleship.ShipFolder;
 using Core;
+using Sea_Battleship.Engine;
 
 namespace Sea_Battleship
 {
@@ -118,6 +119,8 @@ namespace Sea_Battleship
         private void FieldCell_Click(object sender, MouseButtonEventArgs e)
         {
             Image image = (Image)sender;
+            int X = Grid.GetColumn(image);
+            int Y = Grid.GetRow(image);
             SetCell(Grid.GetColumn(image), Grid.GetRow(image), FieldGrid, new Image()
             {
                 Stretch = Stretch.Fill,

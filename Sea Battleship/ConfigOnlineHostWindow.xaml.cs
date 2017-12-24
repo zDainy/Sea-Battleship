@@ -39,8 +39,7 @@ namespace Sea_Battleship
                 WaitingWindow window = new WaitingWindow(OnlineGame, _shipArrangement, _placement);
                 window.Show();
                 Close();
-                Thread waiThread = new Thread(window.Wait);
-                waiThread.Start();
+                window.Wait();
             }
         }
 

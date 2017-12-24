@@ -505,7 +505,7 @@ namespace Core
                 byte[] port = BitConverter.GetBytes(int.Parse(ip[4]));
                 result[5, 4] = port[0];
                 result[5, 5] = port[1];
-                conf[0] = g.GetTurnOwner() == PlayerRole.Server;
+                conf[0] = g.TurnOwner == PlayerRole.Server;
                 conf[3] = (g.GameConfig.GameSpeed == GameSpeed.Slow) || (g.GameConfig.GameSpeed == GameSpeed.Turtle);
                 conf[4] = (g.GameConfig.GameSpeed == GameSpeed.Medium) || (g.GameConfig.GameSpeed == GameSpeed.Turtle);
                 /*switch (g.GameConfig.GameSpeed)

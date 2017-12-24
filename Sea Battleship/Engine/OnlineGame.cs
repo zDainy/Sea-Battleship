@@ -53,7 +53,7 @@ namespace Sea_Battleship.Engine
             if (placement != PlacementState.Manualy)
             {
                 CreateGame(shipArrangement);
-                PlayWindow window = new PlayWindow { Owner = owner };
+                PlayWindow window = new PlayWindow (this) { Owner = owner };
                 window.Show();
             }
             else
@@ -82,15 +82,25 @@ namespace Sea_Battleship.Engine
             }
         }
 
-        public void Turn(int x, int y)
+        public void WaitOrTurn(int x = 0, int y = 0)
         {
             if (IsYourTurn())
             {
-                Connect.SendOperation(PlayerRole, OpearationTypes.Shot, new Shot(new Vector(x, y)));
+                Turn(x, y);
             }
+            else
+            {
+                WaitEnemyTurn();
+            }
+        }
+
+        public void Turn(int x, int y)
+        {
+            Connect.SendOperation(PlayerRole, OpearationTypes.Shot, new Shot(new Vector(x, y)));
             var res = Connect.GetOperation(PlayerRole);
             var shotRes = (ShotResult)res.Item2;
             CheckShotResult(shotRes.State, x, y);
+            Game.ChangeTurn();
         }
 
         public void WaitEnemyTurn()
@@ -101,6 +111,7 @@ namespace Sea_Battleship.Engine
                 var shot = (Shot)res.Item2;
                 CheckShot(shot.TargetPosition);
             }
+            Game.ChangeTurn();
         }
 
         public void CheckShotResult(CellStatе state, int x, int y)
