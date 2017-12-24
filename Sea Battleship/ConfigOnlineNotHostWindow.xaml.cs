@@ -22,7 +22,15 @@ namespace Sea_Battleship
         public ConfigOnlineNotHostWindow()
         {
             InitializeComponent();
+            PlacementState placement = PlacementState.Manualy;
         }
+        enum PlacementState
+        {
+            Manualy,
+            Randomly,
+            Strategily
+        }
+
 
         private void ButtonNext_Click(object sender, RoutedEventArgs e)
         {
@@ -36,6 +44,23 @@ namespace Sea_Battleship
         {
             Owner.Show();
             Close();
+        }
+
+        private void Placement_Click(object sender, RoutedEventArgs e)
+        {
+            RadioButton button = (RadioButton)sender;
+            switch (button.Content)
+            {
+                case "Ручной":
+                    placement = PlacementState.Manualy;
+                    break;
+                case "Случайный":
+                    placement = PlacementState.Randomly;
+                    break;
+                case "По стратегии":
+                    placement = PlacementState.Strategily;
+                    break;
+            }
         }
     }
 }

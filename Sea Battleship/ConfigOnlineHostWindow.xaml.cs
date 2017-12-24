@@ -19,14 +19,34 @@ namespace Sea_Battleship
     /// </summary>
     public partial class ConfigOnlineHostWindow : Window
     {
+        TimeLengthState timeLength = TimeLengthState.Fast;
+        PlacementState placement = PlacementState.Manualy;
+
         public ConfigOnlineHostWindow()
         {
             InitializeComponent();
+            
+
+        }
+
+        enum TimeLengthState
+        {
+            Fast,
+            Medium,
+            Slow,
+            Turtle
+        }
+
+        enum PlacementState
+        {
+            Manualy,
+            Randomly,
+            Strategily
         }
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
-
+           
         }
 
         private void ButtonNext_Click(object sender, RoutedEventArgs e)
@@ -41,6 +61,42 @@ namespace Sea_Battleship
         {
             Owner.Show();
             Close();
+        }
+        private void TimeLength_Click(object sender, RoutedEventArgs e)
+        {
+            RadioButton button = (RadioButton)sender;
+            switch (button.Content)
+            {
+                case "30 секунд":
+                    timeLength = TimeLengthState.Fast;
+                    break;
+                case "1 минута":
+                    timeLength = TimeLengthState.Medium;
+                    break;
+                case "2 минуты":
+                    timeLength = TimeLengthState.Slow;
+                    break;
+                case "5 минут":
+                    timeLength = TimeLengthState.Turtle;
+                    break;
+            }
+        }
+
+        private void Placement_Click(object sender, RoutedEventArgs e)
+        {
+            RadioButton button = (RadioButton)sender;
+            switch (button.Content)
+            {
+                case "Ручной":
+                    placement = PlacementState.Manualy;
+                    break;
+                case "Случайный":
+                    placement = PlacementState.Randomly;
+                    break;
+                case "По стратегии":
+                    placement = PlacementState.Strategily;
+                    break;
+            }
         }
     }
 }

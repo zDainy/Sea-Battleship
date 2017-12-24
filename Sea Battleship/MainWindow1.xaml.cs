@@ -38,6 +38,7 @@ namespace Sea_Battleship
             //        Grid.SetColumn(img, x);
             //        Grid.SetRow(img, y);
             //    }
+            new WaitingWindow().Show();
         }
 
         private void FieldCell_Click(object sender, MouseButtonEventArgs e)
@@ -64,60 +65,60 @@ namespace Sea_Battleship
             Hide();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //StackPanel st = new StackPanel
-            //{
-            //    Background = new SolidColorBrush(Color.FromRgb(0, 0, 0))
-            //};
-            Grid parent = (Grid)st.Parent;
-            parent.Children.Remove(st);
-            st.Margin = new Thickness();
-            //Image img = new Image
-            //{
-            //    Stretch = Stretch.Fill,
-            //    Source = new BitmapImage(new Uri("/Resources/Water.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
-            //    //Opacity = 0
-            //};
-           // st.Children.Add(img);
-            gr.Children.Add(st);
-            Grid.SetRow(st, 1);
-            Grid.SetColumn(st, 1);
-            Grid.SetColumnSpan(st, 2);
+        //private void Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //   // //StackPanel st = new StackPanel
+        //   // //{
+        //   // //    Background = new SolidColorBrush(Color.FromRgb(0, 0, 0))
+        //   // //};
+        //   // Grid parent = (Grid)st.Parent;
+        //   // parent.Children.Remove(st);
+        //   // st.Margin = new Thickness();
+        //   // //Image img = new Image
+        //   // //{
+        //   // //    Stretch = Stretch.Fill,
+        //   // //    Source = new BitmapImage(new Uri("/Resources/Water.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
+        //   // //    //Opacity = 0
+        //   // //};
+        //   //// st.Children.Add(img);
+        //   // gr.Children.Add(st);
+        //   // Grid.SetRow(st, 1);
+        //   // Grid.SetColumn(st, 1);
+        //   // Grid.SetColumnSpan(st, 2);
 
-        }
+        //}
 
-        bool Yes = false;
+        //bool Yes = false;
 
-        private void st_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Yes = !Yes;
-            if(st.Parent==gr)
-            {
-                Grid.SetZIndex(st, 0);
-                gr.Children.Remove(st);
-                MainGrid.Children.Add(st);
-            }
-        }
+        //private void st_MouseDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    Yes = !Yes;
+        //    if(st.Parent==gr)
+        //    {
+        //        Grid.SetZIndex(st, 0);
+        //        gr.Children.Remove(st);
+        //        MainGrid.Children.Add(st);
+        //    }
+        //}
 
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
-            if (Yes)
-            {
-                st.Margin = new Thickness(e.GetPosition(null).X, e.GetPosition(null).Y, 0, 0);
-            }
-        }
+        //    if (Yes)
+        //    {
+        //        st.Margin = new Thickness(e.GetPosition(null).X, e.GetPosition(null).Y, 0, 0);
+        //    }
+       }
 
-        private void st_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            //CaptureMouse();
-            //st.ReleaseMouseCapture();
-            //gr.CaptureMouse();
-            // if (gr.IsMouseOver)
-           // if (st.IsMouseOver)
-            //    Yes = !Yes;
-            Yes = !Yes;
-        }
+        //private void st_MouseUp(object sender, MouseButtonEventArgs e)
+        //{
+        //    //CaptureMouse();
+        //    //st.ReleaseMouseCapture();
+        //    //gr.CaptureMouse();
+        //    // if (gr.IsMouseOver)
+        //   // if (st.IsMouseOver)
+        //    //    Yes = !Yes;
+        //    Yes = !Yes;
+        //}
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -134,22 +135,22 @@ namespace Sea_Battleship
             this.Hide();
         }
 
-        private void gr_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (Yes)
-            {
-                Yes = !Yes;
-                Grid.SetZIndex(st,1);
-                Grid parent = (Grid)st.Parent;
-                parent.Children.Remove(st);
-                st.Margin = new Thickness();
-                gr.Children.Add(st);
-                Grid.SetRow(st, 1);
-                Grid.SetColumn(st, 1);
-                Grid.SetColumnSpan(st, 2);
-            }
+        //private void gr_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        //{
+        //    if (Yes)
+        //    {
+        //        Yes = !Yes;
+        //        Grid.SetZIndex(st,1);
+        //        Grid parent = (Grid)st.Parent;
+        //        parent.Children.Remove(st);
+        //        st.Margin = new Thickness();
+        //        gr.Children.Add(st);
+        //        Grid.SetRow(st, 1);
+        //        Grid.SetColumn(st, 1);
+        //        Grid.SetColumnSpan(st, 2);
+        //    }
 
-        }
+        //}
 
         private void ConnetToLobbyItem_Click(object sender, RoutedEventArgs e)
         {
