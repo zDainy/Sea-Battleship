@@ -98,5 +98,11 @@ namespace Sea_Battleship
                     break;
             }
         }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+           // TextBox textBox = (TextBox)sender;
+            //  textBox.Text;
+        }
     }
 }

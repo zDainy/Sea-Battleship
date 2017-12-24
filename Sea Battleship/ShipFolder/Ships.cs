@@ -67,5 +67,25 @@ namespace Sea_Battleship
                 ShipList1.Add(new Ship1());
             }
         }
+
+        public void PlaceAll()
+        {
+            foreach (AShip ship in ShipList1)
+            {
+                ship.Place(PlayField);
+            }
+            foreach (AShip ship in ShipList2)
+            {
+                ship.Place(PlayField);
+            }
+            foreach (AShip ship in ShipList3)
+            {
+                ship.Place(PlayField);
+            }
+            foreach (AShip ship in ShipList4)
+            {
+                ship.Place(PlayField);
+            }
+        }
     }
 }

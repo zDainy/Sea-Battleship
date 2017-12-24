@@ -207,5 +207,21 @@
   <ItemGroup>
     <Resource Include="Resources\14.gif" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\1n.png" />
+    <Resource Include="Resources\2n.png" />
+    <Resource Include="Resources\3n.png" />
+    <Resource Include="Resources\4n.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\n4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\1n2.png" />
+    <Resource Include="Resources\1n3.png" />
+    <Resource Include="Resources\2n2.png" />
+    <Resource Include="Resources\2n3.png" />
+    <Resource Include="Resources\3n2.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

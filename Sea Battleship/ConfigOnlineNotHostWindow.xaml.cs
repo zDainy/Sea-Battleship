@@ -19,10 +19,11 @@ namespace Sea_Battleship
     /// </summary>
     public partial class ConfigOnlineNotHostWindow : Window
     {
+        private PlacementState placement = PlacementState.Manualy;
         public ConfigOnlineNotHostWindow()
         {
             InitializeComponent();
-            PlacementState placement = PlacementState.Manualy;
+            
         }
         enum PlacementState
         {
