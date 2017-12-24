@@ -18,7 +18,7 @@ namespace Sea_Battleship.ShipFolder
             Images[0] = new Image
             {
                 Stretch = Stretch.Fill,
-                Source = new BitmapImage(new Uri("/Resources/1.png", UriKind.Relative))
+                Source = new BitmapImage(new Uri("/Resources/1n3.png", UriKind.Relative))
                 {
                     CreateOptions = BitmapCreateOptions.IgnoreImageCache
                 },
@@ -26,7 +26,7 @@ namespace Sea_Battleship.ShipFolder
             Images[1] = new Image
             {
                 Stretch = Stretch.Fill,
-                Source = new BitmapImage(new Uri("/Resources/4.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
+                Source = new BitmapImage(new Uri("/Resources/2n3.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
             };
             ShipInit();
         }

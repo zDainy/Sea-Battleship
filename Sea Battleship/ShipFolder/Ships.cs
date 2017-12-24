@@ -41,8 +41,14 @@ namespace Sea_Battleship
         public Ships(PlayField playField)
         {
             _playField = playField;
+            ShipList1 = new List<Ship1>();
+            ShipList2 = new List<Ship2>();
             ShipList3 = new List<Ship3>();
             ShipList4 = new List<Ship4>();
+        }
+
+        public void Init()
+        {
             for (int i = 0; i < _shipCount4; i++)
             {
                 ShipList4.Add(new Ship4());
@@ -51,17 +57,35 @@ namespace Sea_Battleship
             {
                 ShipList3.Add(new Ship3());
             }
-            //for (int i = 0; i < _shipCount2; i++)
-            //{
-            //    Ship2 ship = new Ship2();
-            //    ShipList2.Add(ship);
-            //}
-            //for (int i = 0; i < _shipCount1; i++)
-            //{
-            //    ShipList1.Add(new Ship1());
-            //}
+            for (int i = 0; i < _shipCount2; i++)
+            {
+                Ship2 ship = new Ship2();
+                ShipList2.Add(ship);
+            }
+            for (int i = 0; i < _shipCount1; i++)
+            {
+                ShipList1.Add(new Ship1());
+            }
         }
 
-
+        public void PlaceAll()
+        {
+            foreach (AShip ship in ShipList1)
+            {
+                ship.Place(PlayField);
+            }
+            foreach (AShip ship in ShipList2)
+            {
+                ship.Place(PlayField);
+            }
+            foreach (AShip ship in ShipList3)
+            {
+                ship.Place(PlayField);
+            }
+            foreach (AShip ship in ShipList4)
+            {
+                ship.Place(PlayField);
+            }
+        }
     }
 }

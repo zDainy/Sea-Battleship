@@ -56,6 +56,26 @@ namespace Sea_Battleship
             }
         }
 
+        public void Place(PlayField field)
+        {
+            if (IsHorizontal)
+            {
+                for (int i = 0; i < size; i++)
+                {
+                    PlayField.SetCell(x + i, y, field.FieldGrid, Images[i]);
+                }
+            }
+            else
+            {
+                ChangeOrientation();
+                for (int i = 0; i < size; i++)
+                {
+
+                    PlayField.SetCell(x, y + i, field.FieldGrid, Images[i]);
+                }
+            }
+        }
+
         private void ChangeOrientation()
         {
             for (int i = 0; i < size; i++)

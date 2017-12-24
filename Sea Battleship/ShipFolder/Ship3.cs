@@ -15,18 +15,18 @@ namespace Sea_Battleship
             Images[0] = new Image
             {
                 Stretch = Stretch.Fill,
-                Source = new BitmapImage(new Uri("/Resources/1.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
+                Source = new BitmapImage(new Uri("/Resources/1n2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
             };
             Images[1] = new Image
             {
                 Stretch = Stretch.Fill,
-                Source = new BitmapImage(new Uri("/Resources/2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
+                Source = new BitmapImage(new Uri("/Resources/2n2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
 
             };
             Images[2] = new Image
             {
                 Stretch = Stretch.Fill,
-                Source = new BitmapImage(new Uri("/Resources/4.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
+                Source = new BitmapImage(new Uri("/Resources/3n2.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
             };
             ShipInit();
         }
