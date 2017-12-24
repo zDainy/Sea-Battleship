@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using Common;
 using Core;
+using Network;
 using Sea_Battleship.Engine;
+using ShipArrangement = Core.ShipArrangement;
 
 namespace Sea_Battleship
 {
@@ -26,7 +29,8 @@ namespace Sea_Battleship
         {
             try
             {
-                OnlineGame = new OnlineGame(PlayerRole.Client, _placement, IPAddress.Parse(KeyTextBox.Text));
+                OnlineGame = new OnlineGame(PlayerRole.Client, _placement, ServerUtils.StringToIP(KeyTextBox.Text));
+                Thread.Sleep(2000);
                 OnlineGame.GoToGameWindow(_placement, _shipArrangement, Owner);
                 Close();
             }
