@@ -25,6 +25,8 @@ namespace Sea_Battleship
         Ships ships;
         private static bool isHiddenField = true;
 
+        
+
         public PlayField()
         {
             InitializeComponent();
@@ -117,6 +119,7 @@ namespace Sea_Battleship
 
         private void FieldCell_Click(object sender, MouseButtonEventArgs e)
         {
+            PlayWindow z = (PlayWindow)((Grid)Parent).Parent;
             Image image = (Image)sender;
             SetCell(Grid.GetColumn(image), Grid.GetRow(image), FieldGrid, new Image()
             {
