@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Common;
 using Core;
 using Newtonsoft.Json;
 
@@ -16,8 +17,8 @@ namespace Network
 
         /// <summary>
         /// Подлкючает клиента к серверу
-        /// <param name="ip">Внешний IP</param>
         /// </summary>
+        /// <param name="ip">Внешний IP</param>
         public void Connect(IPAddress ip)
         {
             LogService.Trace("Подключаемся к серверу...");
@@ -40,7 +41,7 @@ namespace Network
         /// <param name="oper">Объект операции</param>
         public void SendRequest(OpearationTypes operType, IOperation oper)
         {
-            LogService.Trace("Отправляем запрос");
+            LogService.Trace($"Клиент отправляет {operType}");
             try
             {
                 // Сериализуем тело ответа в строку Json
@@ -53,11 +54,11 @@ namespace Network
                 // Отправляем данные клиенту
                 byte[] sendBytes = Encoding.UTF8.GetBytes(outData);
                 _networkStream.Write(sendBytes, 0, sendBytes.Length);
-                LogService.Trace($"Запрос отправлен: {outData}");
+                LogService.Trace($"Отправлено: {outData}");
             }
             catch (Exception e)
             {
-                LogService.Trace($"Не удалось отправить запрос: {e.Message}");
+                LogService.Trace($"Не удалось отправить: {e.Message}");
             }
         }
 
@@ -67,7 +68,7 @@ namespace Network
         /// <returns>Возвращает кортеж: тип операции и объект результата</returns>
         public Tuple<OpearationTypes, IOperation> GetResponse()
         { 
-            LogService.Trace("Принимаем ответ");
+            LogService.Trace("Клиент принимает");
             IOperation resultOper = null;
             OpearationTypes operType;
             try
@@ -79,7 +80,7 @@ namespace Network
             catch (Exception e)
             {
                 operType = OpearationTypes.Error;
-                LogService.Trace($"Не удалось принять ответ: {e.Message}");
+                LogService.Trace($"Не удалось принять: {e.Message}");
             }
             return Tuple.Create(operType, resultOper);
         }

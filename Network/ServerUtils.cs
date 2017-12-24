@@ -2,9 +2,9 @@
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
-using Core;
 using System.Net.Sockets;
 using System.Text;
+using Common;
 using Newtonsoft.Json;
 
 namespace Network
@@ -152,6 +152,48 @@ namespace Network
                 throw new Exception(e.Message);
             }
             return Tuple.Create(operType, resultOper);
+        }
+
+        private static string ByteToHex(byte input)
+        {
+            return (input < 16) ? '0' + input.ToString("X") : input.ToString("X");
+        }
+
+        private static byte HexToByte(string input)
+        {
+            return Convert.ToByte(input, 16);
+        }
+
+        /// <summary>
+        /// Возвращает текстовое представление IP-адреса.
+        /// </summary>
+        /// <param name="address">IP-адрес.</param>
+        /// <returns></returns>
+        public static string IPToString(IPAddress address)
+        {
+            byte[] tmp = address.GetAddressBytes();
+            string res = "";
+            for (int i = 0; i < tmp.Length; i++)
+            {
+                res += ByteToHex(tmp[i]);
+            }
+            return res;
+        }
+
+        /// <summary>
+        /// Возвращает IP-адрес по его текстовому представлению.
+        /// </summary>
+        /// <param name="address">Текстовое представление IP-адреса.</param>
+        /// <returns></returns>
+        public static IPAddress StringToIP(string address)
+        {
+            byte[] ip = new byte[4];
+            for (int i = 0; i < 4; i++)
+            {
+                ip[i] = HexToByte(address[2 * i].ToString() + address[2 * i + 1]);
+            }
+            IPAddress res = new IPAddress(ip);
+            return res;
         }
     }
 }

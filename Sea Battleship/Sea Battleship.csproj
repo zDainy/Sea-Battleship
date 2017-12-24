@@ -70,6 +70,7 @@
     <Compile Include="ConfigOnlineNotHostWindow.xaml.cs">
       <DependentUpon>ConfigOnlineNotHostWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Engine\OnlineGame.cs" />
     <Compile Include="PlayWindow.xaml.cs">
       <DependentUpon>PlayWindow.xaml</DependentUpon>
     </Compile>

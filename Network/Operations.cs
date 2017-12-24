@@ -158,13 +158,13 @@ namespace Network
         /// Расстановка
         /// </summary>
         [DataMember]
-        public CellStatе[,] Arragment { get; set; }
+        public Core.ShipArrangement Arragment { get; set; }
 
         /// <summary>
         /// Инициализирует объект расстановки
         /// </summary>
         /// <param name="arr">Расстановка</param>
-        public ShipArrangement(CellStatе[,] arr)
+        public ShipArrangement(Core.ShipArrangement arr)
         {
             Arragment = arr;
         }

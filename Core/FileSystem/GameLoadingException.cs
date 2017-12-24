@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.FileSystem
+namespace Core
 {
     class GameLoadingException : Exception
     {

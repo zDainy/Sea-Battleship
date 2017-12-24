@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Common;
 using Core;
 using Newtonsoft.Json;
 
@@ -15,13 +16,15 @@ namespace Network
         private TcpListener _server;
         private TcpClient _client;
         private NetworkStream _networkStream;
+        public bool IsClientConnected { get; set; }
 
         /// <summary>
         /// Создает сервер через сокет
-        /// <param name="ip">Внутренний IP</param>
         /// </summary>
+        /// <param name="ip">Внутренний IP</param>
         public void Create(IPAddress ip)
         {
+            IsClientConnected = false;
             LogService.Trace("Создаем сервер...");
             try
             {
@@ -31,21 +34,30 @@ namespace Network
 
                 // Cлушаем входящие запросы
                 _server.Start();
-
-                LogService.Trace("Ожидание подключений...");
-
-                while (true)
-                {
-                    // Ожидаем входящее соединение
-                    _client = _server.AcceptTcpClient();
-                    _networkStream = _client.GetStream();
-                    LogService.Trace("Клиент подключен");
-                    break;
-                }
             }
             catch (SocketException e)
             {
                 LogService.Trace($"Не удалось создать сервер: {e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Ожидает подключение клиента
+        /// </summary>
+        public void WaitConnection()
+        {
+            LogService.Trace("Ожидание подключений...");
+            try
+            {
+                // Ожидаем входящее соединение
+                _client = _server.AcceptTcpClient();
+                _networkStream = _client.GetStream();
+                IsClientConnected = true;
+                LogService.Trace("Клиент подключен");
+            }
+            catch (Exception e)
+            {
+                LogService.Trace($"Клиент не смог подключиться: {e.Message}");
             }
         }
 
@@ -55,7 +67,7 @@ namespace Network
         /// <returns>Возвращает кортеж: тип операции и объект результата</returns>
         public Tuple<OpearationTypes, IOperation> GetRequest()
         {
-            LogService.Trace("Принимаем запрос");
+            LogService.Trace("Сервер принимает");
             IOperation resultOper = null;
             OpearationTypes operType;
             try
@@ -67,7 +79,7 @@ namespace Network
             catch (Exception e)
             {
                 operType = OpearationTypes.Error;
-                LogService.Trace($"Не удалось принять запрос: {e.Message}");
+                LogService.Trace($"Не удалось принять: {e.Message}");
             }
             return Tuple.Create(operType, resultOper);
         }
@@ -79,7 +91,7 @@ namespace Network
         /// <param name="oper">Объект операции</param>
         public void SendResponse(OpearationTypes operType, IOperation oper)
         {
-            LogService.Trace("Отправляем ответ");
+            LogService.Trace($"Сервер отправляет {operType}");
             try
             {
                 // Сериализуем тело ответа в строку Json
@@ -92,11 +104,11 @@ namespace Network
                 // Отправляем данные клиенту
                 byte[] sendBytes = Encoding.UTF8.GetBytes(outData);
                 _networkStream.Write(sendBytes, 0, sendBytes.Length);
-                LogService.Trace($"Ответ отправлен: {outData}");
+                LogService.Trace($"Отправлено: {outData}");
             }
             catch (Exception e)
             {
-                LogService.Trace($"Не удалось отправить ответ: {e.Message}");
+                LogService.Trace($"Не удалось отправить: {e.Message}");
             }
         }
 
