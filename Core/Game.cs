@@ -7,7 +7,7 @@ namespace Core
         public ShipArrangement ServerShipArrangement { get; set; }
         public ShipArrangement ClientShipArrangement { get; set; }
         public GameConfig GameConfig { get; set; }
-        private PlayerRole _turnOwner;
+        public PlayerRole TurnOwner { get; set; }
 
         /// <summary>
         /// Инициализирует объект игра
@@ -21,25 +21,25 @@ namespace Core
             ServerShipArrangement = serverShipArr;
             ClientShipArrangement = clientShipArr;
             GameConfig = gameConfig;
-            _turnOwner = turnOwner;
+            TurnOwner = turnOwner;
         }
 
         public PlayerRole GetTurnOwner()
         {
-            return _turnOwner;
+            return TurnOwner;
         }
 
         public MoveResult MakeAMove(int vertical, int horizontal)
         {
-            switch (_turnOwner==PlayerRole.Server?ClientShipArrangement.GetCellState(vertical,horizontal):ServerShipArrangement.GetCellState(vertical,horizontal))
+            switch (TurnOwner == PlayerRole.Server?ClientShipArrangement.GetCellState(vertical,horizontal):ServerShipArrangement.GetCellState(vertical,horizontal))
             {
                 case (CellStatе.Water):
-                    if (_turnOwner == PlayerRole.Server) ClientShipArrangement.SetCellState(CellStatе.WoundedWater, vertical, horizontal);
+                    if (TurnOwner == PlayerRole.Server) ClientShipArrangement.SetCellState(CellStatе.WoundedWater, vertical, horizontal);
                     else ServerShipArrangement.SetCellState(CellStatе.WoundedWater, vertical, horizontal);
                     ChangeTurn();
                     return MoveResult.Miss;
                 case (CellStatе.Ship):
-                    if (_turnOwner == PlayerRole.Server) ClientShipArrangement.SetCellState(CellStatе.WoundedShip, vertical, horizontal);
+                    if (TurnOwner == PlayerRole.Server) ClientShipArrangement.SetCellState(CellStatе.WoundedShip, vertical, horizontal);
                     else ServerShipArrangement.SetCellState(CellStatе.WoundedShip, vertical, horizontal);
                     return MoveResult.Hit;
                 default:
@@ -53,7 +53,7 @@ namespace Core
         public void ChangeTurn()
         {
             // Первых ход всегда за сервером, за исключением случаев когда игра была сохранена
-            _turnOwner = _turnOwner == PlayerRole.Server? PlayerRole.Client : PlayerRole.Server;
+            TurnOwner = TurnOwner == PlayerRole.Server? PlayerRole.Client : PlayerRole.Server;
         }
     }
 

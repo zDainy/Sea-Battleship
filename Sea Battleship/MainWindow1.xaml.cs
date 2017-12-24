@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Common;
+using Core;
 
 namespace Sea_Battleship
 {
@@ -24,6 +26,8 @@ namespace Sea_Battleship
         public MainWindow1()
         {
             InitializeComponent();
+            LogService.Start();
+            LogService.Trace("==============================================");
             //for (int y = 0; y < 10; y++)
             //    for (int x = 0; x < 10; x++)
             //    {

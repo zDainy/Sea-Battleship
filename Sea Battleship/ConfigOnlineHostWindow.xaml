@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="ConfigOnlineHostWindow" Height="326" Width="269.333" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="None">
     <Grid Margin="0,0,0,2">
-        <RadioButton Click="TimeLength_Click" Content="30 секунд" Margin="10,41,0,0" Checked="RadioButton_Checked" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Top" GroupName="TimeLength" IsChecked="True" Grid.ColumnSpan="2"/>
+        <RadioButton Click="TimeLength_Click" Content="30 секунд" Margin="10,41,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Top" GroupName="TimeLength" IsChecked="True" Grid.ColumnSpan="2"/>
         <Label Content="Выберите длительность хода" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
         <TextBox TextChanged="TextBox_TextChanged" Margin="10,267,10,30" TextWrapping="Wrap" Text="TQ22252" Width="241" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" UseLayoutRounding="False" IsReadOnly="True" Height="20" VerticalAlignment="Center"/>
         <RadioButton Click="TimeLength_Click" Content="1 минута" Margin="10,61,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Top" Grid.ColumnSpan="2" GroupName="TimeLength"/>

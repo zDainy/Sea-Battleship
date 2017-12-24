@@ -8,10 +8,10 @@
         Title="ConfigOnlineNotHostWindow" Height="204" Width="292.188" WindowStyle="None">
     <Grid>
         <Label Content="Выберите способ расстановки" HorizontalAlignment="Left" Margin="55,10,0,0" VerticalAlignment="Top"/>
-        <RadioButton Content="Ручной" HorizontalAlignment="Left" Margin="55,41,0,0" VerticalAlignment="Top" GroupName="Placement" IsChecked="True"/>
+        <RadioButton Click="Placement_Click" Content="Ручной" HorizontalAlignment="Left" Margin="55,41,0,0" VerticalAlignment="Top" GroupName="Placement" IsChecked="True"/>
         <TextBox Name="KeyTextBox" HorizontalAlignment="Left" Height="23" Margin="10,162,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="264"/>
-        <RadioButton Content="Случайный" HorizontalAlignment="Left" Margin="55,61,0,0" VerticalAlignment="Top" GroupName="Placement"/>
-        <RadioButton Content="По стратегии" HorizontalAlignment="Left" Margin="55,81,0,0" VerticalAlignment="Top" GroupName="Placement"/>
+        <RadioButton Click="Placement_Click" Content="Случайный" HorizontalAlignment="Left" Margin="55,61,0,0" VerticalAlignment="Top" GroupName="Placement"/>
+        <RadioButton Click="Placement_Click" Content="По стратегии" HorizontalAlignment="Left" Margin="55,81,0,0" VerticalAlignment="Top" GroupName="Placement"/>
         <Grid HorizontalAlignment="Left" Height="20" Margin="10,106,0,0" VerticalAlignment="Top" Width="264">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

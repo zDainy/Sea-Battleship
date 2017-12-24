@@ -1,12 +1,9 @@
-
-﻿using Core;
-using Core.FileSystem;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Common
+namespace Core
 {
     /// <summary>
     /// Подсистема работы с файлами игры.
@@ -640,7 +637,7 @@ namespace Common
                 bytes[i] = HexToByte(input[2 * i].ToString() + input[2 * i + 1]);
             }
             byte[,] result = new byte[10, 10];
-            result = FileSystem.Bending<byte>(bytes, 10, 10);
+            result = Bending<byte>(bytes, 10, 10);
             for (int i = 0; i < 10; i++)
             {
                 byte[] tmp = new byte[6];

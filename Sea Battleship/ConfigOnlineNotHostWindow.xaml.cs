@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using Common;
+using Core;
+using Sea_Battleship.Engine;
 
 namespace Sea_Battleship
 {
@@ -19,26 +13,28 @@ namespace Sea_Battleship
     /// </summary>
     public partial class ConfigOnlineNotHostWindow : Window
     {
-        private PlacementState placement = PlacementState.Manualy;
+        private PlacementState _placement = PlacementState.Manualy;
+        public OnlineGame OnlineGame { get; set; }
+        private ShipArrangement _shipArrangement;
+
         public ConfigOnlineNotHostWindow()
         {
             InitializeComponent();
-            
         }
-        enum PlacementState
-        {
-            Manualy,
-            Randomly,
-            Strategily
-        }
-
 
         private void ButtonNext_Click(object sender, RoutedEventArgs e)
         {
-            PlayWindow window = new PlayWindow();
-            window.Owner = this.Owner;
-            window.Show();
-            Close();
+            try
+            {
+                OnlineGame = new OnlineGame(PlayerRole.Client, _placement, IPAddress.Parse(KeyTextBox.Text));
+                OnlineGame.GoToGameWindow(_placement, _shipArrangement, Owner);
+                Close();
+            }
+            catch (Exception exception)
+            {
+                LogService.Trace($"Невозможно подключиться: {exception.Message}");
+                MessageBox.Show(exception.Message, "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private void ButtonPrev_Click(object sender, RoutedEventArgs e)
@@ -50,17 +46,19 @@ namespace Sea_Battleship
         private void Placement_Click(object sender, RoutedEventArgs e)
         {
             RadioButton button = (RadioButton)sender;
-            switch (button.Content)
+            switch(button.Content)
             {
                 case "Ручной":
-                    placement = PlacementState.Manualy;
-                    break;
+                _placement = PlacementState.Manualy;
+                break;
                 case "Случайный":
-                    placement = PlacementState.Randomly;
-                    break;
+                _placement = PlacementState.Randomly;
+                _shipArrangement = ShipArrangement.Random();
+                break;
                 case "По стратегии":
-                    placement = PlacementState.Strategily;
-                    break;
+                _shipArrangement = ShipArrangement.Strategy();
+                _placement = PlacementState.Strategily;
+                break;
             }
         }
     }

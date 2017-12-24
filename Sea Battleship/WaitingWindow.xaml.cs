@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using Common;
+using Core;
+using Sea_Battleship.Engine;
 
 namespace Sea_Battleship
 {
@@ -19,9 +10,23 @@ namespace Sea_Battleship
     /// </summary>
     public partial class WaitingWindow : Window
     {
-        public WaitingWindow()
+        public OnlineGame OnlineGame { get; set; }
+        public ShipArrangement Arrangment { get; set; }
+        public PlacementState Placement { get; set; }
+
+        public WaitingWindow(OnlineGame onlineGame, ShipArrangement arrangment, PlacementState placement)
         {
             InitializeComponent();
+            OnlineGame = onlineGame;
+            Arrangment = arrangment;
+            Placement = placement;
+        }
+
+        public void Wait()
+        {
+            while (!OnlineGame.Connect.Server.IsClientConnected) { }
+            OnlineGame.GoToGameWindow(Placement, Arrangment, Owner);
+            Close();
         }
     }
 }

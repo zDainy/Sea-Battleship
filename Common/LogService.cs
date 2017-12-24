@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace Core
+namespace Common
 {
     public static class LogService
     {
