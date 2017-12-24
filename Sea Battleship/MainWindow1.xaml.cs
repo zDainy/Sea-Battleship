@@ -41,10 +41,6 @@ namespace Sea_Battleship
             //new WaitingWindow().Show();
         }
 
-        private void FieldCell_Click(object sender, MouseButtonEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
 
         private void audioChanged(object sender, RoutedEventArgs e)
         {
@@ -53,7 +49,11 @@ namespace Sea_Battleship
 
         private void Loading_Click(object sender, RoutedEventArgs e)
         {
-            LoadingWindow lw = new LoadingWindow();
+            LoadingWindow lw = new LoadingWindow
+            {
+                Owner = this.Owner,
+                z = 3
+            };
             lw.Show();
             Hide();
         }
