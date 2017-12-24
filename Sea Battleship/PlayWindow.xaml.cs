@@ -27,6 +27,7 @@ namespace Sea_Battleship
         private void audioChanged(object sender, RoutedEventArgs e)
         {
             WindowConfig.AudioChanged((Image)sender);
+            
         }
 
         private void ExitItem_Click(object sender, RoutedEventArgs e)
