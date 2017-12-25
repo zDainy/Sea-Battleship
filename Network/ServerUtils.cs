@@ -154,16 +154,6 @@ namespace Network
             return Tuple.Create(operType, resultOper);
         }
 
-        private static string ByteToHex(byte input)
-        {
-            return (input < 16) ? '0' + input.ToString("X") : input.ToString("X");
-        }
-
-        private static byte HexToByte(string input)
-        {
-            return Convert.ToByte(input, 16);
-        }
-
         /// <summary>
         /// Возвращает текстовое представление IP-адреса.
         /// </summary>
@@ -171,11 +161,20 @@ namespace Network
         /// <returns></returns>
         public static string IPToString(IPAddress address)
         {
-            byte[] tmp = address.GetAddressBytes();
+            byte[] ip = address.GetAddressBytes();
+            byte[] hash = CryptSystem.GetHash(ip);
+            ip = CryptSystem.Vigenere(ip, hash);
+            byte[] tmp = new byte[6];
+            for (int i = 0; i < 4; i++)
+            {
+                tmp[i] = ip[i];
+            }
+            tmp[4] = hash[0];
+            tmp[5] = hash[1];
             string res = "";
             for (int i=0;i<tmp.Length;i++)
             {
-                res += ByteToHex(tmp[i]);
+                res += CryptSystem.ByteToHex(tmp[i]);
             }
             return res;
         }
@@ -187,11 +186,18 @@ namespace Network
         /// <returns></returns>
         public static IPAddress StringToIP(string address)
         {
-            byte[] ip = new byte[4];
-            for (int i=0;i<4;i++)
+            byte[] tmp = new byte[6];
+            for (int i=0;i<6;i++)
             {
-                ip[i]= HexToByte(address[2 * i].ToString() + address[2 * i + 1]);
+                tmp[i]= CryptSystem.HexToByte(address[2 * i].ToString() + address[2 * i + 1]);
             }
+            byte[] ip = new byte[4];
+            byte[] hash = new byte[2] { tmp[4],tmp[5]};
+            for (int i = 0; i < 4; i++)
+            {
+                ip[i] = tmp[i];
+            }
+            ip = CryptSystem.UnVigenere(ip, hash);
             IPAddress res = new IPAddress(ip);
             return res;
         }
