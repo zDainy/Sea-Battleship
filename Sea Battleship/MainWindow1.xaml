@@ -9,10 +9,7 @@
         mc:Ignorable="d"
         Title="Морской бой" Height="300" Width="866" MinWidth="640" MinHeight="480">
 
-    <Grid Margin="0">
-        <Grid.DataContext>
-            <local:PlayField/>
-        </Grid.DataContext>
+    <Grid  Margin="0">
         <Grid.Background>
             <ImageBrush ImageSource="Resources/main.jpg" Stretch="UniformToFill"/>
         </Grid.Background>
@@ -30,8 +27,8 @@
             <Menu Grid.Column="0" VerticalContentAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Background="{x:Null}" VerticalAlignment="Center">
                 <MenuItem  Header ="Новая игра" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="150" Background="{x:Null}" >
                     <MenuItem Header="Онлайн">
-                        <MenuItem Header="Создать лобби"/>
-                        <MenuItem Header="Подключиться к лобби" />
+                        <MenuItem Header="Создать лобби" Name="CreateLobbyItem" Click="CreateLobby_Click" />
+                        <MenuItem Header="Подключиться к лобби" Name="ConnetToLobbyItem" Click="ConnetToLobbyItem_Click"/>
                     </MenuItem>
                     <MenuItem Header="С компьютером" Click="NewGame_MouseLeftButtonDown"/>
                 </MenuItem>
@@ -43,9 +40,10 @@
                 <MenuItem Header="Правила" />
             </Menu>
             <Menu Margin="0" Grid.Column="3" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
-                <MenuItem Header="Об авторах" />
+                <MenuItem Header="Об авторах" Name="AboutItem" Click="AboutItem_Click" />
             </Menu>
             <Image Grid.Column="4" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"/>
         </Grid>
+
     </Grid>
 </Window>

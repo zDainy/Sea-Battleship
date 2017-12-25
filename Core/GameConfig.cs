@@ -7,7 +7,7 @@ namespace Core
         public bool IsOnline { get; }
         public BotLevels BotLvl { get; }
         public GameStatus GameStatus { get; set; }
-        public GameSpeed GameSpeed { get; }
+        public GameSpeed GameSpeed { get; set; }
         public string Connection { get; }
         public PlayerRole OnlineRole { get; }
 
@@ -92,5 +92,12 @@ namespace Core
         Ship,
         WoundedShip,
         DestroyedShip
+    }
+
+    public enum PlacementState
+    {
+        Manualy,
+        Randomly,
+        Strategily
     }
 }
