@@ -42,179 +42,10 @@ namespace Core
             return result;
         }
 
-        private static bool[] KeyGen(int size)
-        {
-            bool[] result = new bool[size];
-            for (int i = 0; i < size; i++)
-            {
-                result[i] = random.NextDouble() < 0.5;
-            }
-            return result;
-        }
-
-        private static bool[] Scramble(bool[] input, int keylength)
-        {
-            bool[] result = new bool[input.Length + keylength];
-            bool[] key = KeyGen(keylength);
-            for (int i = 0; i < keylength; i++)
-            {
-                result[input.Length + i] = key[i];
-            }
-            int j = 0;
-            for (int i = 0; i < input.Length; i++)
-            {
-                result[i] = input[i] ^ key[j++];
-                if (j == keylength) j = 0;
-            }
-            return result;
-        }
-
-        private static bool[] Unscramble(bool[] input, int keylength)
-        {
-            bool[] key = new bool[keylength];
-            for (int i = 0; i < keylength; i++)
-            {
-                key[i] = input[input.Length - keylength + i];
-            }
-            bool[] result = new bool[input.Length - keylength];
-            int j = 0;
-            for (int i = 0; i < result.Length; i++)
-            {
-                result[i] = input[i] ^ key[j++];
-                if (j == keylength) j = 0;
-            }
-            return result;
-        }
-
-        private static byte[] GetHash(byte[] input)
-        {
-            int size = (int)Math.Round(Math.Sqrt(input.Length));
-            List<byte>[] hash = new List<byte>[size];
-            for (int i = 0; i < size; i++)
-            {
-                hash[i] = new List<byte>();
-                hash[i].Add((byte)(input.Length + i));
-            }
-            byte[] res = new byte[size];
-            for (int i = 0; i < input.Length; i++)
-            {
-                int p;
-                Math.DivRem(i, size, out p);
-                hash[p].Add(input[i]);
-            }
-            for (int i = 0; i < size; i++)
-            {
-                byte b = (byte)hash[i].Count;
-                foreach (byte z in hash[i])
-                {
-                    b = (byte)(b ^ z);
-                }
-                res[i] = b;
-            }
-            return res;
-        }
-
-        private static bool CheckHash(byte[] input, byte[] hash)
-        {
-            byte[] gethash = GetHash(input);
-            if (gethash.Length != hash.Length) return false;
-            for (int i = 0; i < hash.Length; i++)
-            {
-                if (gethash[i] != hash[i]) return false;
-            }
-            return true;
-        }
-
-        private static byte BoolToByte(bool[] input)
-        {
-            if (input.Length != 8) throw new ArgumentException("Incorrect array size");
-            byte result = 0;
-            for (int i = 0; i < 8; i++)
-            {
-                if (input[7 - i]) result += (byte)Math.Pow(2, i);
-            }
-            return result;
-        }
-
-        private static bool[] ByteToBool(byte input)
-        {
-            bool[] result = new bool[8];
-            byte sum = 0;
-            for (int i = 7; i >= 0; i--)
-            {
-                if (Math.Pow(2, i) + sum <= input)
-                {
-                    result[7 - i] = true;
-                    sum += (byte)Math.Pow(2, i);
-                }
-            }
-            return result;
-        }
-
-        private static string ByteToHex(byte input)
-        {
-            return (input < 16) ? '0' + input.ToString("X") : input.ToString("X");
-        }
-
-        private static byte HexToByte(string input)
-        {
-            return Convert.ToByte(input, 16);
-        }
-
-        private static byte Vigenere(byte input, byte key)
-        {
-            return (byte)(input + key);
-        }
-
-        private static byte[] Vigenere(byte[] input, byte key)
-        {
-            for (int i = 0; i < input.Length; i++)
-            {
-                input[i] = Vigenere(input[i], key);
-            }
-            return input;
-        }
-
-        private static byte[] Vigenere(byte[] input, byte[] key)
-        {
-            int j = 0;
-            for (int i = 0; i < input.Length; i++)
-            {
-                input[i] = Vigenere(input[i], key[j++]);
-                if (j == key.Length) j = 0;
-            }
-            return input;
-        }
-
-        private static byte UnVigenere(byte input, byte key)
-        {
-            return (byte)(input - key);
-        }
-
-        private static byte[] UnVigenere(byte[] input, byte key)
-        {
-            for (int i = 0; i < input.Length; i++)
-            {
-                input[i] = UnVigenere(input[i], key);
-            }
-            return input;
-        }
-
-        private static byte[] UnVigenere(byte[] input, byte[] key)
-        {
-            int j = 0;
-            for (int i = 0; i < input.Length; i++)
-            {
-                input[i] = UnVigenere(input[i], key[j++]);
-                if (j == key.Length) j = 0;
-            }
-            return input;
-        }
-
         private static string saveArrangement(bool[,] input)
         {
             bool[] field = Lining<bool>(input);
-            bool[] scrambled = Scramble(field, 4);
+            bool[] scrambled = CryptSystem.Scramble(field, 4);
             byte[] bytes = new byte[13];
             for (int i = 0; i < 13; i++)
             {
@@ -223,15 +54,15 @@ namespace Core
                 {
                     tmp[j] = scrambled[8 * i + j];
                 }
-                bytes[i] = BoolToByte(tmp);
+                bytes[i] = CryptSystem.BoolToByte(tmp);
             }
             byte[] result = new byte[34];
-            byte[] hash = GetHash(bytes);
+            byte[] hash = CryptSystem.GetHash(bytes);
             byte[] keys = new byte[13];
             random.NextBytes(keys);
             for (int i = 0; i < 13; i++)
             {
-                result[2 * i] = Vigenere(bytes[i], keys[i]);
+                result[2 * i] = CryptSystem.Vigenere(bytes[i], keys[i]);
                 result[2 * i + 1] = keys[i];
                 bytes[i] = (byte)(result[2 * i] ^ result[2 * i + 1]);
             }
@@ -239,7 +70,7 @@ namespace Core
             {
                 result[26 + i] = hash[i];
             }
-            hash = GetHash(bytes);
+            hash = CryptSystem.GetHash(bytes);
             for (int i = 0; i < hash.Length; i++)
             {
                 result[26 + hash.Length + i] = hash[i];
@@ -247,7 +78,7 @@ namespace Core
             string res = "";
             for (int i = 0; i < result.Length; i++)
             {
-                res += ByteToHex(result[i]);
+                res += CryptSystem.ByteToHex(result[i]);
             }
             return res;
         }
@@ -257,9 +88,6 @@ namespace Core
         /// </summary>
         /// <param name="name">Имя файла с указанным расширением.</param>
         /// <param name="input">Расстановка кораблей.</param>
-
-        /// 
-
         public static void SaveArrangement(string name, ShipArrangement input)
         {
             bool[,] arrangement = new bool[10, 10];
@@ -286,7 +114,7 @@ namespace Core
             byte[] byteinput = new byte[input.Length / 2];
             for (int i = 0; i < byteinput.Length; i++)
             {
-                byteinput[i] = HexToByte(input[2 * i].ToString() + input[2 * i + 1]);
+                byteinput[i] = CryptSystem.HexToByte(input[2 * i].ToString() + input[2 * i + 1]);
             }
             byte[] hashres = new byte[4];
             byte[] hash = new byte[4];
@@ -300,22 +128,22 @@ namespace Core
             {
                 bytes[i] = (byte)(byteinput[2 * i] ^ byteinput[2 * i + 1]);
             }
-            if (!CheckHash(bytes, hashres)) throw new LoadingArrangementException();
+            if (!CryptSystem.CheckHash(bytes, hashres)) throw new LoadingArrangementException();
             for (int i = 0; i < 13; i++)
             {
-                bytes[i] = UnVigenere(byteinput[2 * i], byteinput[2 * i + 1]);
+                bytes[i] = CryptSystem.UnVigenere(byteinput[2 * i], byteinput[2 * i + 1]);
             }
-            if (!CheckHash(bytes, hash)) throw new LoadingArrangementException();
+            if (!CryptSystem.CheckHash(bytes, hash)) throw new LoadingArrangementException();
             bool[] scrambled = new bool[104];
             for (int i = 0; i < 13; i++)
             {
-                bool[] tmp = ByteToBool(bytes[i]);
+                bool[] tmp = CryptSystem.ByteToBool(bytes[i]);
                 for (int j = 0; j < tmp.Length; j++)
                 {
                     scrambled[i * 8 + j] = tmp[j];
                 }
             }
-            bool[] res = Unscramble(scrambled, 4);
+            bool[] res = CryptSystem.Unscramble(scrambled, 4);
             return Bending<bool>(res, 10, 10);
         }
 
@@ -324,8 +152,6 @@ namespace Core
         /// </summary>
         /// <param name="name">Имя файла.</param>
         /// <returns></returns>
-
-        /// 
         public static ShipArrangement LoadArrangement(string name)
         {
             if (!File.Exists(name)) throw new LoadingArrangementException();
@@ -347,7 +173,6 @@ namespace Core
             }
             return res;
         }
-
 
         private static byte[,] ArrangementsToByteArray(ShipArrangement a, ShipArrangement b) // да, я знаю, что этот код не самый очевидный. Рекомендую просто игнорировать его существование
         {
@@ -431,7 +256,7 @@ namespace Core
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    bool[] tmp = ByteToBool(map[i, j]);
+                    bool[] tmp = CryptSystem.ByteToBool(map[i, j]);
                     if (tmp[0])
                     {
                         if (tmp[1]) result[0].SetCellState(CellStatе.WoundedShip, 2 * i, j);
@@ -491,7 +316,7 @@ namespace Core
             byte[] bytes = new byte[1];
             random.NextBytes(bytes);
             byte config = bytes[0];
-            bool[] conf = ByteToBool(config);
+            bool[] conf = CryptSystem.ByteToBool(config);
             conf[0] = g.GameConfig.IsOnline;
             if (g.GameConfig.IsOnline)  // Сохранение онлайн игры
             {
@@ -527,7 +352,7 @@ namespace Core
                         conf[4] = true;
                         break;
                 }*/
-                config = BoolToByte(conf);
+                config = CryptSystem.BoolToByte(conf);
                 result[5, 6] = config;
                 result[5, 7] = rand[0];
                 result[5, 8] = rand[1];
@@ -575,7 +400,7 @@ namespace Core
                         conf[4] = true;
                         break;
                 }*/
-                config = BoolToByte(conf);
+                config = CryptSystem.BoolToByte(conf);
                 result[5, 6] = config;
                 result[5, 7] = rand[4];
                 result[5, 8] = rand[5];
@@ -588,10 +413,10 @@ namespace Core
                 {
                     tmp[j] = result[j, i];
                 }
-                byte[] hash = GetHash(tmp);
+                byte[] hash = CryptSystem.GetHash(tmp);
                 result[6, i] = hash[0];
                 result[7, i] = hash[1];
-                tmp = Vigenere(tmp, hash);
+                tmp = CryptSystem.Vigenere(tmp, hash);
                 for (int j = 0; j < 5; j++)
                 {
                     result[j, i] = tmp[j];
@@ -601,7 +426,7 @@ namespace Core
                 {
                     tmp[j] = result[j, i];
                 }
-                hash = GetHash(tmp);
+                hash = CryptSystem.GetHash(tmp);
                 result[8, i] = hash[0];
                 result[9, i] = hash[1];
             }
@@ -609,7 +434,7 @@ namespace Core
             string res = "";
             for (int i = 0; i < bytes.Length; i++)
             {
-                res += ByteToHex(bytes[i]);
+                res += CryptSystem.ByteToHex(bytes[i]);
             }
             return res;
         }
@@ -634,7 +459,7 @@ namespace Core
             byte[] bytes = new byte[input.Length / 2];
             for (int i = 0; i < input.Length / 2; i++)
             {
-                bytes[i] = HexToByte(input[2 * i].ToString() + input[2 * i + 1]);
+                bytes[i] = CryptSystem.HexToByte(input[2 * i].ToString() + input[2 * i + 1]);
             }
             byte[,] result = new byte[10, 10];
             result = Bending<byte>(bytes, 10, 10);
@@ -646,15 +471,15 @@ namespace Core
                     tmp[j] = result[j, i];
                 }
                 byte[] hash = new byte[2] { result[8, i], result[9, i] };
-                if (!CheckHash(tmp, hash)) throw new GameLoadingException();
+                if (!CryptSystem.CheckHash(tmp, hash)) throw new GameLoadingException();
                 hash = new byte[2] { result[6, i], result[7, i] };
                 tmp = new byte[5];
                 for (int j = 0; j < 5; j++)
                 {
                     tmp[j] = result[j, i];
                 }
-                tmp = UnVigenere(tmp, hash);
-                if (!CheckHash(tmp, hash)) throw new GameLoadingException();
+                tmp = CryptSystem.UnVigenere(tmp, hash);
+                if (!CryptSystem.CheckHash(tmp, hash)) throw new GameLoadingException();
                 for (int j = 0; j < 5; j++)
                 {
                     result[j, i] = tmp[j];
@@ -662,7 +487,7 @@ namespace Core
             }
             GameConfig gc;
             PlayerRole to;
-            if (!ByteToBool(result[5, 6])[0])
+            if (!CryptSystem.ByteToBool(result[5, 6])[0])
             {
                 BotLevels bl = BotLevels.Easy;
                 GameSpeed gs;
@@ -678,7 +503,7 @@ namespace Core
                         bl = BotLevels.Hard;
                         break;
                 }
-                bool[] config = ByteToBool(result[5, 6]);
+                bool[] config = CryptSystem.ByteToBool(result[5, 6]);
                 gs = config[3] ? config[4] ? GameSpeed.Turtle : GameSpeed.Slow : config[4] ? GameSpeed.Medium : GameSpeed.Fast;
                 to = config[1] ? PlayerRole.Client : PlayerRole.Server;
                 gc = new GameConfig(bl, gs, GameStatus.Pause);
@@ -693,7 +518,7 @@ namespace Core
                 }
                 int port = BitConverter.ToInt32(new byte[4] { result[5, 4], result[5, 5], 0, 0 }, 0);
                 string connection = ip[0].ToString() + '.' + ip[1].ToString() + '.' + ip[2].ToString() + '.' + ip[3].ToString() + ":" + port.ToString();
-                bool[] config = ByteToBool(result[5, 6]);
+                bool[] config = CryptSystem.ByteToBool(result[5, 6]);
                 gs = config[3] ? config[4] ? GameSpeed.Turtle : GameSpeed.Slow : config[4] ? GameSpeed.Medium : GameSpeed.Fast;
                 gc = new GameConfig(PlayerRole.Server, connection, gs, GameStatus.Pause);
                 to = config[1] ? PlayerRole.Client : PlayerRole.Server;
@@ -725,5 +550,5 @@ namespace Core
             fileStream.Close();
             return loadGame(s);
         }
+        }
     }
-}

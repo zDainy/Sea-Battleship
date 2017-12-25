@@ -1,5 +1,3 @@
-﻿using System;
-
 namespace Core
 {
     public class Game
@@ -7,7 +5,8 @@ namespace Core
         public ShipArrangement ServerShipArrangement { get; set; }
         public ShipArrangement ClientShipArrangement { get; set; }
         public GameConfig GameConfig { get; set; }
-        public PlayerRole TurnOwner { get; set; }
+       public PlayerRole TurnOwner { get; set; }
+
 
         /// <summary>
         /// Инициализирует объект игра
@@ -24,6 +23,27 @@ namespace Core
             TurnOwner = turnOwner;
         }
 
+        /// <summary>
+        /// Метод совершения хода для ИИ.
+        /// </summary>
+        /*public void MakeAMove()
+        {
+            System.Windows.Vector vector = new System.Windows.Vector();
+            MoveResult result = MoveResult.Error;
+            do
+            {
+                vector = AI.MakeAMove(GameConfig.BotLvl, ServerShipArrangement, result);
+                result = MakeAMove((int)vector.X, (int)vector.Y);
+            }
+            while (_turnOwner == PlayerRole.Client);
+        }*/
+
+        /// <summary>
+        /// Метод совершения хода для онлайн игры.
+        /// </summary>
+        /// <param name="vertical">Координата по вертикали.</param>
+        /// <param name="horizontal">Координата по горизонтали.</param>
+        /// <returns></returns>
         public MoveResult MakeAMove(int vertical, int horizontal)
         {
             switch (TurnOwner == PlayerRole.Server ? ClientShipArrangement.GetCellState(vertical, horizontal) : ServerShipArrangement.GetCellState(vertical, horizontal))
@@ -55,6 +75,7 @@ namespace Core
     public enum MoveResult
     {
         Hit,
+        Destroyed,
         Miss,
         Error
     }
