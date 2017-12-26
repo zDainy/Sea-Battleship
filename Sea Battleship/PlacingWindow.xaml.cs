@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,9 +43,13 @@ namespace Sea_Battleship
         private double tmpY1;
         private StackPanel tmpShip;
         private List<ShipListItem> shipList = new List<ShipListItem>();
+        private ShipArrangement _arrangementClient;
+        private GameConfig _gameConfig;
 
-        public PlacingWindow()
+        public PlacingWindow(ShipArrangement arrangementClient, GameConfig game)
         {
+            _arrangementClient = arrangementClient;
+            _gameConfig = game;
             InitializeComponent();
 
             for (int y = 0; y < 10; y++)
@@ -402,6 +407,38 @@ namespace Sea_Battleship
                     sh.ShipPanel.Margin = new Thickness(100+ gr.ActualHeight, sh.ShipPanel.Margin.Top, 0,0);
                 }
             }
+        }
+
+        private bool Check(int x, int y)
+        {
+            foreach (ShipListItem sh in shipList)
+            {
+                if (sh.PointList.Contains(new Point(x, y)))
+                    return true;
+            }
+            return false;
+        }
+
+        private ShipArrangement CreateShipArrangement()
+        {
+            ShipArrangement arr = new ShipArrangement();
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if (Check(i, j))
+                    {
+                        arr.SetCellState(CellStatе.Ship, i, j);
+                    }
+                }
+            }
+            return arr;
+        }
+
+        private void ReadyButton_Click(object sender, RoutedEventArgs e)
+        {
+            new PlayWindow(new Game(CreateShipArrangement(), _arrangementClient, _gameConfig)).Show();
+            Close();
         }
     }
 }

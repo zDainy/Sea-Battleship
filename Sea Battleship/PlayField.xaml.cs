@@ -26,11 +26,11 @@ namespace Sea_Battleship
         Ships ships;
         private static bool isHiddenField = true;
 
-        
 
         public PlayField()
         {
             InitializeComponent();
+            Game gg = WindowConfig.game;
             Ships = new Ships(this);
             if (isHiddenField)
             {
@@ -69,12 +69,11 @@ namespace Sea_Battleship
                         Grid.SetColumn(img, x);
                         Grid.SetRow(img, y);
                     }
-                    
+
                 }
-                // Core.ShipArrangement arr = new Core.ShipArrangement();
-                //ShipArrangement arr =  ShipArrangement.Strategy();
-                ShipArrangement arr = ShipArrangement.Strategy();
-                PlaceFromMassive(arr.GetArrangement());
+                PlaceFromMassive(WindowConfig.game.ServerShipArrangement.GetArrangement());
+               // ShipArrangement arr = ShipArrangement.Strategy();
+               // PlaceFromMassive(arr.GetArrangement());
 
                 //ships.ShipList4[0].Place(this, 0, 0, true);
 
@@ -86,7 +85,7 @@ namespace Sea_Battleship
             }
             isHiddenField = !isHiddenField;
         }
-
+    
         public Ships Ships { get => ships; set => ships = value; }
        // public bool IsHiddenField { get => isHiddenField; set => isHiddenField = value; }
 
@@ -124,13 +123,102 @@ namespace Sea_Battleship
             Image image = (Image)sender;
             int X = Grid.GetColumn(image);
             int Y = Grid.GetRow(image);
+            string uriString = "";
+            MoveResult result =  z.Game.MakeAMove(X, Y);
+            switch(result)
+            {
+                case MoveResult.Hit:
+                    uriString = "/Resources/shipCrushed.png";
+                    break;
+                case MoveResult.Miss:
+                    uriString = "/Resources/waterCrushed.png";
+                    break;
+                case MoveResult.Destroyed:
+                    break;
+                case MoveResult.Error:
+                    break;
+            }
+            
             SetCell(Grid.GetColumn(image), Grid.GetRow(image), FieldGrid, new Image()
             {
                 Stretch = Stretch.Fill,
                 Opacity = 100,
-                Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                Source = new BitmapImage(new Uri(uriString, UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
             });
+            Point p = AI.MakeAMove(z.Game);
+            image = (Image)z.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
+            bool was = false;
+            foreach (AShip sh in z.MyField.ships.ShipList1)
+            {
+                if (sh.isHere(image, z.MyField))
+                {
+                    SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
+                    {
+                        Stretch = Stretch.Fill,
+                        Opacity = 100,
+                        Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                    });
+                    was = true;
+                    break;
+                }
+            }
+            if(!was)
+                foreach (AShip sh in z.MyField.ships.ShipList2)
+                {
+                    if (sh.isHere(image, z.MyField))
+                    {
+                        SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (!was)
+                foreach (AShip sh in z.MyField.ships.ShipList3)
+                {
+                    if (sh.isHere(image, z.MyField))
+                    {
+                        SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (!was)
+                foreach (AShip sh in z.MyField.ships.ShipList4)
+                {
+                    if (sh.isHere(image, z.MyField))
+                    {
+                        SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if(!was)
+            {
+                SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
+                {
+                    Stretch = Stretch.Fill,
+                    Opacity = 100,
+                    Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                });
+            }
         }
+
+
 
         private void _SizeChanged(object sender, SizeChangedEventArgs e)
         {

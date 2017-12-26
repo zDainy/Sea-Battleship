@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 namespace Core
 {
-    static class AI
+    public static class AI
     {
         private static System.Random random = new System.Random();
 
@@ -53,7 +53,7 @@ namespace Core
             return false;
         }
 
-        public static void MakeAMove(Game g)
+        public static Point MakeAMove(Game g)
         {
             int x = 0;
             int y = 0;
@@ -242,6 +242,7 @@ namespace Core
                     }
                     break;
             }
+            return new Point(x, y);
         }
     }
 }

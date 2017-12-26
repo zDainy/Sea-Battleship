@@ -9,6 +9,7 @@ namespace Sea_Battleship
     public abstract class AShip
     {
         int size;
+        int countAlive;
         Image[] images;
         bool isHorizontal = true;
         int x = -1;
@@ -20,6 +21,7 @@ namespace Sea_Battleship
         public int Size { get => size; set => size = value; }
         public int X { get => x; set => x = value; }
         public int Y { get => y; set => y = value; }
+        public int CountAlive { get => countAlive; set => countAlive = value; }
 
         public void ShipInit()
         {
@@ -34,7 +36,7 @@ namespace Sea_Battleship
             //
         }
 
-       public void Place(PlayField field, int x, int y, bool isHorizontal)
+        public void Place(PlayField field, int x, int y, bool isHorizontal)
         {
             X = x;
             Y = y;
@@ -83,6 +85,90 @@ namespace Sea_Battleship
             {
                 Images[i].LayoutTransform = new RotateTransform(90);
             }
+        }
+
+        public bool isHere(Image image, PlayField field) //ДА ЧТО ЗА НАХУЙ
+        {
+            foreach (Image im in images)
+            {
+                if (im == image)
+                {
+                    countAlive--;
+                    if (countAlive == 0)
+                    {
+                        if (isHorizontal)
+                        {
+                            for (int i = X - 1; i < x + size + 1; i++)
+                            {
+                                if (i >= 0 && i < 10 && y + 1 >= 0 && y + 1 < 10)
+                                    PlayField.SetCell(i, y + 1, field.FieldGrid, new Image()
+                                    {
+                                        Stretch = Stretch.Fill,
+                                        Opacity = 100,
+                                        Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                                    });
+                                if (i >= 0 && i < 10 && y - 1 >= 0 && y - 1 < 10)
+                                    PlayField.SetCell(i, y - 1, field.FieldGrid, new Image()
+                                    {
+                                        Stretch = Stretch.Fill,
+                                        Opacity = 100,
+                                        Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                                    });
+                            }
+                            if (x - 1 >= 0 && x - 1 < 10)
+                                PlayField.SetCell(x - 1, y, field.FieldGrid, new Image()
+                                {
+                                    Stretch = Stretch.Fill,
+                                    Opacity = 100,
+                                    Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                                });
+                            if (x + size >= 0 && x + size < 10)
+                                PlayField.SetCell(x + size, y, field.FieldGrid, new Image()
+                                {
+                                    Stretch = Stretch.Fill,
+                                    Opacity = 100,
+                                    Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                                });
+                        }
+                        else
+                        {
+                            for (int i = y - 1; i < y + size + 1; i++)
+                            {
+                                if (i >= 0 && i < 10 && x + 1 >= 0 && x + 1 < 10)
+                                    PlayField.SetCell(x + 1, i, field.FieldGrid, new Image()
+                                    {
+                                        Stretch = Stretch.Fill,
+                                        Opacity = 100,
+                                        Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                                    });
+                                if (i >= 0 && i < 10 && x - 1 >= 0 && x - 1 < 10)
+                                    PlayField.SetCell(x - 1, i, field.FieldGrid, new Image()
+                                    {
+                                        Stretch = Stretch.Fill,
+                                        Opacity = 100,
+                                        Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                                    });
+                            }
+                            if (y - 1 >= 0 && y - 1 < 10)
+                                PlayField.SetCell(x, y - 1, field.FieldGrid, new Image()
+                                {
+                                    Stretch = Stretch.Fill,
+                                    Opacity = 100,
+                                    Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                                });
+                            if (y + size >= 0 && y + size < 10)
+                                PlayField.SetCell(x, y + size, field.FieldGrid, new Image()
+                                {
+                                    Stretch = Stretch.Fill,
+                                    Opacity = 100,
+                                    Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                                });
+                        }
+                    }
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
