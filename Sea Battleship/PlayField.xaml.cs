@@ -125,7 +125,7 @@ namespace Sea_Battleship
             {
                 Stretch = Stretch.Fill,
                 Opacity = 100,
-                Source = new BitmapImage(new Uri("/Resources/no-audio.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
             });
         }
 
