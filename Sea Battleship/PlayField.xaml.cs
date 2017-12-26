@@ -26,6 +26,8 @@ namespace Sea_Battleship
         Ships ships;
         private static bool isHiddenField = true;
 
+        
+
         public PlayField()
         {
             InitializeComponent();
@@ -118,6 +120,7 @@ namespace Sea_Battleship
 
         private void FieldCell_Click(object sender, MouseButtonEventArgs e)
         {
+            PlayWindow z = (PlayWindow)((Grid)Parent).Parent;
             Image image = (Image)sender;
             int X = Grid.GetColumn(image);
             int Y = Grid.GetRow(image);
@@ -125,7 +128,7 @@ namespace Sea_Battleship
             {
                 Stretch = Stretch.Fill,
                 Opacity = 100,
-                Source = new BitmapImage(new Uri("/Resources/no-audio.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
             });
         }
 

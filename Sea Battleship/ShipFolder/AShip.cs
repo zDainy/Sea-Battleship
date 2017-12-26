@@ -13,6 +13,7 @@ namespace Sea_Battleship
         bool isHorizontal = true;
         int x = -1;
         int y = -1;
+        bool iDead = false;
 
         public Image[] Images { get => images; set => images = value; }
         public bool IsHorizontal { get => isHorizontal; set => isHorizontal = value; }

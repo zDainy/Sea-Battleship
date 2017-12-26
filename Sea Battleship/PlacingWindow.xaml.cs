@@ -63,7 +63,7 @@ namespace Sea_Battleship
                     Grid.SetRow(img, y);
                 }
             }
-            foreach (Object ship in MainGrid.Children)
+            foreach (Object ship in ((Grid)MainGrid.Children[1]).Children)
             {
                 if (ship.GetType().ToString() == "System.Windows.Controls.StackPanel")
                         shipList.Add(new ShipListItem {ShipPanel = (StackPanel)ship});
@@ -318,8 +318,9 @@ namespace Sea_Battleship
                     break;
                 }
             }
-            if (listItem.PointList != null)
-                listItem.PointList = null;
+            if (listItem != null)
+                if (listItem.PointList != null)
+                    listItem.PointList = null;
             if (ship.Parent == gr)
             {
                 Grid.SetZIndex(ship, 0);
@@ -387,6 +388,19 @@ namespace Sea_Battleship
             if(Yes)
             {
                 ChangeOrientation();
+            }
+        }
+
+        private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ((Grid)sender).Width = ((Grid)sender).ActualHeight * 632 / 449;
+            gr.Width = gr.ActualHeight;
+            foreach(ShipListItem sh in shipList)
+            {
+                if(sh.PointList==null)
+                {
+                    sh.ShipPanel.Margin = new Thickness(100+ gr.ActualHeight, sh.ShipPanel.Margin.Top, 0,0);
+                }
             }
         }
     }
