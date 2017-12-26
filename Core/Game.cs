@@ -1,4 +1,5 @@
 namespace Core
+
 {
     public class Game
     {
@@ -6,6 +7,13 @@ namespace Core
         public ShipArrangement ClientShipArrangement { get; set; }
         public GameConfig GameConfig { get; set; }
        public PlayerRole TurnOwner { get; set; }
+      private ShipArrangement _currentArrangement
+      {
+        get
+        {
+          return TurnOwner == PlayerRole.Server?ClientShipArrangement:ServerShipArrangement;
+        }
+      }
 
 
         /// <summary>
@@ -49,13 +57,11 @@ namespace Core
             switch (TurnOwner == PlayerRole.Server ? ClientShipArrangement.GetCellState(vertical, horizontal) : ServerShipArrangement.GetCellState(vertical, horizontal))
             {
                 case (CellStatе.Water):
-                    if (TurnOwner == PlayerRole.Server) ClientShipArrangement.SetCellState(CellStatе.WoundedWater, vertical, horizontal);
-                    else ServerShipArrangement.SetCellState(CellStatе.WoundedWater, vertical, horizontal);
+                    _currentArrangement.SetCellState(CellStatе.WoundedWater, vertical, horizontal);
                     ChangeTurn();
                     return MoveResult.Miss;
                 case (CellStatе.Ship):
-                    if (TurnOwner == PlayerRole.Server) ClientShipArrangement.SetCellState(CellStatе.WoundedShip, vertical, horizontal);
-                    else ServerShipArrangement.SetCellState(CellStatе.WoundedShip, vertical, horizontal);
+                    _currentArrangement.SetCellState(CellStatе.WoundedShip, vertical, horizontal);
                     return MoveResult.Hit;
                 default:
                     return MoveResult.Error;
@@ -70,13 +76,5 @@ namespace Core
             // Первых ход всегда за сервером, за исключением случаев когда игра была сохранена
             TurnOwner = TurnOwner == PlayerRole.Server ? PlayerRole.Client : PlayerRole.Server;
         }
-    }
-
-    public enum MoveResult
-    {
-        Hit,
-        Destroyed,
-        Miss,
-        Error
     }
 }

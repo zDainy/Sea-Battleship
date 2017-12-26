@@ -287,12 +287,4 @@ namespace Core
             return arrangement;
         }
     }
-    /// <summary>
-    /// Указывает направление установки корабля.
-    /// </summary>
-    public enum Direction
-    {
-        Right,
-        Down
-    }
 }
