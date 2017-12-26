@@ -93,4 +93,24 @@ namespace Core
         WoundedShip,
         DestroyedShip
     }
+
+    /// <summary>
+    /// Указывает направление установки корабля.
+    /// </summary>
+    public enum Direction
+    {
+        Right,
+        Down
+    }
+
+    /// <summary>
+    /// Результат совершенного хода.
+    /// </summary>
+    public enum MoveResult
+    {
+        Hit,
+        Destroyed,
+        Miss,
+        Error
+    }
 }
