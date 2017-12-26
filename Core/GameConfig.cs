@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Core
 {
@@ -7,7 +7,7 @@ namespace Core
         public bool IsOnline { get; }
         public BotLevels BotLvl { get; }
         public GameStatus GameStatus { get; set; }
-        public GameSpeed GameSpeed { get; }
+        public GameSpeed GameSpeed { get; set; }
         public string Connection { get; }
         public PlayerRole OnlineRole { get; }
 
@@ -112,5 +112,11 @@ namespace Core
         Destroyed,
         Miss,
         Error
+        
+    public enum PlacementState
+    {
+        Manualy,
+        Randomly,
+        Strategily
     }
 }

@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Sea_Battleship.ShipFolder;
+using Core;
+using Sea_Battleship.Engine;
 
 namespace Sea_Battleship
 {
@@ -21,34 +24,74 @@ namespace Sea_Battleship
     public partial class PlayField : UserControl
     {
         Ships ships;
-        bool[,] _possibilityToPlace;
+        private static bool isHiddenField = true;
 
         public PlayField()
         {
             InitializeComponent();
-            PossibilityToPlace = new bool[10, 10];
-            for (int i = 0; i < 10; i++)
-                for (int j = 0; j < 10; j++)
-                    PossibilityToPlace[i, j] = true;
-            Ships = new Ships(this, PossibilityToPlace);
-            for(int y = 0; y<10; y++)
-                for(int x = 0; x<10; x++)
+            Ships = new Ships(this);
+            if (isHiddenField)
+            {
+                ships.Init();
+                for (int y = 0; y < 10; y++)
                 {
-                    Image img = new Image
+                    for (int x = 0; x < 10; x++)
                     {
-                        Stretch = Stretch.Fill,                       
-                        Source = new BitmapImage(new Uri("/Resources/Water.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
-                        Opacity = 0
-                    };
-                    img.MouseLeftButtonDown += FieldCell_Click;
-                    FieldGrid.Children.Add(img);
-                    Grid.SetColumn(img, x);
-                    Grid.SetRow(img, y);
+                        Image img = new Image
+                        {
+                            Stretch = Stretch.Fill,
+                            Source = new BitmapImage(new Uri("/Resources/Water.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
+                            Opacity = 0
+                        };
+                        img.MouseLeftButtonDown += FieldCell_Click;
+                        FieldGrid.Children.Add(img);
+                        Grid.SetColumn(img, x);
+                        Grid.SetRow(img, y);
+                    }
                 }
+            }
+            else
+            {
+                for (int y = 0; y < 10; y++)
+                {
+                    for (int x = 0; x < 10; x++)
+                    {
+                        Image img = new Image
+                        {
+                            Stretch = Stretch.Fill,
+                            Source = new BitmapImage(new Uri("/Resources/Water.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
+                            Opacity = 0
+                        };
+                        //img.MouseLeftButtonDown += FieldCell_Click;
+                        FieldGrid.Children.Add(img);
+                        Grid.SetColumn(img, x);
+                        Grid.SetRow(img, y);
+                    }
+                    
+                }
+                // Core.ShipArrangement arr = new Core.ShipArrangement();
+                //ShipArrangement arr =  ShipArrangement.Strategy();
+                ShipArrangement arr = ShipArrangement.Strategy();
+                PlaceFromMassive(arr.GetArrangement());
+
+                //ships.ShipList4[0].Place(this, 0, 0, true);
+
+                //ships.ShipList3[0].Place(this, 1, 1, false);
+
+                //ships.ShipList2[0].Place(this, 5, 5, false);
+
+                //ships.ShipList1[0].Place(this, 9, 9, true);
+            }
+            isHiddenField = !isHiddenField;
         }
 
-        public bool[,] PossibilityToPlace { get => _possibilityToPlace; set => _possibilityToPlace = value; }
         public Ships Ships { get => ships; set => ships = value; }
+       // public bool IsHiddenField { get => isHiddenField; set => isHiddenField = value; }
+
+        public void PlaceShips()
+        {
+            ships.PlaceAll();
+        }
 
         public static void DeleteCell(int x, int y, PlayField playField)
         {
@@ -75,31 +118,133 @@ namespace Sea_Battleship
 
         private void FieldCell_Click(object sender, MouseButtonEventArgs e)
         {
-            if (WindowConfig.ShipState == WindowConfig.State.Ship4)
+            Image image = (Image)sender;
+            int X = Grid.GetColumn(image);
+            int Y = Grid.GetRow(image);
+            SetCell(Grid.GetColumn(image), Grid.GetRow(image), FieldGrid, new Image()
             {
-                WindowConfig.ShipState = WindowConfig.State.None;
-                foreach (Ship4 ship in Ships.ShipList4)
-                    if (!ship.IsPlaced)
-                    {
-                        ship.Place((Image)sender, this);
-                        break;
-                    }
-            }
-            else if (WindowConfig.ShipState == WindowConfig.State.Ship3)
-            {
-                WindowConfig.ShipState = WindowConfig.State.None;
-                foreach (Ship3 ship in Ships.ShipList3)
-                    if (!ship.IsPlaced)
-                    {
-                        ship.Place((Image)sender, this);
-                        break;
-                    }
-            }
+                Stretch = Stretch.Fill,
+                Opacity = 100,
+                Source = new BitmapImage(new Uri("/Resources/no-audio.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+            });
         }
 
         private void _SizeChanged(object sender, SizeChangedEventArgs e)
         {
             FieldGrid.Width = FieldGrid.ActualHeight;
+        }
+
+        public void PlaceFromMassive(CellStatе[,] cells)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if (cells[i, j] == CellStatе.Ship)
+                        PluckShip(i,j,cells);
+                }
+            }
+            PlaceShips();
+        }
+
+        private void PluckShip(int i, int j, CellStatе[,] cells)
+        {
+            int len = 1;
+            cells[i, j] = CellStatе.Water;
+            if (i + 1 < 10 && cells[i + 1, j] == CellStatе.Ship)
+            {
+                len++;
+                cells[i + 1, j] = CellStatе.Water;
+                if (i + 2 < 10 && cells[i + 2, j] == CellStatе.Ship)
+                {
+                    len++;
+                    cells[i + 2, j] = CellStatе.Water;
+                    if (i + 3 < 10 && cells[i + 3, j] == CellStatе.Ship)
+                    {
+                        len++;
+                        cells[i + 3, j] = CellStatе.Water;
+                        Ships.ShipList4.Add(new Ship4()
+                        {
+                            IsHorizontal = true,
+                            X = i,
+                            Y = j,
+                            Size = len,
+                        });
+                    }
+                    else
+                    {
+                        Ships.ShipList3.Add(new Ship3()
+                        {
+                            IsHorizontal = true,
+                            X = i,
+                            Y = j,
+                            Size = len,
+                        });
+                    }
+                }
+                else
+                {
+                    Ships.ShipList2.Add(new Ship2()
+                    {
+                        IsHorizontal = true,
+                        X = i,
+                        Y = j,
+                        Size = len,
+                    });
+                }
+            }
+            else if (j + 1 < 10 && cells[i, j + 1] == CellStatе.Ship)
+            {
+                len++;
+                cells[i, j + 1] = CellStatе.Water;
+                if (j + 2 < 10 && cells[i, j + 2] == CellStatе.Ship)
+                {
+                    len++;
+                    cells[i, j + 2] = CellStatе.Water;
+                    if (j + 3 < 10 && cells[i, j + 3] == CellStatе.Ship)
+                    {
+                        len++;
+                        cells[i, j + 3] = CellStatе.Water;
+                        Ships.ShipList4.Add(new Ship4()
+                        {
+                            IsHorizontal = false,
+                            X = i,
+                            Y = j,
+                            Size = len,
+                        });
+                    }
+                    else
+                    {
+                        Ships.ShipList3.Add(new Ship3()
+                        {
+                            IsHorizontal = false,
+                            X = i,
+                            Y = j,
+                            Size = len,
+                        });
+                    }
+                }
+                else
+                {
+                    Ships.ShipList2.Add(new Ship2()
+                    {
+                        IsHorizontal = false,
+                        X = i,
+                        Y = j,
+                        Size = len,
+                    });
+                }
+            }
+            else
+            {
+                Ships.ShipList1.Add(new Ship1()
+                {
+                    IsHorizontal = true,
+                    X = i,
+                    Y = j,
+                    Size = len,
+                });
+            }
         }
     }
 }

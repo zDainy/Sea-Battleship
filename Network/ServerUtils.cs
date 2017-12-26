@@ -2,9 +2,9 @@
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
-using Core;
 using System.Net.Sockets;
 using System.Text;
+using Common;
 using Newtonsoft.Json;
 
 namespace Network
@@ -172,7 +172,7 @@ namespace Network
             tmp[4] = hash[0];
             tmp[5] = hash[1];
             string res = "";
-            for (int i=0;i<tmp.Length;i++)
+            for (int i = 0; i < tmp.Length; i++)
             {
                 res += CryptSystem.ByteToHex(tmp[i]);
             }

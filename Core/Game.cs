@@ -1,18 +1,20 @@
-﻿namespace Core
+namespace Core
+
 {
     public class Game
     {
         public ShipArrangement ServerShipArrangement { get; set; }
         public ShipArrangement ClientShipArrangement { get; set; }
         public GameConfig GameConfig { get; set; }
-        private PlayerRole _turnOwner;
-        private ShipArrangement _currentArrangement
+       public PlayerRole TurnOwner { get; set; }
+      private ShipArrangement _currentArrangement
+      {
+        get
         {
-            get
-            {
-                return _turnOwner == PlayerRole.Server ? ClientShipArrangement : ServerShipArrangement;
-            }
+          return TurnOwner == PlayerRole.Server?ClientShipArrangement:ServerShipArrangement;
         }
+      }
+
 
         /// <summary>
         /// Инициализирует объект игра
@@ -26,12 +28,7 @@
             ServerShipArrangement = serverShipArr;
             ClientShipArrangement = clientShipArr;
             GameConfig = gameConfig;
-            _turnOwner = turnOwner;
-        }
-
-        public PlayerRole GetTurnOwner()
-        {
-            return _turnOwner;
+            TurnOwner = turnOwner;
         }
 
         /// <summary>
@@ -57,7 +54,7 @@
         /// <returns></returns>
         public MoveResult MakeAMove(int vertical, int horizontal)
         {
-            switch (_currentArrangement.GetCellState(vertical, horizontal))
+            switch (TurnOwner == PlayerRole.Server ? ClientShipArrangement.GetCellState(vertical, horizontal) : ServerShipArrangement.GetCellState(vertical, horizontal))
             {
                 case (CellStatе.Water):
                     _currentArrangement.SetCellState(CellStatе.WoundedWater, vertical, horizontal);
@@ -77,7 +74,7 @@
         public void ChangeTurn()
         {
             // Первых ход всегда за сервером, за исключением случаев когда игра была сохранена
-            _turnOwner = _turnOwner == PlayerRole.Server ? PlayerRole.Client : PlayerRole.Server;
+            TurnOwner = TurnOwner == PlayerRole.Server ? PlayerRole.Client : PlayerRole.Server;
         }
     }
 }

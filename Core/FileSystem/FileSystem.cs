@@ -1,12 +1,9 @@
-
-using Core;
-using Core.FileSystem;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Common
+namespace Core
 {
     /// <summary>
     /// Подсистема работы с файлами игры.
@@ -333,7 +330,7 @@ namespace Common
                 byte[] port = BitConverter.GetBytes(int.Parse(ip[4]));
                 result[5, 4] = port[0];
                 result[5, 5] = port[1];
-                conf[0] = g.GetTurnOwner() == PlayerRole.Server;
+                conf[0] = g.TurnOwner == PlayerRole.Server;
                 conf[3] = (g.GameConfig.GameSpeed == GameSpeed.Slow) || (g.GameConfig.GameSpeed == GameSpeed.Turtle);
                 conf[4] = (g.GameConfig.GameSpeed == GameSpeed.Medium) || (g.GameConfig.GameSpeed == GameSpeed.Turtle);
                 /*switch (g.GameConfig.GameSpeed)
@@ -465,7 +462,7 @@ namespace Common
                 bytes[i] = CryptSystem.HexToByte(input[2 * i].ToString() + input[2 * i + 1]);
             }
             byte[,] result = new byte[10, 10];
-            result = FileSystem.Bending<byte>(bytes, 10, 10);
+            result = Bending<byte>(bytes, 10, 10);
             for (int i = 0; i < 10; i++)
             {
                 byte[] tmp = new byte[6];
