@@ -64,6 +64,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ConfigOfflineWindow.xaml.cs">
+      <DependentUpon>ConfigOfflineWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ConfigOnlineHostWindow.xaml.cs">
       <DependentUpon>ConfigOnlineHostWindow.xaml</DependentUpon>
     </Compile>
@@ -93,6 +96,10 @@
       <DependentUpon>WaitingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowConfig.cs" />
+    <Page Include="ConfigOfflineWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ConfigOnlineHostWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

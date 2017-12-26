@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,10 @@ namespace Sea_Battleship
 {
     static class WindowConfig
     {
-        public enum State {None, Ship1, Ship2, Ship3, Ship4 };
-        public static State ShipState;
-       // public static bool isShipUp = false;
+        public enum State { Online, Offline };
+        public static State GameState;
+        public static Game game;
+        public static Engine.OnlineGame onlineGame;
         private static bool _audio = true;
         public static bool Audio { get => _audio; set => _audio = value; }
         public static void AudioChanged(Image image)

@@ -64,8 +64,9 @@ namespace Sea_Battleship
 
         private void NewGame_MouseLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            PlacingWindow lw = new PlacingWindow();
-            lw.Show();
+            WindowConfig.GameState = WindowConfig.State.Offline;
+            ConfigOfflineWindow window = new ConfigOfflineWindow() { Owner = this};
+            window.Show();
             Hide();
         }
 
@@ -82,6 +83,7 @@ namespace Sea_Battleship
 
         private void CreateLobby_Click(object sender, RoutedEventArgs e)
         {
+            WindowConfig.GameState = WindowConfig.State.Online;
             ConfigOnlineHostWindow window = new ConfigOnlineHostWindow();
             window.Owner = this;
             window.Show();
@@ -92,6 +94,7 @@ namespace Sea_Battleship
 
         private void ConnetToLobbyItem_Click(object sender, RoutedEventArgs e)
         {
+            WindowConfig.GameState = WindowConfig.State.Online;
             ConfigOnlineNotHostWindow window = new ConfigOnlineNotHostWindow();
             window.Owner = this;
             window.Show();

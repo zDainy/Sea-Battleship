@@ -22,11 +22,19 @@ namespace Sea_Battleship
     public partial class PlayWindow : Window
     {
         public OnlineGame OnlineGame { get; set; }
+        public Game Game { get; set; }
 
         public PlayWindow(OnlineGame onlineGame)
         {
             InitializeComponent();
             OnlineGame = onlineGame;
+        }
+
+        public PlayWindow(Game game)
+        {
+            WindowConfig.game = game;
+            InitializeComponent();
+            Game = game;
         }
 
         private void audioChanged(object sender, RoutedEventArgs e)
