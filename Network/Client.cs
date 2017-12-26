@@ -14,6 +14,7 @@ namespace Network
         private int _port = 27015;
         private TcpClient _client;
         private NetworkStream _networkStream;
+        public bool isConnected;
 
         /// <summary>
         /// Подлкючает клиента к серверу
@@ -21,11 +22,13 @@ namespace Network
         /// <param name="ip">Внешний IP</param>
         public void Connect(IPAddress ip)
         {
+            isConnected = false;
             LogService.Trace("Подключаемся к серверу...");
             try
             {
                 _client = new TcpClient(ip.ToString(), _port);
                 _networkStream = _client.GetStream();
+                isConnected = true;
                 LogService.Trace("Соединение установлено");
             }
             catch (SocketException e)

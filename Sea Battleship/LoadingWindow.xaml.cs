@@ -19,6 +19,7 @@ namespace Sea_Battleship
     /// </summary>
     public partial class LoadingWindow : Window
     {
+        public int z;
         public LoadingWindow()
         {
             InitializeComponent();

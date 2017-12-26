@@ -27,18 +27,11 @@ namespace Sea_Battleship
 
         private void ButtonNext_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                OnlineGame = new OnlineGame(PlayerRole.Client, _placement, ServerUtils.StringToIP(KeyTextBox.Text));
-                Thread.Sleep(2000);
-                OnlineGame.GoToGameWindow(_placement, _shipArrangement, Owner);
-                Close();
-            }
-            catch (Exception exception)
-            {
-                LogService.Trace($"Невозможно подключиться: {exception.Message}");
-                MessageBox.Show(exception.Message, "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+            OnlineGame = new OnlineGame(PlayerRole.Client, _placement, ServerUtils.StringToIP(KeyTextBox.Text));
+            Thread.Sleep(2000);
+            OnlineGame.GoToGameWindow(_placement, _shipArrangement, Owner);
+            Close();
+
         }
 
         private void ButtonPrev_Click(object sender, RoutedEventArgs e)

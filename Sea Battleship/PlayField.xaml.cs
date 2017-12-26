@@ -25,6 +25,7 @@ namespace Sea_Battleship
     {
         Ships ships;
         private static bool isHiddenField = true;
+        PlayWindow pw;
 
         public PlayField()
         {
@@ -70,9 +71,11 @@ namespace Sea_Battleship
                     
                 }
                 // Core.ShipArrangement arr = new Core.ShipArrangement();
-                //ShipArrangement arr =  ShipArrangement.Strategy();
-                ShipArrangement arr = ShipArrangement.Strategy();
+                ShipArrangement arr =  ShipArrangement.Random();
+                //pw = (PlayWindow)((Grid)Parent).Parent;
+                //ShipArrangement arr = pw.OnlineGame._myArrangement;
                 PlaceFromMassive(arr.GetArrangement());
+               // zzz();
 
                 //ships.ShipList4[0].Place(this, 0, 0, true);
 
@@ -84,6 +87,14 @@ namespace Sea_Battleship
             }
             isHiddenField = !isHiddenField;
         }
+
+        //private void zzz()
+        //{
+        //    //ShipArrangement arr = ShipArrangement.Strategy();
+        //    pw = (PlayWindow)((Grid)Parent).Parent;
+        //    ShipArrangement arr = pw.OnlineGame._myArrangement;
+        //    PlaceFromMassive(arr.GetArrangement());
+        //}
 
         public Ships Ships { get => ships; set => ships = value; }
        // public bool IsHiddenField { get => isHiddenField; set => isHiddenField = value; }
@@ -118,10 +129,18 @@ namespace Sea_Battleship
 
         private void FieldCell_Click(object sender, MouseButtonEventArgs e)
         {
+            pw = (PlayWindow)((Grid)Parent).Parent;
             Image image = (Image)sender;
             int X = Grid.GetColumn(image);
             int Y = Grid.GetRow(image);
-            SetCell(Grid.GetColumn(image), Grid.GetRow(image), FieldGrid, new Image()
+            //SetCell(X, Y, FieldGrid, new Image()
+            //{
+            //    Stretch = Stretch.Fill,
+            //    Opacity = 100,
+            //    Source = new BitmapImage(new Uri("/Resources/no-audio.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+            //});
+            var res = pw.OnlineGame.WaitEnemyTurn();
+            SetCell((int)res.X, (int)res.Y, pw.MyField.FieldGrid, new Image()
             {
                 Stretch = Stretch.Fill,
                 Opacity = 100,
