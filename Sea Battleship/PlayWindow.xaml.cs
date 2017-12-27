@@ -26,8 +26,9 @@ namespace Sea_Battleship
 
         public PlayWindow(OnlineGame onlineGame)
         {
-            InitializeComponent();
+            WindowConfig.OnlineGame = onlineGame;
             OnlineGame = onlineGame;
+            InitializeComponent();
         }
 
         public PlayWindow(Game game)

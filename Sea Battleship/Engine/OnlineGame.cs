@@ -15,7 +15,7 @@ namespace Sea_Battleship.Engine
         private Thread _connectionThread;
         public Connection Connect { get; set; }
         public Game Game { get; set; }
-        private ShipArrangement _myArrangement;
+        private ShipArrangement MyArrangement;
         private ShipArrangement _enemyArrangement;
         public PlacementState Placement { get; set; }
 
@@ -65,7 +65,7 @@ namespace Sea_Battleship.Engine
         public void CreateGame(ShipArrangement arragment)
         {
             _enemyArrangement = new ShipArrangement();
-            _myArrangement = arragment;
+            MyArrangement = arragment;
             if (PlayerRole == PlayerRole.Server)
             {
                 Connect.Server.SendResponse(OpearationTypes.StartConfig, new StartConfig(GameConfig.GameSpeed));
@@ -82,39 +82,28 @@ namespace Sea_Battleship.Engine
             }
         }
 
-        public void WaitOrTurn(int x = 0, int y = 0)
-        {
-            if (IsYourTurn())
-            {
-                Turn(x, y);
-            }
-            else
-            {
-                WaitEnemyTurn();
-            }
-        }
-
-        public void Turn(int x, int y)
+        public CellStatе Turn(int x, int y)
         {
             Connect.SendOperation(PlayerRole, OpearationTypes.Shot, new Shot(new Vector(x, y)));
             var res = Connect.GetOperation(PlayerRole);
             var shotRes = (ShotResult)res.Item2;
-            CheckShotResult(shotRes.State, x, y);
-            Game.ChangeTurn();
+            SetShotResult(shotRes.State, x, y);
+            return shotRes.State;
         }
 
-        public void WaitEnemyTurn()
+        public Vector WaitEnemyTurn()
         {
             var res = Connect.GetOperation(PlayerRole);
+            Vector shotRes = new Vector(0, 0);
             if (res.Item1 == OpearationTypes.Shot)
             {
                 var shot = (Shot)res.Item2;
-                CheckShot(shot.TargetPosition);
+                shotRes = shot.TargetPosition;
             }
-            Game.ChangeTurn();
+            return shotRes;
         }
 
-        public void CheckShotResult(CellStatе state, int x, int y)
+        public void SetShotResult(CellStatе state, int x, int y)
         {
             if (PlayerRole == PlayerRole.Server)
             {
@@ -126,7 +115,7 @@ namespace Sea_Battleship.Engine
             }
         }
 
-        public void CheckShot(Vector coords)
+        public CellStatе CheckShot(Vector coords)
         {
             CellStatе newState = CellStatе.Water;
             if (PlayerRole == PlayerRole.Server)
@@ -145,24 +134,20 @@ namespace Sea_Battleship.Engine
             }
             else
             {
-                switch (_myArrangement.GetCellState(coords))
+                switch (MyArrangement.GetCellState(coords))
                 {
                     case CellStatе.Water:
                         newState = CellStatе.WoundedWater;
-                        _myArrangement.SetCellState(newState, (int)coords.X, (int)coords.Y);
+                        MyArrangement.SetCellState(newState, (int)coords.X, (int)coords.Y);
                         break;
                     case CellStatе.Ship:
                         newState = CellStatе.WoundedShip;
-                        _myArrangement.SetCellState(newState, (int)coords.X, (int)coords.Y);
+                        MyArrangement.SetCellState(newState, (int)coords.X, (int)coords.Y);
                         break;
                 }
             }
             Connect.SendOperation(PlayerRole, OpearationTypes.ShotResult, new ShotResult(newState));
-        }
-
-        private bool IsYourTurn()
-        {
-            return Game.TurnOwner == PlayerRole;
+            return newState;
         }
     }
 }
