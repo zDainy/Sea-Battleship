@@ -55,7 +55,7 @@ namespace Sea_Battleship.Engine
             if (placement != PlacementState.Manualy)
             {
                 CreateGame(shipArrangement);
-                PlayWindow window = new PlayWindow (this) { Owner = owner };
+                PlayWindow window = new PlayWindow(this) { Owner = owner };
                 window.Show();
             }
             else

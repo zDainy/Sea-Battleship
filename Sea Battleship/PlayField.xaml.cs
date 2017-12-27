@@ -23,7 +23,6 @@ namespace Sea_Battleship
         Ships ships;
         private static bool isHiddenField = true;
         private OnlineGame _onlineGame;
-        private Thread _onlineThread;
         private bool _isOnlineGame;
         private Timer _turnTimer;
 
@@ -37,10 +36,10 @@ namespace Sea_Battleship
             CellStatе[,] enemyArr;
 
             if (!(_onlineGame is null))
-            { 
+            {
                 _isOnlineGame = true;
                 gg = _onlineGame.Game;
-                _turnTimer = new Timer {Interval = (int) _onlineGame.GameConfig.GameSpeed};
+                _turnTimer = new Timer { Interval = (int)_onlineGame.GameConfig.GameSpeed };
                 if (_onlineGame.PlayerRole == PlayerRole.Client)
                 {
                     myArr = _onlineGame.MyArrangement.GetArrangement();
@@ -131,13 +130,13 @@ namespace Sea_Battleship
                 //ships.ShipList1[0].Place(this, 9, 9, true);
             }
             isHiddenField = !isHiddenField;
-         //   _turnTimer.Tick += (sender, e) => SwitchTurn();
-           // _turnTimer.Start();
+            //   _turnTimer.Tick += (sender, e) => SwitchTurn();
+            // _turnTimer.Start();
         }
 
         public void SwitchTurn()
         {
-          //  _turnTimer.Stop();
+            //  _turnTimer.Stop();
             if (_onlineGame.IsMyTurn)
             {
                 // <--- Переключалка хода
@@ -150,7 +149,7 @@ namespace Sea_Battleship
                 // <--- Переключалка хода
                 _onlineGame.IsMyTurn = true;
             }
-          //  _turnTimer.Start();
+            //  _turnTimer.Start();
         }
 
         public Ships Ships { get => ships; set => ships = value; }
@@ -207,12 +206,17 @@ namespace Sea_Battleship
             Vector vect = (Vector)obj;
             try
             {
-                var shotRes = _onlineGame.Turn((int) vect.X, (int) vect.Y);
-                SetShotOnField((int) vect.X, (int) vect.Y, shotRes, false);
+                var shotRes = _onlineGame.Turn((int)vect.X, (int)vect.Y);
+                SetShotOnField((int)vect.X, (int)vect.Y, shotRes, false);
                 if (shotRes == CellStatе.WoundedWater)
                 {
                     SwitchTurn();
                 }
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Соединение разорвано", "Противник отключился", MessageBoxButton.OK, MessageBoxImage.Warning);
+                LogService.Trace("Противник отключился");
             }
             catch (Exception e)
             {
@@ -238,6 +242,11 @@ namespace Sea_Battleship
                     } while (shotRes == CellStatе.WoundedShip);
                     SwitchTurn();
                 }
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Соединение разорвано", "Противник отключился", MessageBoxButton.OK, MessageBoxImage.Warning);
+                LogService.Trace("Противник отключился");
             }
             catch (Exception e)
             {
