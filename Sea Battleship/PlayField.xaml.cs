@@ -1,21 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using Timer = System.Windows.Forms.Timer;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Sea_Battleship.ShipFolder;
 using Core;
 using Sea_Battleship.Engine;
 using System.Threading;
+using Common;
 
 namespace Sea_Battleship
 {
@@ -25,20 +19,49 @@ namespace Sea_Battleship
     public partial class PlayField : UserControl
     {
         private PlayWindow _pw;
-        private event del setSell;
-        private delegate void del(int x, int y, Grid grid, Image image);
+
         Ships ships;
         private static bool isHiddenField = true;
+        private OnlineGame _onlineGame;
+        private bool _isOnlineGame;
+        private Timer _turnTimer;
 
 
         public PlayField()
         {
             InitializeComponent();
             Game gg = WindowConfig.game;
+            _onlineGame = WindowConfig.OnlineGame;
+            CellStatе[,] myArr;
+            CellStatе[,] enemyArr;
+
+            if (!(_onlineGame is null))
+            {
+                _isOnlineGame = true;
+                gg = _onlineGame.Game;
+                _turnTimer = new Timer { Interval = (int)_onlineGame.GameConfig.GameSpeed };
+                if (_onlineGame.PlayerRole == PlayerRole.Client)
+                {
+                    myArr = _onlineGame.MyArrangement.GetArrangement();
+                    enemyArr = _onlineGame.EnemyArrangement.GetArrangement();
+                    ThreadPool.QueueUserWorkItem(OnlineEnemyTurn);
+                }
+                else
+                {
+                    myArr = gg.ServerShipArrangement.GetArrangement();
+                    enemyArr = gg.ClientShipArrangement.GetArrangement();
+                }
+            }
+            else
+            {
+                enemyArr = gg.ClientShipArrangement.GetArrangement();
+                myArr = gg.ServerShipArrangement.GetArrangement();
+            }
+
             Ships = new Ships(this);
             if (isHiddenField)
             {
-              //  ships.Init();
+                //  ships.Init();
                 for (int y = 0; y < 10; y++)
                 {
                     for (int x = 0; x < 10; x++)
@@ -55,7 +78,7 @@ namespace Sea_Battleship
                         Grid.SetRow(img, y);
                     }
                 }
-                CellStatе[,] arr = WindowConfig.game.ClientShipArrangement.GetArrangement();
+                CellStatе[,] arr = enemyArr;
                 CellStatе[,] copyarr = new CellStatе[10, 10];
                 for (int i = 0; i < 10; i++)
                 {
@@ -85,18 +108,18 @@ namespace Sea_Battleship
                     }
 
                 }
-                CellStatе[,] arr = WindowConfig.game.ServerShipArrangement.GetArrangement();
-                CellStatе[,] copyarr = new CellStatе[10,10];
-                for (int i = 0; i<10; i++)
+                CellStatе[,] arr = myArr;
+                CellStatе[,] copyarr = new CellStatе[10, 10];
+                for (int i = 0; i < 10; i++)
                 {
-                    for(int j = 0; j<10; j++)
+                    for (int j = 0; j < 10; j++)
                     {
                         copyarr[i, j] = arr[i, j];
                     }
                 }
                 PlaceFromMassive(copyarr, ships, true);
-               // ShipArrangement arr = ShipArrangement.Strategy();
-               // PlaceFromMassive(arr.GetArrangement());
+                // ShipArrangement arr = ShipArrangement.Strategy();
+                // PlaceFromMassive(arr.GetArrangement());
 
                 //ships.ShipList4[0].Place(this, 0, 0, true);
 
@@ -107,8 +130,28 @@ namespace Sea_Battleship
                 //ships.ShipList1[0].Place(this, 9, 9, true);
             }
             isHiddenField = !isHiddenField;
+            //   _turnTimer.Tick += (sender, e) => SwitchTurn();
+            // _turnTimer.Start();
         }
-    
+
+        public void SwitchTurn()
+        {
+            //  _turnTimer.Stop();
+            if (_onlineGame.IsMyTurn)
+            {
+                // <--- Переключалка хода
+                _onlineGame.IsMyTurn = false;
+                _onlineGame.IsOne = false;
+                ThreadPool.QueueUserWorkItem(OnlineEnemyTurn);
+            }
+            else
+            {
+                // <--- Переключалка хода
+                _onlineGame.IsMyTurn = true;
+            }
+            //  _turnTimer.Start();
+        }
+
         public Ships Ships { get => ships; set => ships = value; }
 
         // public bool IsHiddenField { get => isHiddenField; set => isHiddenField = value; }
@@ -136,9 +179,81 @@ namespace Sea_Battleship
         public static void SetCell(int x, int y, Grid grid, Image image)
         {
             grid.Children.RemoveAt(10 * y + x);
-            grid.Children.Insert(10*y+x,image);
+            grid.Children.Insert(10 * y + x, image);
             Grid.SetRow(image, y);
             Grid.SetColumn(image, x);
+        }
+
+        private void SetShotOnField(int x, int y, CellStatе state, bool onMyField)
+        {
+            _pw = (PlayWindow)((Grid)Parent).Parent;
+            var fg = onMyField ? _pw.MyField.FieldGrid : _pw.EnemyField.FieldGrid;
+            string uri = state == CellStatе.WoundedShip ? "/Resources/shipCrushed.png" : "/Resources/waterCrushed.png";
+            fg.Dispatcher.Invoke(() =>
+            {
+                SetCell(x, y, fg, new Image()
+                {
+                    Stretch = Stretch.Fill,
+                    Opacity = 100,
+                    Source = new BitmapImage(new Uri(uri, UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                });
+            });
+        }
+
+
+        private void OnlineMyTurn(object obj)
+        {
+            Vector vect = (Vector)obj;
+            try
+            {
+                var shotRes = _onlineGame.Turn((int)vect.X, (int)vect.Y);
+                SetShotOnField((int)vect.X, (int)vect.Y, shotRes, false);
+                if (shotRes == CellStatе.WoundedWater)
+                {
+                    SwitchTurn();
+                }
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Соединение разорвано", "Противник отключился", MessageBoxButton.OK, MessageBoxImage.Warning);
+                LogService.Trace("Противник отключился");
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Ошибка соединения", MessageBoxButton.OK, MessageBoxImage.Error);
+                LogService.Trace($"Ошибка соединения: {e.Message}");
+                OnlineMyTurn(vect);
+            }
+        }
+
+        private void OnlineEnemyTurn(object obj)
+        {
+            try
+            {
+                if (!_onlineGame.IsOne)
+                {
+                    CellStatе shotRes;
+                    _onlineGame.IsOne = true;
+                    do
+                    {
+                        var comeVector = _onlineGame.WaitEnemyTurn();
+                        shotRes = _onlineGame.CheckShot(comeVector);
+                        SetShotOnField((int)comeVector.X, (int)comeVector.Y, shotRes, true);
+                    } while (shotRes == CellStatе.WoundedShip);
+                    SwitchTurn();
+                }
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Соединение разорвано", "Противник отключился", MessageBoxButton.OK, MessageBoxImage.Warning);
+                LogService.Trace("Противник отключился");
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Ошибка соединения", MessageBoxButton.OK, MessageBoxImage.Error);
+                LogService.Trace($"Ошибка соединения: {e.Message}");
+                OnlineEnemyTurn(null);
+            }
         }
 
         private void FieldCell_Click(object sender, MouseButtonEventArgs e)
@@ -148,28 +263,19 @@ namespace Sea_Battleship
             int X = Grid.GetColumn(image);
             int Y = Grid.GetRow(image);
             string uriString = "";
-            MoveResult result =  z.Game.MakeAMove(X, Y); //ход первого игрока
-            switch(result)
+            if (_isOnlineGame && _onlineGame.IsMyTurn)
             {
-                case MoveResult.Hit:
-                    bool was = false;
-                    uriString = "/Resources/shipCrushed.png";
-                    foreach (AShip sh in ships.ShipList1)
-                    {
-                        if (sh.isHere(X, Y, z))
-                        {
-                            SetCell((int)X, (int)Y, FieldGrid, new Image()
-                            {
-                                Stretch = Stretch.Fill,
-                                Opacity = 100,
-                                Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                            });
-                            was = true;
-                            break;
-                        }
-                    }
-                    if (!was)
-                        foreach (AShip sh in ships.ShipList2)
+                ThreadPool.QueueUserWorkItem(OnlineMyTurn, new Vector(X, Y));
+            }
+            else if (!_isOnlineGame)
+            {
+                MoveResult result = z.Game.MakeAMove(X, Y); //ход первого игрока
+                switch (result)
+                {
+                    case MoveResult.Hit:
+                        bool was = false;
+                        uriString = "/Resources/shipCrushed.png";
+                        foreach (AShip sh in ships.ShipList1)
                         {
                             if (sh.isHere(X, Y, z))
                             {
@@ -183,55 +289,72 @@ namespace Sea_Battleship
                                 break;
                             }
                         }
-                    if (!was)
-                        foreach (AShip sh in ships.ShipList3)
-                        {
-                            if (sh.isHere(X, Y, z))
+                        if (!was)
+                            foreach (AShip sh in ships.ShipList2)
                             {
-                                SetCell((int)X, (int)Y, FieldGrid, new Image()
+                                if (sh.isHere(X, Y, z))
                                 {
-                                    Stretch = Stretch.Fill,
-                                    Opacity = 100,
-                                    Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                                });
-                                was = true;
-                                break;
+                                    SetCell((int)X, (int)Y, FieldGrid, new Image()
+                                    {
+                                        Stretch = Stretch.Fill,
+                                        Opacity = 100,
+                                        Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                                    });
+                                    was = true;
+                                    break;
+                                }
                             }
-                        }
-                    if (!was)
-                        foreach (AShip sh in ships.ShipList4)
-                        {
-                            if (sh.isHere(X, Y, z))
+                        if (!was)
+                            foreach (AShip sh in ships.ShipList3)
                             {
-                                SetCell((int)X, (int)Y, FieldGrid, new Image()
+                                if (sh.isHere(X, Y, z))
                                 {
-                                    Stretch = Stretch.Fill,
-                                    Opacity = 100,
-                                    Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                                });
-                                was = true;
-                                break;
+                                    SetCell((int)X, (int)Y, FieldGrid, new Image()
+                                    {
+                                        Stretch = Stretch.Fill,
+                                        Opacity = 100,
+                                        Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                                    });
+                                    was = true;
+                                    break;
+                                }
                             }
-                        }
+                        if (!was)
+                            foreach (AShip sh in ships.ShipList4)
+                            {
+                                if (sh.isHere(X, Y, z))
+                                {
+                                    SetCell((int)X, (int)Y, FieldGrid, new Image()
+                                    {
+                                        Stretch = Stretch.Fill,
+                                        Opacity = 100,
+                                        Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                                    });
+                                    was = true;
+                                    break;
+                                }
+                            }
 
-                    break;
-                case MoveResult.Miss:
-                    uriString = "/Resources/waterCrushed.png";
-                    SetCell(Grid.GetColumn(image), Grid.GetRow(image), FieldGrid, new Image()
-                    {
-                        Stretch = Stretch.Fill,
-                        Opacity = 100,
-                        Source = new BitmapImage(new Uri(uriString, UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                    });
-                    break;
-                case MoveResult.Destroyed:
-                    break;
-                case MoveResult.Error:
-                    break;
-            }    
-            if (result != MoveResult.Hit) //если не попал, ход второго игрока
-            {
-                EnemyStep(z);
+                        break;
+                    case MoveResult.Miss:
+                        uriString = "/Resources/waterCrushed.png";
+                        SetCell(Grid.GetColumn(image), Grid.GetRow(image), FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri(uriString, UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        break;
+                    case MoveResult.Destroyed:
+                        break;
+                    case MoveResult.Error:
+                        break;
+                }
+                if (result != MoveResult.Hit) //если не попал, ход второго игрока
+                {
+                    EnemyStep(z);
+                }
+
             }
         }
 
@@ -319,6 +442,8 @@ namespace Sea_Battleship
                 });
             }
         }
+
+
 
         private void _SizeChanged(object sender, SizeChangedEventArgs e)
         {

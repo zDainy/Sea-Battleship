@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Sea_Battleship.Engine;
 
 namespace Sea_Battleship
 {
@@ -45,13 +46,25 @@ namespace Sea_Battleship
         private List<ShipListItem> shipList = new List<ShipListItem>();
         private ShipArrangement _arrangementClient;
         private GameConfig _gameConfig;
+        private OnlineGame _onlineGame;
 
         public PlacingWindow(ShipArrangement arrangementClient, GameConfig game)
         {
             _arrangementClient = arrangementClient;
             _gameConfig = game;
             InitializeComponent();
+            Init();
+        }
 
+        public PlacingWindow(OnlineGame game)
+        {
+            _onlineGame = game;
+            InitializeComponent();
+            Init();
+        }
+
+        private void Init()
+        {
             for (int y = 0; y < 10; y++)
             {
                 for (int x = 0; x < 10; x++)
@@ -71,7 +84,7 @@ namespace Sea_Battleship
             foreach (Object ship in ((Grid)MainGrid.Children[1]).Children)
             {
                 if (ship.GetType().ToString() == "System.Windows.Controls.StackPanel")
-                        shipList.Add(new ShipListItem {ShipPanel = (StackPanel)ship});
+                    shipList.Add(new ShipListItem { ShipPanel = (StackPanel)ship });
             }
         }
 
@@ -437,7 +450,16 @@ namespace Sea_Battleship
 
         private void ReadyButton_Click(object sender, RoutedEventArgs e)
         {
-            new PlayWindow(new Game(CreateShipArrangement(), _arrangementClient, _gameConfig)).Show();
+            if (!(_onlineGame is null))
+            {
+                _onlineGame.CreateGame(CreateShipArrangement());
+                new PlayWindow(_onlineGame).Show();
+                
+            }
+            else
+            {
+                new PlayWindow(new Game(CreateShipArrangement(), _arrangementClient, _gameConfig)).Show();
+            }
             Close();
         }
     }
