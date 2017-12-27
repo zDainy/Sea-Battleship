@@ -9,6 +9,7 @@ using Sea_Battleship.ShipFolder;
 using Core;
 using Sea_Battleship.Engine;
 using System.Threading;
+using Common;
 
 namespace Sea_Battleship
 {
@@ -130,29 +131,26 @@ namespace Sea_Battleship
                 //ships.ShipList1[0].Place(this, 9, 9, true);
             }
             isHiddenField = !isHiddenField;
-            _turnTimer.Tick += (sender, e) => SwitchTurn();
-            _turnTimer.Start();
+         //   _turnTimer.Tick += (sender, e) => SwitchTurn();
+           // _turnTimer.Start();
         }
 
         public void SwitchTurn()
         {
-            _turnTimer.Stop();
+          //  _turnTimer.Stop();
             if (_onlineGame.IsMyTurn)
             {
+                // <--- Переключалка хода
                 _onlineGame.IsMyTurn = false;
                 _onlineGame.IsOne = false;
                 ThreadPool.QueueUserWorkItem(OnlineEnemyTurn);
-                
-                // Переключалка хода
-                MessageBox.Show("ПРАИБАЛЕЕ))))00");
             }
             else
             {
-                // Переключалка хода
+                // <--- Переключалка хода
                 _onlineGame.IsMyTurn = true;
-                MessageBox.Show("Твой ход");
             }
-            _turnTimer.Start();
+          //  _turnTimer.Start();
         }
 
         public Ships Ships { get => ships; set => ships = value; }
@@ -207,27 +205,45 @@ namespace Sea_Battleship
         private void OnlineMyTurn(object obj)
         {
             Vector vect = (Vector)obj;
-            var shotRes = _onlineGame.Turn((int)vect.X, (int)vect.Y);
-            SetShotOnField((int)vect.X, (int)vect.Y, shotRes, false);
-            if (shotRes == CellStatе.WoundedWater)
+            try
             {
-                SwitchTurn();
+                var shotRes = _onlineGame.Turn((int) vect.X, (int) vect.Y);
+                SetShotOnField((int) vect.X, (int) vect.Y, shotRes, false);
+                if (shotRes == CellStatе.WoundedWater)
+                {
+                    SwitchTurn();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Ошибка соединения", MessageBoxButton.OK, MessageBoxImage.Error);
+                LogService.Trace($"Ошибка соединения: {e.Message}");
+                OnlineMyTurn(vect);
             }
         }
 
         private void OnlineEnemyTurn(object obj)
         {
-            if (!_onlineGame.IsOne)
+            try
             {
-                CellStatе shotRes;
-                _onlineGame.IsOne = true;
-                do
+                if (!_onlineGame.IsOne)
                 {
-                    var comeVector = _onlineGame.WaitEnemyTurn();
-                    shotRes = _onlineGame.CheckShot(comeVector);
-                    SetShotOnField((int) comeVector.X, (int) comeVector.Y, shotRes, true);
-                } while (shotRes == CellStatе.WoundedShip);
-                SwitchTurn();
+                    CellStatе shotRes;
+                    _onlineGame.IsOne = true;
+                    do
+                    {
+                        var comeVector = _onlineGame.WaitEnemyTurn();
+                        shotRes = _onlineGame.CheckShot(comeVector);
+                        SetShotOnField((int)comeVector.X, (int)comeVector.Y, shotRes, true);
+                    } while (shotRes == CellStatе.WoundedShip);
+                    SwitchTurn();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Ошибка соединения", MessageBoxButton.OK, MessageBoxImage.Error);
+                LogService.Trace($"Ошибка соединения: {e.Message}");
+                OnlineEnemyTurn(null);
             }
         }
 

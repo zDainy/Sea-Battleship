@@ -74,6 +74,7 @@ namespace Sea_Battleship.Engine
                 Connect.Server.SendResponse(OpearationTypes.StartConfig, new StartConfig(GameConfig.GameSpeed));
                 var res = Connect.Server.GetRequest();
                 Network.ShipArrangement clArrangement = (Network.ShipArrangement)res.Item2;
+                Connect.Server.SendResponse(OpearationTypes.ShipArrangement, new Network.ShipArrangement(arragment));
                 Game = new Game(arragment, clArrangement.Arragment, GameConfig);
                 IsMyTurn = true;
             }
@@ -83,6 +84,9 @@ namespace Sea_Battleship.Engine
                 StartConfig startConfig = (StartConfig)res.Item2;
                 GameConfig = new GameConfig(BotLevels.Easy, startConfig.GameSpeed);
                 Connect.Client.SendRequest(OpearationTypes.ShipArrangement, new Network.ShipArrangement(arragment));
+                var resArr = Connect.Client.GetResponse();
+                Network.ShipArrangement enemyArrangementArrangement = (Network.ShipArrangement)resArr.Item2;
+                EnemyArrangement = enemyArrangementArrangement.Arragment;
                 IsMyTurn = false;
             }
         }
