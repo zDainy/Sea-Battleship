@@ -42,18 +42,19 @@ namespace Sea_Battleship
             CellStatе[,] enemyArr;
 
             if (!(_onlineGame is null))
-            {
+            { 
                 _isOnlineGame = true;
                 gg = _onlineGame.Game;
-                myArr = _onlineGame.PlayerRole == PlayerRole.Server
-                    ? gg.ServerShipArrangement.GetArrangement()
-                    : gg.ClientShipArrangement.GetArrangement();
-                enemyArr = _onlineGame.PlayerRole == PlayerRole.Server
-                    ? gg.ClientShipArrangement.GetArrangement()
-                    : gg.ServerShipArrangement.GetArrangement();
                 if (_onlineGame.PlayerRole == PlayerRole.Client)
                 {
+                    myArr = _onlineGame.MyArrangement.GetArrangement();
+                    enemyArr = _onlineGame.EnemyArrangement.GetArrangement();
                     ThreadPool.QueueUserWorkItem(OnlineEnemyTurn);
+                }
+                else
+                {
+                    myArr = gg.ServerShipArrangement.GetArrangement();
+                    enemyArr = gg.ClientShipArrangement.GetArrangement();
                 }
             }
             else
@@ -188,25 +189,30 @@ namespace Sea_Battleship
         private void OnlineMyTurn(object obj)
         {
             Vector vect = (Vector)obj;
-            CellStatе shotRes;
-            do
+            var shotRes = _onlineGame.Turn((int)vect.X, (int)vect.Y);
+            SetShotOnField((int)vect.X, (int)vect.Y, shotRes, false);
+            if (shotRes == CellStatе.WoundedWater)
             {
-                shotRes = _onlineGame.Turn((int)vect.X, (int)vect.Y);
-                SetShotOnField((int)vect.X, (int)vect.Y, shotRes, false);
-            } while (shotRes == CellStatе.WoundedShip);
-            ThreadPool.QueueUserWorkItem(OnlineEnemyTurn, vect);
+                _onlineGame.IsMyTurn = false;
+                _onlineGame.IsOne = false;
+                ThreadPool.QueueUserWorkItem(OnlineEnemyTurn);
+            }
         }
 
         private void OnlineEnemyTurn(object obj)
         {
-            Vector vect = (Vector)obj;
-            CellStatе shotRes;
-            do
+            if (!_onlineGame.IsOne)
             {
-                var comeVector = _onlineGame.WaitEnemyTurn();
-                shotRes = _onlineGame.CheckShot(comeVector);
-                SetShotOnField((int)vect.X, (int)vect.Y, shotRes, true);
-            } while (shotRes == CellStatе.WoundedShip);
+                CellStatе shotRes;
+                _onlineGame.IsOne = true;
+                do
+                {
+                    var comeVector = _onlineGame.WaitEnemyTurn();
+                    shotRes = _onlineGame.CheckShot(comeVector);
+                    SetShotOnField((int) comeVector.X, (int) comeVector.Y, shotRes, true);
+                } while (shotRes == CellStatе.WoundedShip);
+                _onlineGame.IsMyTurn = true;
+            }
         }
 
         private void FieldCell_Click(object sender, MouseButtonEventArgs e)
@@ -216,11 +222,11 @@ namespace Sea_Battleship
             int X = Grid.GetColumn(image);
             int Y = Grid.GetRow(image);
             string uriString = "";
-            if (_isOnlineGame)
+            if (_isOnlineGame && _onlineGame.IsMyTurn)
             {
                 ThreadPool.QueueUserWorkItem(OnlineMyTurn, new Vector(X, Y));
             }
-            else
+            else if (!_isOnlineGame)
             {
                 MoveResult result = z.Game.MakeAMove(X, Y); //ход первого игрока
                 switch (result)

@@ -15,9 +15,11 @@ namespace Sea_Battleship.Engine
         private Thread _connectionThread;
         public Connection Connect { get; set; }
         public Game Game { get; set; }
-        private ShipArrangement MyArrangement;
-        private ShipArrangement _enemyArrangement;
+        public ShipArrangement MyArrangement { get; set; }
+        public ShipArrangement EnemyArrangement { get; set; }
         public PlacementState Placement { get; set; }
+        public bool IsMyTurn { get; set; }
+        public bool IsOne { get; set; } = false;
 
         public OnlineGame(PlayerRole playerRole, PlacementState placement, IPAddress ip = null)
         {
@@ -64,7 +66,7 @@ namespace Sea_Battleship.Engine
 
         public void CreateGame(ShipArrangement arragment)
         {
-            _enemyArrangement = new ShipArrangement();
+            EnemyArrangement = new ShipArrangement();
             MyArrangement = arragment;
             if (PlayerRole == PlayerRole.Server)
             {
@@ -72,6 +74,7 @@ namespace Sea_Battleship.Engine
                 var res = Connect.Server.GetRequest();
                 Network.ShipArrangement clArrangement = (Network.ShipArrangement)res.Item2;
                 Game = new Game(arragment, clArrangement.Arragment, GameConfig);
+                IsMyTurn = true;
             }
             else
             {
@@ -79,6 +82,7 @@ namespace Sea_Battleship.Engine
                 StartConfig startConfig = (StartConfig)res.Item2;
                 GameConfig = new GameConfig(BotLevels.Easy, startConfig.GameSpeed);
                 Connect.Client.SendRequest(OpearationTypes.ShipArrangement, new Network.ShipArrangement(arragment));
+                IsMyTurn = false;
             }
         }
 
@@ -111,7 +115,7 @@ namespace Sea_Battleship.Engine
             }
             else
             {
-                _enemyArrangement.SetCellState(state, x, y);
+                EnemyArrangement.SetCellState(state, x, y);
             }
         }
 
