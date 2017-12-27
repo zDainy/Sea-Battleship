@@ -59,6 +59,7 @@ namespace Sea_Battleship
         public PlacingWindow(OnlineGame game)
         {
             _onlineGame = game;
+            InitializeComponent();
             Init();
         }
 

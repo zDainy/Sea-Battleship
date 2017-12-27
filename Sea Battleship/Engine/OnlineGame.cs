@@ -60,8 +60,7 @@ namespace Sea_Battleship.Engine
             }
             else
             {
-                // Открыть форму ручной расстановки и там вызвать CreateGame
-                PlacingWindow window = new PlacingWindow(this) {Owner = owner};
+                PlacingWindow window = new PlacingWindow(this) { Owner = owner };
                 window.Show();
             }
         }
