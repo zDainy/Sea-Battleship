@@ -198,5 +198,124 @@ namespace Sea_Battleship
             }
             return false;
         }
+
+        public bool isHere(int x, int y, PlayWindow window)
+        {
+            if (isHorizontal && (
+            size == 1 && X == x && Y == y ||
+            size == 2 && (X == x && Y == y || X + 1 == x && Y == y) ||
+            size == 3 && (X == x && Y == y || X + 1 == x && Y == y || X + 2 == x && Y == y) ||
+            size == 4 && (X == x && Y == y || X + 1 == x && Y == y || X + 2 == x && Y == y || X + 3 == x && Y == y)
+            ) ||
+            size == 2 && (X == x && Y == y || X == x && Y + 1 == y) ||
+            size == 3 && (X == x && Y == y || X == x && Y + 1 == y || X == x && Y + 2 == y) ||
+            size == 4 && (X == x && Y == y || X == x && Y + 1 == y || X == x && Y + 2 == y || X == x && Y + 3 == y)
+            )
+            {
+                countAlive--;
+                if (countAlive == 0)
+                {
+                    if (isHorizontal)
+                    {
+                        for (int i = 0; i < size; i++)
+                            window.Game.ClientShipArrangement.SetCellState(Core.CellStatе.DestroyedShip, X + i, y);
+                        for (int i = X - 1; i < X + size + 1; i++)
+                        {
+                            if (i >= 0 && i < 10 && Y + 1 >= 0 && Y + 1 < 10)
+                            {
+                                PlayField.SetCell(i, Y + 1, window.EnemyField.FieldGrid, new Image()
+                                {
+                                    Stretch = Stretch.Fill,
+                                    Opacity = 100,
+                                    Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                                });
+                                window.Game.ClientShipArrangement.SetCellState(Core.CellStatе.WoundedWater, i, Y + 1);
+                            }
+                            if (i >= 0 && i < 10 && Y - 1 >= 0 && Y - 1 < 10)
+                            {
+                                PlayField.SetCell(i, Y - 1, window.EnemyField.FieldGrid, new Image()
+                                {
+                                    Stretch = Stretch.Fill,
+                                    Opacity = 100,
+                                    Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                                });
+                                window.Game.ClientShipArrangement.SetCellState(Core.CellStatе.WoundedWater, i, Y - 1);
+                            }
+                        }
+                        if (X - 1 >= 0 && X - 1 < 10)
+                        {
+                            PlayField.SetCell(X - 1, Y, window.EnemyField.FieldGrid, new Image()
+                            {
+                                Stretch = Stretch.Fill,
+                                Opacity = 100,
+                                Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                            });
+                            window.Game.ClientShipArrangement.SetCellState(Core.CellStatе.WoundedWater, X - 1, Y);
+                        }
+                        if (X + size >= 0 && X + size < 10)
+                        {
+                            PlayField.SetCell(X + size, Y, window.EnemyField.FieldGrid, new Image()
+                            {
+                                Stretch = Stretch.Fill,
+                                Opacity = 100,
+                                Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                            });
+                            window.Game.ClientShipArrangement.SetCellState(Core.CellStatе.WoundedWater, X + size, Y);
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < size; i++)
+                            window.Game.ClientShipArrangement.SetCellState(Core.CellStatе.DestroyedShip, X, Y + i);
+                        for (int i = Y - 1; i < Y + size + 1; i++)
+                        {
+                            if (i >= 0 && i < 10 && X + 1 >= 0 && X + 1 < 10)
+                            {
+                                PlayField.SetCell(X + 1, i, window.EnemyField.FieldGrid, new Image()
+                                {
+                                    Stretch = Stretch.Fill,
+                                    Opacity = 100,
+                                    Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                                });
+                                window.Game.ClientShipArrangement.SetCellState(Core.CellStatе.WoundedWater, X + 1, i);
+                            }
+                            if (i >= 0 && i < 10 && X - 1 >= 0 && X - 1 < 10)
+                            {
+                                PlayField.SetCell(X - 1, i, window.EnemyField.FieldGrid, new Image()
+                                {
+                                    Stretch = Stretch.Fill,
+                                    Opacity = 100,
+                                    Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                                });
+                                window.Game.ClientShipArrangement.SetCellState(Core.CellStatе.WoundedWater, X - 1, i);
+                            }
+                        }
+                        if (Y - 1 >= 0 && Y - 1 < 10)
+                        {
+                            PlayField.SetCell(X, Y - 1, window.EnemyField.FieldGrid, new Image()
+                            {
+                                Stretch = Stretch.Fill,
+                                Opacity = 100,
+                                Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                            });
+                            window.Game.ClientShipArrangement.SetCellState(Core.CellStatе.WoundedWater, X, Y - 1);
+                        }
+                        if (Y + size >= 0 && Y + size < 10)
+                        {
+                            PlayField.SetCell(X, Y + size, window.EnemyField.FieldGrid, new Image()
+                            {
+                                Stretch = Stretch.Fill,
+                                Opacity = 100,
+                                Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                            });
+                            window.Game.ClientShipArrangement.SetCellState(Core.CellStatе.WoundedWater, X, Y + size);
+                        }
+                    }
+                }
+                return true;
+            }
+
+            return false;
+        }
     }
 }
