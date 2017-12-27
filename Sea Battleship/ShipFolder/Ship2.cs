@@ -14,6 +14,7 @@ namespace Sea_Battleship.ShipFolder
         public Ship2()
         {
             Size = 2;
+            CountAlive = 2;
             Images = new Image[Size];
             Images[0] = new Image
             {

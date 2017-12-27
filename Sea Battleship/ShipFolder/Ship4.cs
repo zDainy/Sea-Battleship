@@ -11,6 +11,7 @@ namespace Sea_Battleship
         public Ship4()
         {
             Size = 4;
+            CountAlive = 4;
             Images = new Image[Size];
             Images[0] = new Image
             {

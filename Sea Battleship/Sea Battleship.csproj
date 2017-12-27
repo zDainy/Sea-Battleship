@@ -64,6 +64,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ConfigOfflineWindow.xaml.cs">
+      <DependentUpon>ConfigOfflineWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ConfigOnlineHostWindow.xaml.cs">
       <DependentUpon>ConfigOnlineHostWindow.xaml</DependentUpon>
     </Compile>
@@ -93,6 +96,10 @@
       <DependentUpon>WaitingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowConfig.cs" />
+    <Page Include="ConfigOfflineWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ConfigOnlineHostWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -171,6 +178,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\shipCrushed.png~" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -223,6 +231,12 @@
     <Resource Include="Resources\2n2.png" />
     <Resource Include="Resources\2n3.png" />
     <Resource Include="Resources\3n2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\waterCrushed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\shipCrushed.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

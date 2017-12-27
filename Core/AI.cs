@@ -1,9 +1,10 @@
 ﻿using System.Windows;
 namespace Core
 {
-    static class AI
+    public static class AI
     {
         private static System.Random random = new System.Random();
+        private static System.Collections.Generic.LinkedList<Vector> history = new System.Collections.Generic.LinkedList<Vector>();
 
         private static bool FindFourDestroyed(ShipArrangement arrangement)
         {
@@ -53,7 +54,7 @@ namespace Core
             return false;
         }
 
-        public static void MakeAMove(Game g)
+        public static Point MakeAMove(Game g)
         {
             int x = 0;
             int y = 0;
@@ -74,6 +75,7 @@ namespace Core
                     int j = 0;
                     while ((i < 10) && (fx == -1))
                     {
+                        j = 0;
                         while ((j < 10) && (fy == -1))
                         {
                             if (g.ServerShipArrangement.GetCellState(i, j) == CellStatе.WoundedShip)
@@ -106,8 +108,18 @@ namespace Core
                             {
                                 px++;
                             }
-                            if ((px == 10) || (g.ServerShipArrangement.GetCellState(px, fy) == CellStatе.WoundedWater)) g.MakeAMove(fx - 1, fy);
-                            else g.MakeAMove(px, fy);
+                            if ((px == 10) || (g.ServerShipArrangement.GetCellState(px, fy) == CellStatе.WoundedWater))
+                            {
+                                g.MakeAMove(fx - 1, fy);
+                                x = fx - 1;
+                                y = fy;
+                            }
+                            else
+                            {
+                                g.MakeAMove(px, fy);
+                                x = px;
+                                y = fy;
+                            }
                         }
                         else if (g.ServerShipArrangement.GetCellState(fx, fy + 1) == CellStatе.WoundedShip)
                         {
@@ -116,26 +128,44 @@ namespace Core
                             {
                                 py++;
                             }
-                            if ((py == 10) || (g.ServerShipArrangement.GetCellState(fx, py) == CellStatе.WoundedWater)) g.MakeAMove(fx, fy - 1);
-                            else g.MakeAMove(fx, py);
+                            if ((py == 10) || (g.ServerShipArrangement.GetCellState(fx, py) == CellStatе.WoundedWater))
+                            {
+                                g.MakeAMove(fx, fy - 1);
+                                x = fx;
+                                y = fy - 1;
+                            }
+                            else
+                            {
+                                g.MakeAMove(fx, py);
+                                x = fx;
+                                y = py;
+                            }
                         }
                         else
                         {
                             if ((fx + 1 < 10) && (g.ServerShipArrangement.GetCellState(fx + 1, fy) != CellStatе.WoundedWater))
                             {
                                 g.MakeAMove(fx + 1, fy);
+                                x = fx + 1;
+                                y = fy;
                             }
                             else if ((fy + 1 < 10) && (g.ServerShipArrangement.GetCellState(fx, fy + 1) != CellStatе.WoundedWater))
                             {
                                 g.MakeAMove(fx, fy + 1);
+                                x = fx;
+                                y = fy + 1;
                             }
                             else if ((fx - 1 >= 0) && (g.ServerShipArrangement.GetCellState(fx - 1, fy) != CellStatе.WoundedWater))
                             {
                                 g.MakeAMove(fx - 1, fy);
+                                x = fx - 1;
+                                y = fy;
                             }
                             else if ((fy - 1 >= 0) && (g.ServerShipArrangement.GetCellState(fx, fy - 1) != CellStatе.WoundedWater))
                             {
                                 g.MakeAMove(fx, fy - 1);
+                                x = fx;
+                                y = fy - 1;
                             }
                         }
                     }
@@ -147,6 +177,7 @@ namespace Core
                     j = 0;
                     while ((i < 10) && (fx == -1))
                     {
+                        j = 0;
                         while ((j < 10) && (fy == -1))
                         {
                             if (g.ServerShipArrangement.GetCellState(i, j) == CellStatе.WoundedShip)
@@ -242,6 +273,8 @@ namespace Core
                     }
                     break;
             }
+            history.AddLast(new Vector(x, y));
+            return new Point(x, y);
         }
     }
 }

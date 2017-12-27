@@ -112,6 +112,7 @@ namespace Core
         Destroyed,
         Miss,
         Error
+    }
         
     public enum PlacementState
     {
