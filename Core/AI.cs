@@ -81,7 +81,7 @@ namespace Core
 
         public static Point MakeAMove(Game g)
         {
-            if (Will.Count == 0 && Count(g.ServerShipArrangement) < 20) FillList(g.ServerShipArrangement);
+            if (Will.Count == 0 && Count(g.ServerShipArrangement) < 28) FillList(g.ServerShipArrangement);
             int x = 0;
             int y = 0;
             switch (g.GameConfig.BotLvl)
