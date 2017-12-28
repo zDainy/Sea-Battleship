@@ -49,6 +49,11 @@ namespace Sea_Battleship
 
         private void ExitItem_Click(object sender, RoutedEventArgs e)
         {
+            CloseWin();
+        }
+
+        public void CloseWin()
+        {
             if (OnlineGame.PlayerRole == PlayerRole.Server)
             {
                 OnlineGame.Connect.Server.Stop();

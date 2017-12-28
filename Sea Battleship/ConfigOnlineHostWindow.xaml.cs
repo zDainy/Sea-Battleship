@@ -36,7 +36,7 @@ namespace Sea_Battleship
             }
             else
             {
-                WaitingWindow window = new WaitingWindow(OnlineGame, _shipArrangement, _placement);
+                WaitingWindow window = new WaitingWindow(OnlineGame, _shipArrangement, _placement, Owner);
                 window.Show();
                 Close();
                 window.Wait();

@@ -13,10 +13,12 @@ namespace Sea_Battleship
         public OnlineGame OnlineGame { get; set; }
         public ShipArrangement Arrangment { get; set; }
         public PlacementState Placement { get; set; }
+        private Window _pWindow;
 
-        public WaitingWindow(OnlineGame onlineGame, ShipArrangement arrangment, PlacementState placement)
+        public WaitingWindow(OnlineGame onlineGame, ShipArrangement arrangment, PlacementState placement,Window pOwner)
         {
             InitializeComponent();
+            _pWindow = pOwner;
             OnlineGame = onlineGame;
             Arrangment = arrangment;
             Placement = placement;
@@ -25,7 +27,7 @@ namespace Sea_Battleship
         public void Wait()
         {
             while (!OnlineGame.Connect.Server.IsClientConnected) { }
-            OnlineGame.GoToGameWindow(Placement, Arrangment, Owner);
+            OnlineGame.GoToGameWindow(Placement, Arrangment, _pWindow);
             Close();
         }
     }

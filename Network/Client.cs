@@ -14,6 +14,7 @@ namespace Network
         private int _port = 27015;
         private TcpClient _client;
         private NetworkStream _networkStream;
+        public bool IsClosed { get; set; }
 
         /// <summary>
         /// Подлкючает клиента к серверу
@@ -103,6 +104,7 @@ namespace Network
             LogService.Trace("Отключаемся от сервера...");
             try
             {
+                IsClosed = true;
                 _client.Close();
                 LogService.Trace("Соединение завершено");
             }

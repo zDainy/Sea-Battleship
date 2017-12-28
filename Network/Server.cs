@@ -17,6 +17,7 @@ namespace Network
         private TcpClient _client;
         private NetworkStream _networkStream;
         public bool IsClientConnected { get; set; }
+        public bool IsClosed { get; set; }
 
         /// <summary>
         /// Создает сервер через сокет
@@ -131,6 +132,7 @@ namespace Network
             try
             {
                 _server.Stop();
+                IsClosed = true;
                 LogService.Trace("Сервер отключен");
             }
             catch (SocketException e)
