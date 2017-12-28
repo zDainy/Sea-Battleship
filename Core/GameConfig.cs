@@ -91,7 +91,8 @@ namespace Core
         WoundedWater,
         Ship,
         WoundedShip,
-        DestroyedShip
+        DestroyedShip,
+        BlankShot
     }
 
     /// <summary>

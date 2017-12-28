@@ -39,7 +39,13 @@ namespace Sea_Battleship
             {
                 _isOnlineGame = true;
                 gg = _onlineGame.Game;
-                _turnTimer = new Timer { Interval = (int)_onlineGame.GameConfig.GameSpeed };
+                _onlineGame.TurnTimer.Interval = 5000;
+                _turnTimer = _onlineGame.TurnTimer;
+                if (_onlineGame.isStart)
+                {
+                    _turnTimer.Tick += (sender, e) => SwitchTurn(true);
+                    _onlineGame.isStart = false;
+                }
                 if (_onlineGame.PlayerRole == PlayerRole.Client)
                 {
                     myArr = _onlineGame.MyArrangement.GetArrangement();
@@ -130,45 +136,41 @@ namespace Sea_Battleship
                 //ships.ShipList1[0].Place(this, 9, 9, true);
             }
             isHiddenField = !isHiddenField;
-            //   _turnTimer.Tick += (sender, e) => SwitchTurn();
-           //  _turnTimer.Start();
+            _turnTimer.Start();
         }
 
-        public void SwitchTurn()
+        public void SwitchTurn(bool isFromTimer)
         {
-           // _turnTimer.Stop();
+            _turnTimer.Enabled = false;
             if (_onlineGame.IsMyTurn)
             {
+                if (isFromTimer)
+                {
+                    _onlineGame.Turn(-1, -1);
+                }
+                LogService.Trace("Теперь чужой ход");
                 // <--- Переключалка хода
                 _onlineGame.IsMyTurn = false;
                 _onlineGame.IsOne = false;
                 WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
                 {
-                    //_pw.EnemyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E")); //(Brush)new BrushConverter().ConvertFromString("#FF00287E");
                     WindowConfig.PlayWindowCon.MyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E"));
                 });
-                // _pw.EnemyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E")); //(Brush)new BrushConverter().ConvertFromString("#FF00287E");
-                // _pw.MyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF98ECFF")); //(Brush)new BrushConverter().ConvertFromString("#FF98ECFF");
                 ThreadPool.QueueUserWorkItem(OnlineEnemyTurn);
             }
             else
             {
+                LogService.Trace("Теперь твой ход");
                 // <--- Переключалка хода
                 WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
                 {
-                    // _pw.EnemyTurnLabel.Background =  new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF98ECFF"));// (Brush)new BrushConverter().ConvertFromString("#FF98ECFFFF00287E");
                     WindowConfig.PlayWindowCon.MyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
                 });
-
-                //Dispatcher.Invoke( _pw.EnemyTurnLabel.Background = new SolidColorBrush(Colors.Red));// new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF98ECFF"));// (Brush)new BrushConverter().ConvertFromString("#FF98ECFFFF00287E");
-                //_pw.MyTurnLabel.Background = new SolidColorBrush(Colors.Red);// new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E")); //(Brush)new BrushConverter().ConvertFromString("#FF00287E");
                 _onlineGame.IsMyTurn = true;
             }
-
-           // _turnTimer.Start();
+            _turnTimer.Enabled = true;
         }
-            //  _pw//
-        
+
 
         public Ships Ships { get => ships; set => ships = value; }
 
@@ -252,14 +254,18 @@ namespace Sea_Battleship
 
         private void OnlineMyTurn(object obj)
         {
+            _turnTimer.Enabled = false;
             Vector vect = (Vector)obj;
             try
             {
                 var shotRes = _onlineGame.Turn((int)vect.X, (int)vect.Y);
-                SetShotOnField((int)vect.X, (int)vect.Y, shotRes, false);
-                if (shotRes == CellStatе.WoundedWater)
+                if (shotRes != CellStatе.BlankShot)
                 {
-                    SwitchTurn();
+                    SetShotOnField((int)vect.X, (int)vect.Y, shotRes, false);
+                    if (shotRes == CellStatе.WoundedWater)
+                    {
+                        SwitchTurn(false);
+                    }
                 }
             }
             catch (NullReferenceException)
@@ -279,6 +285,7 @@ namespace Sea_Battleship
         {
             try
             {
+                bool needSwitch = true;
                 if (!_onlineGame.IsOne)
                 {
                     CellStatе shotRes;
@@ -286,10 +293,16 @@ namespace Sea_Battleship
                     do
                     {
                         var comeVector = _onlineGame.WaitEnemyTurn();
+                        if ((int)comeVector.X == -1 && (int)comeVector.Y == -1)
+                        {
+                            needSwitch = false;
+                            break;
+                        }
                         shotRes = _onlineGame.CheckShot(comeVector);
                         SetShotOnField((int)comeVector.X, (int)comeVector.Y, shotRes, true);
                     } while (shotRes == CellStatе.WoundedShip);
-                    SwitchTurn();
+                    if (needSwitch)
+                        SwitchTurn(false);
                 }
             }
             catch (NullReferenceException)

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Windows;
 using Core;
 using Network;
+using Timer = System.Windows.Forms.Timer;
 using ShipArrangement = Core.ShipArrangement;
 
 namespace Sea_Battleship.Engine
@@ -20,11 +21,14 @@ namespace Sea_Battleship.Engine
         public PlacementState Placement { get; set; }
         public bool IsMyTurn { get; set; }
         public bool IsOne { get; set; } = false;
+        public Timer TurnTimer { get; set; }
+        public bool isStart { get; set; } = true;
 
         public OnlineGame(PlayerRole playerRole, PlacementState placement, IPAddress ip = null)
         {
             PlayerRole = playerRole;
             Placement = placement;
+            TurnTimer = new Timer();
             InitGame(ip);
         }
 
@@ -94,6 +98,10 @@ namespace Sea_Battleship.Engine
         public CellStatе Turn(int x, int y)
         {
             Connect.SendOperation(PlayerRole, OpearationTypes.Shot, new Shot(new Vector(x, y)));
+            if (x == -1 && y == -1)
+            {
+                return CellStatе.BlankShot;
+            }
             var res = Connect.GetOperation(PlayerRole);
             var shotRes = (ShotResult)res.Item2;
             SetShotResult(shotRes.State, x, y);
@@ -103,7 +111,7 @@ namespace Sea_Battleship.Engine
         public Vector WaitEnemyTurn()
         {
             var res = Connect.GetOperation(PlayerRole);
-            Vector shotRes = new Vector(0, 0);
+            Vector shotRes = new Vector(-1, -1);
             if (res.Item1 == OpearationTypes.Shot)
             {
                 var shot = (Shot)res.Item2;
