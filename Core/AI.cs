@@ -155,7 +155,7 @@ namespace Core
                         if (fx + 1 < 10 && g.ServerShipArrangement.GetCellState(fx + 1, fy) == CellStatе.WoundedShip)
                         {
                             int px = fx + 1;
-                            while ((g.ServerShipArrangement.GetCellState(px, fy) == CellStatе.WoundedShip) && (px < 10))
+                            while ((px < 10)&&(g.ServerShipArrangement.GetCellState(px, fy) == CellStatе.WoundedShip))
                             {
                                 px++;
                             }
@@ -175,7 +175,7 @@ namespace Core
                         else if (fy + 1 < 10 && g.ServerShipArrangement.GetCellState(fx, fy + 1) == CellStatе.WoundedShip)
                         {
                             int py = fy + 1;
-                            while ((g.ServerShipArrangement.GetCellState(fx, py) == CellStatе.WoundedShip) && (py < 10))
+                            while ((py < 10)&&(g.ServerShipArrangement.GetCellState(fx, py) == CellStatе.WoundedShip))
                             {
                                 py++;
                             }

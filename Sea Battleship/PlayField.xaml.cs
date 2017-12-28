@@ -215,6 +215,8 @@ namespace Sea_Battleship
                     {
                         case CellStatе.WoundedShip:
                             _pw.MyField.Ships.CheckEnemy(new Point(x, y), _pw, true);
+                            if(_pw.MyField.Ships.IsAllDead())
+                                EndOfGame(false);
                             break;
                         case CellStatе.WoundedWater:
                             SetCell(x, y, fg, new Image()
@@ -235,6 +237,8 @@ namespace Sea_Battleship
                     {
                         case CellStatе.WoundedShip:
                             ships.Check(x, y, _pw, true);
+                            if (_pw.MyField.Ships.IsAllDead())
+                                EndOfGame(true);
                             break;
                         case CellStatе.WoundedWater:
                             SetCell(x, y, fg, new Image()
@@ -323,6 +327,10 @@ namespace Sea_Battleship
                 {
                     case MoveResult.Hit:
                         ships.Check(X, Y, z, false);
+                        if (ships.IsAllDead())
+                        {
+                            EndOfGame(true);
+                        }
                         break;
                     case MoveResult.Miss:
                         uriString = "/Resources/waterCrushed.png";
@@ -354,70 +362,17 @@ namespace Sea_Battleship
             do //ходит, пока не промахнётся
             {
                 image = (Image)z.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
-                was = false;
-                foreach (AShip sh in z.MyField.ships.ShipList1)
-                {
-                    if (sh.isHere(image, z, false))
-                    {
-                        SetShotOnField((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
-                        {
-                            Stretch = Stretch.Fill,
-                            Opacity = 100,
-                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                        });
-                        was = true;
-                        break;
-                    }
-                }
-                if (!was)
-                    foreach (AShip sh in z.MyField.ships.ShipList2)
-                    {
-                        if (sh.isHere(image, z, false))
-                        {
-                            SetShotOnField((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
-                            {
-                                Stretch = Stretch.Fill,
-                                Opacity = 100,
-                                Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                            });
-                            was = true;
-                            break;
-                        }
-                    }
-                if (!was)
-                    foreach (AShip sh in z.MyField.ships.ShipList3)
-                    {
-                        if (sh.isHere(image, z, false))
-                        {
-                            SetShotOnField((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
-                            {
-                                Stretch = Stretch.Fill,
-                                Opacity = 100,
-                                Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                            });
-                            was = true;
-                            break;
-                        }
-                    }
-                if (!was)
-                    foreach (AShip sh in z.MyField.ships.ShipList4)
-                    {
-                        if (sh.isHere(image, z, false))
-                        {
-                            SetShotOnField((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
-                            {
-                                Stretch = Stretch.Fill,
-                                Opacity = 100,
-                                Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                            });
-                            was = true;
-                            break;
-                        }
-                    }
+                was = z.MyField.ships.Check(image, z, false);
                 if (was)
                 {
                     p = AI.MakeAMove(z.Game);
                 }
+                if (z.MyField.ships.IsAllDead())
+                {
+                    EndOfGame(false);
+                    break;
+                }
+
             }
             while (was);
             if (!was)
@@ -561,6 +516,34 @@ namespace Sea_Battleship
             {
                 SetCell(x, y, grid, image);
             });
+        }
+
+
+        private void EndOfGame(bool isPlayerWin)
+        {
+            if (isPlayerWin)
+            {
+                MessageBoxResult res = MessageBox.Show(WindowConfig.PlayWindowCon, "Вы проиграли...", "Конец игры", MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.No, MessageBoxOptions.None);
+                if (!_isOnlineGame)
+                    WindowConfig.game = null;
+                else
+                    WindowConfig.OnlineGame = null;
+                WindowConfig.PlayWindowCon.Owner.Show();
+                WindowConfig.PlayWindowCon.Close();
+
+            }
+            else
+            {
+                MessageBoxResult res = MessageBox.Show(WindowConfig.PlayWindowCon, "Вы проиграли...", "Конец игры", MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.No, MessageBoxOptions.None);
+
+                if (!_isOnlineGame)
+                    WindowConfig.game = null;
+                else
+                    WindowConfig.OnlineGame = null;
+                WindowConfig.PlayWindowCon.Owner.Show();
+                WindowConfig.PlayWindowCon.Close();
+
+            }
         }
     }
 }

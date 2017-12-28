@@ -14,7 +14,7 @@ namespace Sea_Battleship
         bool isHorizontal = true;
         int x = -1;
         int y = -1;
-        bool iDead = false;
+        bool isDead = false;
 
         public Image[] Images { get => images; set => images = value; }
         public bool IsHorizontal { get => isHorizontal; set => isHorizontal = value; }
@@ -22,19 +22,6 @@ namespace Sea_Battleship
         public int X { get => x; set => x = value; }
         public int Y { get => y; set => y = value; }
         public int CountAlive { get => countAlive; set => countAlive = value; }
-
-        public void ShipInit()
-        {
-            for (int i = 0; i < Size; i++)
-            {
-                Images[i].MouseLeftButtonDown += Ship_MouseLeftButtonDown;
-            }
-        }
-
-        private void Ship_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            //
-        }
 
         public void Place(PlayField field, int x, int y, bool isHorizontal)
         {
@@ -87,8 +74,9 @@ namespace Sea_Battleship
             }
         }
 
-        public bool isHere(Image image, PlayWindow window, bool isOnline)
+        public bool isHere(Image image, PlayWindow window, bool isOnline, out bool isDead)
         {
+            isDead = false;
             if (!isOnline)
             {
                 foreach (Image im in images)
@@ -98,6 +86,8 @@ namespace Sea_Battleship
                         countAlive--;
                         if (countAlive == 0)
                         {
+                            this.isDead = true;
+                            isDead = true;
                             if (isHorizontal)
                             {
                                 for (int i = 0; i < size; i++)
@@ -209,6 +199,8 @@ namespace Sea_Battleship
                         countAlive--;
                         if (countAlive == 0)
                         {
+                            this.isDead = true;
+                            isDead = true;
                             if (isHorizontal)
                             {
                                 for (int i = X - 1; i < x + size + 1; i++)
@@ -301,8 +293,9 @@ namespace Sea_Battleship
             }
         }
 
-        public bool isHere(int x, int y, PlayWindow window, bool isOnline)
+        public bool isHere(int x, int y, PlayWindow window, bool isOnline, out bool isDead)
         {
+            isDead = false;
             if (!isOnline)
             {
                 if (isHorizontal && (
@@ -319,6 +312,8 @@ namespace Sea_Battleship
                     countAlive--;
                     if (countAlive == 0)
                     {
+                        this.isDead = true;
+                        isDead = true;
                         if (isHorizontal)
                         {
                             for (int i = 0; i < size; i++)
@@ -437,6 +432,8 @@ namespace Sea_Battleship
                     countAlive--;
                     if (countAlive == 0)
                     {
+                        this.isDead = true;
+                        isDead = true;
                         if (isHorizontal)
                         {
                             for (int i = X - 1; i < X + size + 1; i++)

@@ -23,6 +23,7 @@ namespace Sea_Battleship
         int _shipCount3 = 2;
         int _shipCount4 = 1;
         PlayField _playField;
+        private int isDeadCount = 0;
 
         public PlayField PlayField { get => _playField; set => _playField = value; }
         public int ShipCount3 { get => _shipCount3; set => _shipCount3 = value; }
@@ -91,10 +92,11 @@ namespace Sea_Battleship
 
         public bool Check(int X, int Y, PlayWindow z, bool isOnline)
         {
+            bool isDead = false;
             bool was = false;
             foreach (AShip sh in ShipList1)
             {
-                if (sh.isHere(X, Y, z, isOnline))
+                if (sh.isHere(X, Y, z, isOnline, out isDead))
                 {
                     PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
                     {
@@ -109,7 +111,7 @@ namespace Sea_Battleship
             if (!was)
                 foreach (AShip sh in ShipList2)
                 {
-                    if (sh.isHere(X, Y, z, isOnline))
+                    if (sh.isHere(X, Y, z, isOnline, out isDead))
                     {
                         PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
                         {
@@ -124,7 +126,7 @@ namespace Sea_Battleship
             if (!was)
                 foreach (AShip sh in ShipList3)
                 {
-                    if (sh.isHere(X, Y, z, isOnline))
+                    if (sh.isHere(X, Y, z, isOnline, out isDead))
                     {
                         PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
                         {
@@ -139,7 +141,7 @@ namespace Sea_Battleship
             if (!was)
                 foreach (AShip sh in ShipList4)
                 {
-                    if (sh.isHere(X, Y, z, isOnline))
+                    if (sh.isHere(X, Y, z, isOnline, out isDead))
                     {
                         PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
                         {
@@ -151,16 +153,89 @@ namespace Sea_Battleship
                         break;
                     }
                 }
+            if (isDead)
+                isDeadCount++;
+            return was;
+        }
+
+        public bool Check(Image im, PlayWindow z, bool isOnline)
+        {
+            bool isDead = false;
+            bool was = false;
+            int X = Grid.GetColumn(im);
+            int Y = Grid.GetRow(im);
+            foreach (AShip sh in ShipList1)
+            {
+                if (sh.isHere(im, z, isOnline, out isDead))
+                {
+                    PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
+                    {
+                        Stretch = Stretch.Fill,
+                        Opacity = 100,
+                        Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                    });
+                    was = true;
+                    break;
+                }
+            }
+            if (!was)
+                foreach (AShip sh in ShipList2)
+                {
+                    if (sh.isHere(im, z, isOnline, out isDead))
+                    {
+                        PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (!was)
+                foreach (AShip sh in ShipList3)
+                {
+                    if (sh.isHere(im, z, isOnline, out isDead))
+                    {
+                        PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (!was)
+                foreach (AShip sh in ShipList4)
+                {
+                    if (sh.isHere(im, z, isOnline, out isDead))
+                    {
+                        PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (isDead)
+                isDeadCount++;
             return was;
         }
 
         public void CheckEnemy(Point p, PlayWindow z, bool isOnline)
         {
+            bool isDead = false;
             Image image = (Image)z.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
             bool was = false;
             foreach (AShip sh in z.MyField.Ships.ShipList1)
             {
-                if (sh.isHere(image, z, isOnline))
+                if (sh.isHere(image, z, isOnline, out isDead))
                 {
                     PlayField.SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
                     {
@@ -175,7 +250,7 @@ namespace Sea_Battleship
             if (!was)
                 foreach (AShip sh in z.MyField.Ships.ShipList2)
                 {
-                    if (sh.isHere(image, z, isOnline))
+                    if (sh.isHere(image, z, isOnline, out isDead))
                     {
                         PlayField.SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
                         {
@@ -190,7 +265,7 @@ namespace Sea_Battleship
             if (!was)
                 foreach (AShip sh in z.MyField.Ships.ShipList3)
                 {
-                    if (sh.isHere(image, z, isOnline))
+                    if (sh.isHere(image, z, isOnline, out isDead))
                     {
                         PlayField.SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
                         {
@@ -205,7 +280,7 @@ namespace Sea_Battleship
             if (!was)
                 foreach (AShip sh in z.MyField.Ships.ShipList4)
                 {
-                    if (sh.isHere(image, z, isOnline))
+                    if (sh.isHere(image, z, isOnline, out isDead))
                     {
                         PlayField.SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
                         {
@@ -217,6 +292,13 @@ namespace Sea_Battleship
                         break;
                     }
                 }
+
+        }
+
+        public bool IsAllDead()
+        {
+            if (isDeadCount == 10) return true;
+            return false;
         }
     }
 }

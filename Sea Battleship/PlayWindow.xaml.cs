@@ -35,6 +35,7 @@ namespace Sea_Battleship
 
         public PlayWindow(Game game)
         {
+            WindowConfig.PlayWindowCon = this;
             WindowConfig.game = game;
             InitializeComponent();
             Game = game;
