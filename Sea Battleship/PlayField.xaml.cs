@@ -143,7 +143,6 @@ namespace Sea_Battleship
         {
             if (_onlineGame.IsMyTurn)
             {
-                WindowConfig.PlayWindowCon.Pause.IsEnabled = false;
                 if (isFromTimer)
                 {
                     _onlineGame.Turn(-1, -1);
@@ -155,20 +154,21 @@ namespace Sea_Battleship
                 WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
                 {
                     WindowConfig.PlayWindowCon.MyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E"));
+                    WindowConfig.PlayWindowCon.Pause.IsEnabled = false;
                 });
                 ThreadPool.QueueUserWorkItem(OnlineEnemyTurn);
             }
             else
             {
-                if (_onlineGame.PlayerRole == PlayerRole.Server)
-                {
-                    WindowConfig.PlayWindowCon.Pause.IsEnabled = true;
-                }
                 LogService.Trace("Теперь твой ход");
                 // <--- Переключалка хода
                 WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
                 {
                     WindowConfig.PlayWindowCon.MyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
+                    if (_onlineGame.PlayerRole == PlayerRole.Server)
+                    {
+                        WindowConfig.PlayWindowCon.Pause.IsEnabled = true;
+                    }
                 });
                 _onlineGame.IsMyTurn = true;
             }
@@ -302,11 +302,11 @@ namespace Sea_Battleship
                         }
                         if ((int)comeVector.X == -2 && (int)comeVector.Y == -2)
                         {
+                            ThreadPool.QueueUserWorkItem(OnlineEnemyTurn);
                             WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
                             {
                                 WindowConfig.PlayWindowCon.CheckPause();
                             });
-                            OnlineEnemyTurn(null);
                             break;
                         }
                         if ((int)comeVector.X == -3 && (int)comeVector.Y == -3)

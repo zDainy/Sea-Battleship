@@ -77,7 +77,10 @@ namespace Sea_Battleship
         {
             if (!(_pWindow is null))
             {
-                _pWindow.UnpressPause();
+                _pWindow.Dispatcher.Invoke(() =>
+                {
+                    _pWindow.UnpressPause();
+                });
             }
         }
     }
