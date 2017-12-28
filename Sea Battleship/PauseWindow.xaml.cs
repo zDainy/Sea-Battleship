@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Forms;
 using Core;
+using Sea_Battleship.Engine;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Sea_Battleship
@@ -11,8 +12,11 @@ namespace Sea_Battleship
     public partial class PauseWindow : Window
     {
         private Timer _timer;
-        public PauseWindow(PlayerRole role)
+        private OnlineGame _onlineGame;
+
+        public PauseWindow(PlayerRole role, OnlineGame onGame)
         {
+            _onlineGame = onGame;
             InitializeComponent();
             PauseButton.IsEnabled = role == PlayerRole.Server;
             _timer = new Timer {Interval = 300000};
@@ -25,9 +29,12 @@ namespace Sea_Battleship
             UnpressPause();
         }
 
-        private void UnpressPause()
+        public void UnpressPause()
         {
-            // послать операцию клиенту
+            if (_onlineGame.PlayerRole == PlayerRole.Server)
+            {
+                _onlineGame.Turn(-3, -3);
+            }
             _timer.Stop();
            Close();
         }

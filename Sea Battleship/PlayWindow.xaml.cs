@@ -23,6 +23,7 @@ namespace Sea_Battleship
     {
         public OnlineGame OnlineGame { get; set; }
         public Game Game { get; set; }
+        private PauseWindow _pWindow;
 
         public PlayWindow(OnlineGame onlineGame)
         {
@@ -67,9 +68,17 @@ namespace Sea_Battleship
         public void CheckPause()
         {
             OnlineGame.TurnTimer.Stop();
-            PauseWindow window = new PauseWindow(OnlineGame.PlayerRole);
-            window.ShowDialog();
+            _pWindow = new PauseWindow(OnlineGame.PlayerRole, OnlineGame);
+            _pWindow.ShowDialog();
             OnlineGame.TurnTimer.Start();
+        }
+
+        public void BreakPause()
+        {
+            if (!(_pWindow is null))
+            {
+                _pWindow.UnpressPause();
+            }
         }
     }
 }

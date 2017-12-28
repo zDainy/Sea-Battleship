@@ -302,8 +302,18 @@ namespace Sea_Battleship
                         }
                         if ((int)comeVector.X == -2 && (int)comeVector.Y == -2)
                         {
-                            WindowConfig.PlayWindowCon.CheckPause();
+                            WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
+                            {
+                                WindowConfig.PlayWindowCon.CheckPause();
+                            });
                             OnlineEnemyTurn(null);
+                            break;
+                        }
+                        if ((int)comeVector.X == -3 && (int)comeVector.Y == -3)
+                        {
+                            WindowConfig.PlayWindowCon.BreakPause();
+                            OnlineEnemyTurn(null);
+                            break;
                         }
                         shotRes = _onlineGame.CheckShot(comeVector);
                         SetShotOnField((int)comeVector.X, (int)comeVector.Y, shotRes, true);

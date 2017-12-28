@@ -99,7 +99,7 @@ namespace Sea_Battleship.Engine
         public CellStatе Turn(int x, int y)
         {
             Connect.SendOperation(PlayerRole, OpearationTypes.Shot, new Shot(new Vector(x, y)));
-            if (x == -1 && y == -1 || x == -2 && y == -2)
+            if (x == -1 && y == -1 || x == -2 && y == -2 || x == -3 && y == -3)
             {
                 return CellStatе.BlankShot;
             }
