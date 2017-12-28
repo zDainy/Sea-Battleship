@@ -311,7 +311,7 @@ namespace Sea_Battleship
                         }
                         if ((int)comeVector.X == -3 && (int)comeVector.Y == -3)
                         {
-                            WindowConfig.PlayWindowCon.BreakPause();
+                            _onlineGame.TurnTimer.Start();
                             OnlineEnemyTurn(null);
                             break;
                         }

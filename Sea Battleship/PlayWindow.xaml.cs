@@ -68,19 +68,11 @@ namespace Sea_Battleship
         public void CheckPause()
         {
             OnlineGame.TurnTimer.Stop();
-            _pWindow = new PauseWindow(OnlineGame.PlayerRole, OnlineGame);
-            _pWindow.ShowDialog();
-            OnlineGame.TurnTimer.Start();
-        }
-
-        public void BreakPause()
-        {
-            if (!(_pWindow is null))
+            if (OnlineGame.PlayerRole == PlayerRole.Server)
             {
-                _pWindow.Dispatcher.Invoke(() =>
-                {
-                    _pWindow.UnpressPause();
-                });
+                _pWindow = new PauseWindow(OnlineGame.PlayerRole, OnlineGame);
+                _pWindow.ShowDialog();
+                OnlineGame.TurnTimer.Start();
             }
         }
     }

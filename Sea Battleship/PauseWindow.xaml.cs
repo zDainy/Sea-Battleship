@@ -31,10 +31,6 @@ namespace Sea_Battleship
 
         public void UnpressPause()
         {
-            if (_onlineGame.PlayerRole == PlayerRole.Server)
-            {
-                _onlineGame.Turn(-3, -3);
-            }
             _timer.Stop();
            Close();
         }
