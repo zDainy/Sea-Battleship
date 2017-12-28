@@ -29,6 +29,14 @@ namespace Sea_Battleship
         {
             WindowConfig.PlayWindowCon = this;
             WindowConfig.OnlineGame = onlineGame;
+            if (OnlineGame.PlayerRole == PlayerRole.Server)
+            {
+                Save.IsEnabled = true;
+            }
+            else
+            {
+                Save.IsEnabled = false;
+            }
             OnlineGame = onlineGame;
             InitializeComponent();
             WindowConfig.ChangeSwitch();
@@ -87,6 +95,12 @@ namespace Sea_Battleship
                 _pWindow.ShowDialog();
                 OnlineGame.TurnTimer.Start();
             }
+        }
+
+        private void Save_OnClick(object sender, RoutedEventArgs e)
+        {
+            FileSystem.SaveGame("Онлайн игра", OnlineGame.Game);
+            MessageBox.Show("Игра сохранена", "Сохранение", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

@@ -20,13 +20,16 @@ namespace Sea_Battleship.Engine
         public ShipArrangement EnemyArrangement { get; set; }
         public PlacementState Placement { get; set; }
         public bool IsMyTurn { get; set; }
-        public bool IsOne { get; set; } = false;
+        public bool IsOne { get; set; }
         public Timer TurnTimer { get; set; }
-        public bool IsStart { get; set; } = true;
-        public bool IsPaused { get; set; } = false;
+        public bool IsStart { get; set; }
+        public bool IsPaused { get; set; }
 
         public OnlineGame(PlayerRole playerRole, PlacementState placement, IPAddress ip = null)
         {
+            IsPaused = false;
+            IsOne = false;
+            IsStart = true;
             PlayerRole = playerRole;
             Placement = placement;
             TurnTimer = new Timer();

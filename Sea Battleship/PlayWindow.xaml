@@ -24,7 +24,7 @@
                 <ColumnDefinition Width="30 px"/>
             </Grid.ColumnDefinitions>
             <Menu Grid.Column="0" VerticalContentAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Background="{x:Null}" VerticalAlignment="Center">
-                <MenuItem  Header ="Сохранить игру" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="150" Background="{x:Null}" >
+                <MenuItem  Header ="Сохранить игру" Name="Save" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="150" Background="{x:Null}" Click="Save_OnClick" >
                 </MenuItem>
             </Menu>
             <Menu Margin="0" Grid.Column="1" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">

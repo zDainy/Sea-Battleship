@@ -39,7 +39,7 @@ namespace Sea_Battleship
             {
                 _isOnlineGame = true;
                 gg = _onlineGame.Game;
-                _onlineGame.TurnTimer.Interval = 5000;
+                _onlineGame.TurnTimer.Interval = (int)_onlineGame.GameConfig.GameSpeed;
                 _turnTimer = _onlineGame.TurnTimer;
                 if (_onlineGame.IsStart)
                 {
@@ -141,61 +141,41 @@ namespace Sea_Battleship
 
         public void SwitchTurn(bool isFromTimer)
         {
-            if (_onlineGame.PlayerRole == PlayerRole.Server && _onlineGame.Connect.Client.IsClosed)
+
+            if (_onlineGame.IsMyTurn)
             {
-                MessageBox.Show("Противник вышел", "Конец игры", MessageBoxButton.OK, MessageBoxImage.Information,
-                    MessageBoxResult.OK);
+                if (isFromTimer)
+                {
+                    _onlineGame.Turn(-1, -1);
+                }
+                LogService.Trace("Теперь чужой ход");
+                // <--- Переключалка хода
+                _onlineGame.IsMyTurn = false;
+                _onlineGame.IsOne = false;
                 WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
                 {
-                    WindowConfig.PlayWindowCon.CloseWin();
+                    WindowConfig.PlayWindowCon.MyTurnLabel.Background =
+                        new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E"));
+                    WindowConfig.PlayWindowCon.Pause.IsEnabled = false;
                 });
-            }
-            else if (_onlineGame.PlayerRole == PlayerRole.Client && _onlineGame.Connect.Server.IsClosed)
-            {
-                MessageBox.Show("Противник вышел", "Конец игры", MessageBoxButton.OK, MessageBoxImage.Information,
-                    MessageBoxResult.OK);
-                WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
-                {
-                    WindowConfig.PlayWindowCon.CloseWin();
-                });
+                ThreadPool.QueueUserWorkItem(OnlineEnemyTurn);
             }
             else
             {
-
-                if (_onlineGame.IsMyTurn)
+                LogService.Trace("Теперь твой ход");
+                // <--- Переключалка хода
+                WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
                 {
-                    if (isFromTimer)
+                    WindowConfig.PlayWindowCon.MyTurnLabel.Background =
+                        new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
+                    if (_onlineGame.PlayerRole == PlayerRole.Server)
                     {
-                        _onlineGame.Turn(-1, -1);
+                        WindowConfig.PlayWindowCon.Pause.IsEnabled = true;
                     }
-                    LogService.Trace("Теперь чужой ход");
-                    // <--- Переключалка хода
-                    _onlineGame.IsMyTurn = false;
-                    _onlineGame.IsOne = false;
-                    WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
-                    {
-                        WindowConfig.PlayWindowCon.MyTurnLabel.Background =
-                            new SolidColorBrush((Color) ColorConverter.ConvertFromString("#FF00287E"));
-                        WindowConfig.PlayWindowCon.Pause.IsEnabled = false;
-                    });
-                    ThreadPool.QueueUserWorkItem(OnlineEnemyTurn);
-                }
-                else
-                {
-                    LogService.Trace("Теперь твой ход");
-                    // <--- Переключалка хода
-                    WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
-                    {
-                        WindowConfig.PlayWindowCon.MyTurnLabel.Background =
-                            new SolidColorBrush((Color) ColorConverter.ConvertFromString("#FF93FF3A"));
-                        if (_onlineGame.PlayerRole == PlayerRole.Server)
-                        {
-                            WindowConfig.PlayWindowCon.Pause.IsEnabled = true;
-                        }
-                    });
-                    _onlineGame.IsMyTurn = true;
-                }
+                });
+                _onlineGame.IsMyTurn = true;
             }
+
         }
 
 
