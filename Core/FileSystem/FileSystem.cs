@@ -13,38 +13,9 @@ namespace Core
     {
         private static Random random = new Random();
 
-        private static T[] Lining<T>(T[,] input)
-        {
-            int n = input.GetLength(0);
-            int m = input.GetLength(1);
-            T[] result = new T[n * m];
-            for (int i = 0; i < n; i++)
-            {
-
-                for (int j = 0; j < m; j++)
-                {
-                    result[i * m + j] = input[i, j];
-                }
-            }
-            return result;
-        }
-
-        private static T[,] Bending<T>(T[] input, int n, int m)
-        {
-            T[,] result = new T[n, m];
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < m; j++)
-                {
-                    result[i, j] = input[i * m + j];
-                }
-            }
-            return result;
-        }
-
         private static string saveArrangement(bool[,] input)
         {
-            bool[] field = Lining<bool>(input);
+            bool[] field = CryptSystem.Lining<bool>(input);
             bool[] scrambled = CryptSystem.Scramble(field, 4);
             byte[] bytes = new byte[13];
             for (int i = 0; i < 13; i++)
@@ -144,7 +115,7 @@ namespace Core
                 }
             }
             bool[] res = CryptSystem.Unscramble(scrambled, 4);
-            return Bending<bool>(res, 10, 10);
+            return CryptSystem.Bending<bool>(res, 10, 10);
         }
 
         /// <summary>
@@ -430,7 +401,7 @@ namespace Core
                 result[8, i] = hash[0];
                 result[9, i] = hash[1];
             }
-            bytes = Lining<byte>(result);
+            bytes = CryptSystem.Lining<byte>(result);
             string res = "";
             for (int i = 0; i < bytes.Length; i++)
             {
@@ -462,7 +433,7 @@ namespace Core
                 bytes[i] = CryptSystem.HexToByte(input[2 * i].ToString() + input[2 * i + 1]);
             }
             byte[,] result = new byte[10, 10];
-            result = Bending<byte>(bytes, 10, 10);
+            result = CryptSystem.Bending<byte>(bytes, 10, 10);
             for (int i = 0; i < 10; i++)
             {
                 byte[] tmp = new byte[6];

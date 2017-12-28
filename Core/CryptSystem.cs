@@ -9,6 +9,36 @@ namespace Core
     public static class CryptSystem
     {
         private static Random random = new Random();
+
+        public static T[] Lining<T>(T[,] input)
+        {
+            int n = input.GetLength(0);
+            int m = input.GetLength(1);
+            T[] result = new T[n * m];
+            for (int i = 0; i < n; i++)
+            {
+
+                for (int j = 0; j < m; j++)
+                {
+                    result[i * m + j] = input[i, j];
+                }
+            }
+            return result;
+        }
+
+        public static T[,] Bending<T>(T[] input, int n, int m)
+        {
+            T[,] result = new T[n, m];
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    result[i, j] = input[i * m + j];
+                }
+            }
+            return result;
+        }
+
         /// <summary>
         /// Представляет байт в виде строки из двух символов.
         /// </summary>
@@ -202,6 +232,139 @@ namespace Core
                 if (j == key.Length) j = 0;
             }
             return input;
+        }
+
+        /// <summary>
+        /// Представляет расстановку кораблей в байтовый массив.
+        /// </summary>
+        /// <param name="arrangement"></param>
+        /// <returns></returns>
+        public static byte[] ArrangementToByte(ShipArrangement arrangement)
+        {
+            CellStatе[] tmp = Lining<CellStatе>(arrangement.GetArrangement());
+            byte[] result = new byte[25];
+            for (int i = 0; i < 25; i++)
+            {
+                switch (tmp[4 * i])
+                {
+                    case CellStatе.Water:
+                        result[i] = 0;
+                        break;
+                    case CellStatе.WoundedWater:
+                        result[i] = 0x40;
+                        break;
+                    case CellStatе.Ship:
+                        result[i] = 0x80;
+                        break;
+                    case CellStatе.WoundedShip:
+                    case CellStatе.DestroyedShip:
+                        result[i] = 0xC0;
+                        break;
+                }
+                switch (tmp[4 * i + 1])
+                {
+                    case CellStatе.Water:
+                        break;
+                    case CellStatе.WoundedWater:
+                        result[i] += 0x10;
+                        break;
+                    case CellStatе.Ship:
+                        result[i] += 0x20;
+                        break;
+                    case CellStatе.WoundedShip:
+                    case CellStatе.DestroyedShip:
+                        result[i] += 0x30;
+                        break;
+                }
+                switch (tmp[4 * i + 2])
+                {
+                    case CellStatе.Water:
+                        break;
+                    case CellStatе.WoundedWater:
+                        result[i] += 0x04;
+                        break;
+                    case CellStatе.Ship:
+                        result[i] += 0x08;
+                        break;
+                    case CellStatе.WoundedShip:
+                    case CellStatе.DestroyedShip:
+                        result[i] += 0x0C;
+                        break;
+                }
+                switch (tmp[4 * i + 3])
+                {
+                    case CellStatе.Water:
+                        break;
+                    case CellStatе.WoundedWater:
+                        result[i] += 0x01;
+                        break;
+                    case CellStatе.Ship:
+                        result[i] += 0x02;
+                        break;
+                    case CellStatе.WoundedShip:
+                    case CellStatе.DestroyedShip:
+                        result[i] += 0x03;
+                        break;
+                }
+            }
+            return result;
+        }
+
+        public static ShipArrangement ByteToArrangement(byte[] input)
+        {
+            ShipArrangement result = new ShipArrangement();
+            CellStatе[] map = new CellStatе[100];
+            for (int i = 0; i < 25; i++)
+            {
+                bool[] tmp = CryptSystem.ByteToBool(input[i]);
+                if (tmp[0])
+                {
+                    if (tmp[1]) map[4*i]=CellStatе.WoundedShip;
+                    else map[4*i] = CellStatе.Ship;
+                }
+                else
+                {
+                    if (tmp[1]) map[4*i] = CellStatе.WoundedWater;
+                    else map[4*i] = CellStatе.Water;
+                }
+                if (tmp[2])
+                {
+                    if (tmp[3]) map[4*i+1] = CellStatе.WoundedShip;
+                    else map[4*i+1] = CellStatе.Ship;
+                }
+                else
+                {
+                    if (tmp[3]) map[4*i+1] = CellStatе.WoundedWater;
+                    else map[4*i+1] =  CellStatе.Water;
+                }
+                if (tmp[4])
+                {
+                    if (tmp[5]) map[4*i+2] = CellStatе.WoundedShip;
+                    else map[4*i+2] = CellStatе.Ship;
+                }
+                else
+                {
+                    if (tmp[5]) map[4*i+2] = CellStatе.WoundedWater;
+                    else map[4*i+2] = CellStatе.Water;
+                }
+                if (tmp[6])
+                {
+                    if (tmp[7]) map[4*i+3] = CellStatе.WoundedShip;
+                    else map[4*i+3] = CellStatе.Ship;
+                }
+                else
+                {
+                    if (tmp[7]) map[4*i+3] = CellStatе.WoundedWater;
+                    else map[4*i+3] = CellStatе.Water;
+                }
+            }
+            CellStatе[,] a = Bending<CellStatе>(map, 10, 10);
+            for (int i=0;i<10;i++)
+            {
+                for (int j = 0; j < 10; j++)
+                    result.SetCellState(a[i, j], i, j);
+            }
+            return result;
         }
     }
 }
