@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sea_Battleship"
         mc:Ignorable="d"
-        Title="LoadingWindow" Height="300" Width="300" MinWidth="640" MinHeight="480">
+        Title="LoadingWindow" Height="406.5" Width="548.5" MinWidth="640" MinHeight="480" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Margin="0">
         <Grid.Background>
             <ImageBrush ImageSource="Resources/main.jpg" Stretch="UniformToFill"/>
@@ -16,22 +16,16 @@
             </Grid.Background>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition Width="30 px"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Menu Grid.Column="0" VerticalContentAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Background="{x:Null}" VerticalAlignment="Center">
-                <MenuItem  Header ="Правила" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="150" Background="{x:Null}" />
-            </Menu>
-            <Menu Margin="0" Grid.Column="1" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
+            <Menu Grid.Column="0" VerticalContentAlignment="Center"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Background="{x:Null}" HorizontalAlignment="Center">
+                <MenuItem  Header ="Правила" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="150" Background="{x:Null}" Height="25" />
                 <MenuItem Header="Об авторах" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
-            </Menu>
-            <Menu Margin="0" Grid.Column="2" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
-                <MenuItem Header="Назад" />
+                <MenuItem Header="Назад" Name="BackClick" Click="BackClick_Click"/>
             </Menu>
             <Image Grid.Column="3" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"></Image>
         </Grid>
-        <Grid HorizontalAlignment="Center" Margin="130,100" VerticalAlignment="Center" MinWidth="360" MinHeight="250" Width="200" Height="100" >
+        <Grid HorizontalAlignment="Center" Margin="88,61,88,51" VerticalAlignment="Center" MinWidth="360" MinHeight="250" Width="456" Height="337" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition Width="0.3*"></ColumnDefinition>

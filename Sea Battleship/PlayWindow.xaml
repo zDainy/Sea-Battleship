@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sea_Battleship"
         mc:Ignorable="d"
-        Title="PlayWindow" Height="300" Width="300" MinWidth="640" MinHeight="480">
+        Title="PlayWindow" Height="500" Width="900" MinWidth="640" MinHeight="480" WindowStyle="None" ResizeMode="NoResize">
     <Grid Margin="0">
         <Grid.Background>
             <ImageBrush ImageSource="Resources/main.jpg" Stretch="UniformToFill"/>
@@ -16,38 +16,23 @@
             </Grid.Background>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
                 <ColumnDefinition Width="30 px"/>
             </Grid.ColumnDefinitions>
-            <Menu Grid.Column="0" VerticalContentAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Background="{x:Null}" VerticalAlignment="Center">
-                <MenuItem  Header ="Сохранить игру" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="150" Background="{x:Null}" >
+            <Menu Grid.Column="0" VerticalContentAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Background="{x:Null}" HorizontalAlignment="Center">
+                <MenuItem  Header ="Сохранить игру" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="130" Background="{x:Null}" Height="25" >
                 </MenuItem>
-            </Menu>
-            <Menu Margin="0" Grid.Column="1" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
-                <MenuItem  Header="Правила" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
-            </Menu>
-            <Menu Margin="0" Grid.Column="2" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
-                <MenuItem Header="Об авторах" />
-            </Menu>
-            <Menu Margin="0" Grid.Column="3" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
-                <MenuItem Header="Пауза" />
-            </Menu>
-            <Menu Margin="0" Grid.Column="4" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
+                <MenuItem  Header="Правила" Width="130" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+                <MenuItem Header="Об авторах" Width="130" />
+                <MenuItem Header="Пауза" Width="130" />
                 <MenuItem Header="Выход" Name="ExitItem" Click="ExitItem_Click"/>
             </Menu>
             <Image Grid.Column="5" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"/>
         </Grid>
         <!--<local:PlayField IsHiddenField="False" HorizontalAlignment="Left" Height="191" Margin="71,93,0,0" VerticalAlignment="Top" Width="191"/>-->
 
-        <local:PlayField x:Name="EnemyField" HorizontalAlignment="Left" Height="290" Margin="332,103,0,0" VerticalAlignment="Top" Width="290"/>
-        <local:PlayField x:Name="MyField" HorizontalAlignment="Left" Height="290" Margin="10,103,0,0" VerticalAlignment="Top" Width="290"/>
-        <Grid HorizontalAlignment="Left" Height="31" Margin="0,418,0,0" VerticalAlignment="Top" Width="632" IsEnabled="False">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+        <local:PlayField x:Name="EnemyField" HorizontalAlignment="Right" Height="350" Margin="0,80,55,0" VerticalAlignment="Top" Width="350"/>
+        <local:PlayField x:Name="MyField" HorizontalAlignment="Left" Height="350" Margin="55,80,0,0" VerticalAlignment="Top" Width="350"/>
+        <Grid Height="31" Margin="0,418,0,0" VerticalAlignment="Bottom" IsEnabled="False">
             <Label Name="MyTurnLabel" Content="Ваш ход" Background="#FF00287E" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1"/>
         </Grid>
 

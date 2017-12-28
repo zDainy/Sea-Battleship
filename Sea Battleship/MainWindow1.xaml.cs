@@ -28,23 +28,7 @@ namespace Sea_Battleship
             InitializeComponent();
             LogService.Start();
             LogService.Trace("==============================================");
-            //for (int y = 0; y < 10; y++)
-            //    for (int x = 0; x < 10; x++)
-            //    {
-            //        Image img = new Image
-            //        {
-            //            Stretch = Stretch.Fill,
-            //            Source = new BitmapImage(new Uri("/Resources/Water.jpg", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
-            //            Opacity = 0
-            //        };
-            //        img.MouseLeftButtonUp += FieldCell_Click;
-            //        gr.Children.Add(img);
-            //        Grid.SetColumn(img, x);
-            //        Grid.SetRow(img, y);
-            //    }
-            //new WaitingWindow().Show();
         }
-
 
         private void audioChanged(object sender, RoutedEventArgs e)
         {
@@ -55,8 +39,7 @@ namespace Sea_Battleship
         {
             LoadingWindow lw = new LoadingWindow
             {
-                Owner = this.Owner,
-                z = 3
+                Owner = this
             };
             lw.Show();
             Hide();
@@ -70,15 +53,11 @@ namespace Sea_Battleship
             Hide();
         }
 
-
-
-
-
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            TestWindow test = new TestWindow();
-            test.Show();
-            Hide();
+            //TestWindow test = new TestWindow();
+            //test.Show();
+            //Hide();
         }
 
         private void CreateLobby_Click(object sender, RoutedEventArgs e)

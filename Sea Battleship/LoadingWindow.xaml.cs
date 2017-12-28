@@ -28,5 +28,11 @@ namespace Sea_Battleship
         {
             WindowConfig.AudioChanged((Image)sender);
         }
+
+        private void BackClick_Click(object sender, RoutedEventArgs e)
+        {
+            Owner.Show();
+            Close();
+        }
     }
 }

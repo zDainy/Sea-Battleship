@@ -71,7 +71,8 @@ namespace Sea_Battleship
 
         private void ButtonPrev_Click(object sender, RoutedEventArgs e)
         {
-
+            Owner.Show();
+            Close();
         }
 
         private void TimeLength_Click(object sender, RoutedEventArgs e)

@@ -34,14 +34,14 @@ namespace Sea_Battleship
             public StackPanel ShipPanel { get => _shipPanel; set => _shipPanel = value; }
             public List<Point> PointList { get => _pointList; set => _pointList = value; }
         }
-        private double tmpX4;
-        private double tmpY4;
-        private double tmpX3;
-        private double tmpY3;
-        private double tmpX2;
-        private double tmpY2;
-        private double tmpX1;
-        private double tmpY1;
+        private double tmpX4 = 500;
+        private double tmpY4 = 80;
+        private double tmpX3 = 500;
+        private double tmpY3 = 140;
+        private double tmpX2 = 500;
+        private double tmpY2 = 200;
+        private double tmpX1 = 500;
+        private double tmpY1 = 260;
         private StackPanel tmpShip;
         private List<ShipListItem> shipList = new List<ShipListItem>();
         private ShipArrangement _arrangementClient;
@@ -79,9 +79,10 @@ namespace Sea_Battleship
                     gr.Children.Add(img);
                     Grid.SetColumn(img, x);
                     Grid.SetRow(img, y);
+                    Grid.SetZIndex(img, 1);
                 }
             }
-            foreach (Object ship in ((Grid)MainGrid.Children[1]).Children)
+            foreach (Object ship in CurGrid.Children)
             {
                 if (ship.GetType().ToString() == "System.Windows.Controls.StackPanel")
                     shipList.Add(new ShipListItem { ShipPanel = (StackPanel)ship });
@@ -291,7 +292,7 @@ namespace Sea_Battleship
         {
             if (Yes)
             {
-                tmpShip.Margin = new Thickness(e.GetPosition(null).X-15, e.GetPosition(null).Y-15, 0, 0);
+                tmpShip.Margin = new Thickness(e.GetPosition(null).X-20, e.GetPosition(null).Y-20, 0, 0);
             }
         }
 
@@ -327,6 +328,7 @@ namespace Sea_Battleship
             Yes = !Yes;
             StackPanel ship = (StackPanel)sender;
             tmpShip = ship;
+            Grid.SetZIndex(tmpShip, 0);
             ShipListItem listItem = null;
             foreach (ShipListItem sh in shipList)
             {
@@ -343,29 +345,7 @@ namespace Sea_Battleship
             {
                 Grid.SetZIndex(ship, 0);
                 gr.Children.Remove(ship);
-                MainGrid.Children.Add(ship);
-            }
-            else
-            {
-                switch (tmpShip.BindingGroup.Name)
-                {
-                    case "ship4":
-                        tmpX4 = tmpShip.Margin.Left;
-                        tmpY4 = tmpShip.Margin.Top;
-                        break;
-                    case "ship3":
-                        tmpX3 = tmpShip.Margin.Left;
-                        tmpY3 = tmpShip.Margin.Top;
-                        break;
-                    case "ship2":
-                        tmpX2 = tmpShip.Margin.Left;
-                        tmpY2 = tmpShip.Margin.Top;
-                        break;
-                    case "ship1":
-                        tmpX1 = tmpShip.Margin.Left;
-                        tmpY1 = tmpShip.Margin.Top;
-                        break;
-                }
+                CurGrid.Children.Add(ship);
             }
         }
 
@@ -453,12 +433,12 @@ namespace Sea_Battleship
             if (!(_onlineGame is null))
             {
                 _onlineGame.CreateGame(CreateShipArrangement());
-                new PlayWindow(_onlineGame).Show();
+                new PlayWindow(_onlineGame) { Owner = Owner}.Show();
                 
             }
             else
             {
-                new PlayWindow(new Game(CreateShipArrangement(), _arrangementClient, _gameConfig)).Show();
+                new PlayWindow(new Game(CreateShipArrangement(), _arrangementClient, _gameConfig)) { Owner = Owner }.Show();
             }
             Close();
         }

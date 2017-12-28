@@ -131,7 +131,7 @@ namespace Sea_Battleship
             }
             isHiddenField = !isHiddenField;
             //   _turnTimer.Tick += (sender, e) => SwitchTurn();
-           //  _turnTimer.Start();
+            //  _turnTimer.Start();
         }
 
         public void SwitchTurn()
@@ -523,7 +523,7 @@ namespace Sea_Battleship
         {
             if (isPlayerWin)
             {
-                MessageBoxResult res = MessageBox.Show(WindowConfig.PlayWindowCon, "Вы проиграли...", "Конец игры", MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.No, MessageBoxOptions.None);
+                MessageBoxResult res = MessageBox.Show(WindowConfig.PlayWindowCon, "Вы выиграли!", "Конец игры", MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.No, MessageBoxOptions.None);
                 if (!_isOnlineGame)
                     WindowConfig.game = null;
                 else
