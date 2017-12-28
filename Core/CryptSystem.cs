@@ -239,7 +239,7 @@ namespace Core
         /// </summary>
         /// <param name="arrangement"></param>
         /// <returns></returns>
-        public static byte[] ArrangementToByte(ShipArrangement arrangement)
+        public static string ArrangementToByte(ShipArrangement arrangement)
         {
             CellStatе[] tmp = Lining<CellStatе>(arrangement.GetArrangement());
             byte[] result = new byte[25];
@@ -307,11 +307,21 @@ namespace Core
                         break;
                 }
             }
-            return result;
+            string res = "";
+            for (int i =0;i<25;i++)
+            {
+                res += ByteToHex(result[i]);
+            }
+            return res;
         }
 
-        public static ShipArrangement ByteToArrangement(byte[] input)
+        public static ShipArrangement ByteToArrangement(string str)
         {
+            byte[] input = new byte[25];
+            for (int i=0;i<25;i++)
+            {
+                input[i] = HexToByte(str[2 * i].ToString() + str[2 * i + 1]);
+            }
             ShipArrangement result = new ShipArrangement();
             CellStatе[] map = new CellStatе[100];
             for (int i = 0; i < 25; i++)

@@ -94,8 +94,18 @@ namespace Network
             LogService.Trace($"Сервер отправляет {operType}");
             try
             {
-                // Сериализуем тело ответа в строку Json
-                string bodyJson = oper != null ? JsonConvert.SerializeObject(oper) : "";
+                string bodyJson;
+                if (operType == OpearationTypes.ShipArrangement)
+                {
+                    var arr = (ShipArrangement)oper;
+                    bodyJson = CryptSystem.ArrangementToByte(arr.Arragment);
+                }
+                else
+                {
+                    // Сериализуем тело ответа в строку Json
+                    bodyJson = oper != null ? JsonConvert.SerializeObject(oper) : "";
+                }
+               
                 JsonData jsonData = new JsonData(operType, bodyJson);
 
                 // Сериализуем объект ответа в строку Json
