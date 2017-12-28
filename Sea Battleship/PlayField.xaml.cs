@@ -42,6 +42,7 @@ namespace Sea_Battleship
                 _turnTimer = new Timer { Interval = (int)_onlineGame.GameConfig.GameSpeed };
                 if (_onlineGame.PlayerRole == PlayerRole.Client)
                 {
+
                     myArr = _onlineGame.MyArrangement.GetArrangement();
                     enemyArr = _onlineGame.EnemyArrangement.GetArrangement();
                     ThreadPool.QueueUserWorkItem(OnlineEnemyTurn);
@@ -142,15 +143,32 @@ namespace Sea_Battleship
                 // <--- Переключалка хода
                 _onlineGame.IsMyTurn = false;
                 _onlineGame.IsOne = false;
+                _pw.Dispatcher.Invoke(() =>
+                {
+                    //_pw.EnemyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E")); //(Brush)new BrushConverter().ConvertFromString("#FF00287E");
+                    _pw.MyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E"));
+                });
+               // _pw.EnemyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E")); //(Brush)new BrushConverter().ConvertFromString("#FF00287E");
+               // _pw.MyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF98ECFF")); //(Brush)new BrushConverter().ConvertFromString("#FF98ECFF");
                 ThreadPool.QueueUserWorkItem(OnlineEnemyTurn);
             }
             else
             {
                 // <--- Переключалка хода
+                _pw.Dispatcher.Invoke(() =>
+                {
+                   // _pw.EnemyTurnLabel.Background =  new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF98ECFF"));// (Brush)new BrushConverter().ConvertFromString("#FF98ECFFFF00287E");
+                    _pw.MyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
+                });
+
+                //Dispatcher.Invoke( _pw.EnemyTurnLabel.Background = new SolidColorBrush(Colors.Red));// new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF98ECFF"));// (Brush)new BrushConverter().ConvertFromString("#FF98ECFFFF00287E");
+                //_pw.MyTurnLabel.Background = new SolidColorBrush(Colors.Red);// new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E")); //(Brush)new BrushConverter().ConvertFromString("#FF00287E");
                 _onlineGame.IsMyTurn = true;
             }
-            //  _turnTimer.Start();
         }
+            //  _turnTimer.Start();
+            //  _pw//
+        
 
         public Ships Ships { get => ships; set => ships = value; }
 

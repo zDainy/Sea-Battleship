@@ -47,10 +47,8 @@
         <Grid HorizontalAlignment="Left" Height="31" Margin="0,418,0,0" VerticalAlignment="Top" Width="632" IsEnabled="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Label Content="Ход второго игрока" Margin="0" Background="#FF00287E" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-            <Label Content="Ваш ход" Background="#FF98ECFF" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1"/>
+            <Label Name="MyTurnLabel" Content="Ваш ход" Background="#FF00287E" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1"/>
         </Grid>
 
 
