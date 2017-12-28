@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -32,7 +33,7 @@ namespace Sea_Battleship
         public List<Ship4> ShipList4 { get => _shipList4; set => _shipList4 = value; }
         public List<Ship1> ShipList1 { get => _shipList1; set => _shipList1 = value; }
         public List<Ship2> ShipList2 { get => _shipList2; set => _shipList2 = value; }
-       
+
 
         public Ships()
         {
@@ -86,6 +87,136 @@ namespace Sea_Battleship
             {
                 ship.Place(PlayField);
             }
+        }
+
+        public bool Check(int X, int Y, PlayWindow z, bool isOnline)
+        {
+            bool was = false;
+            foreach (AShip sh in ShipList1)
+            {
+                if (sh.isHere(X, Y, z, isOnline))
+                {
+                    PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
+                    {
+                        Stretch = Stretch.Fill,
+                        Opacity = 100,
+                        Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                    });
+                    was = true;
+                    break;
+                }
+            }
+            if (!was)
+                foreach (AShip sh in ShipList2)
+                {
+                    if (sh.isHere(X, Y, z, isOnline))
+                    {
+                        PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (!was)
+                foreach (AShip sh in ShipList3)
+                {
+                    if (sh.isHere(X, Y, z, isOnline))
+                    {
+                        PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (!was)
+                foreach (AShip sh in ShipList4)
+                {
+                    if (sh.isHere(X, Y, z, isOnline))
+                    {
+                        PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            return was;
+        }
+
+        public void CheckEnemy(Point p, PlayWindow z, bool isOnline)
+        {
+            Image image = (Image)z.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
+            bool was = false;
+            foreach (AShip sh in z.MyField.Ships.ShipList1)
+            {
+                if (sh.isHere(image, z, isOnline))
+                {
+                    PlayField.SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
+                    {
+                        Stretch = Stretch.Fill,
+                        Opacity = 100,
+                        Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                    });
+                    was = true;
+                    break;
+                }
+            }
+            if (!was)
+                foreach (AShip sh in z.MyField.Ships.ShipList2)
+                {
+                    if (sh.isHere(image, z, isOnline))
+                    {
+                        PlayField.SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (!was)
+                foreach (AShip sh in z.MyField.Ships.ShipList3)
+                {
+                    if (sh.isHere(image, z, isOnline))
+                    {
+                        PlayField.SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (!was)
+                foreach (AShip sh in z.MyField.Ships.ShipList4)
+                {
+                    if (sh.isHere(image, z, isOnline))
+                    {
+                        PlayField.SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
         }
     }
 }
