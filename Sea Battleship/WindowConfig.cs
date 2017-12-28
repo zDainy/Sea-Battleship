@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using Sea_Battleship.Engine;
 
 namespace Sea_Battleship
 {
@@ -14,7 +15,7 @@ namespace Sea_Battleship
         public enum State { Online, Offline };
         public static State GameState;
         public static Game game;
-        public static Engine.OnlineGame onlineGame;
+        public static OnlineGame OnlineGame;
         private static bool _audio = true;
         public static bool Audio { get => _audio; set => _audio = value; }
         public static void AudioChanged(Image image)
