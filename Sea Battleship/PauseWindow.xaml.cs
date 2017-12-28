@@ -27,6 +27,7 @@ namespace Sea_Battleship
 
         private void UnpressPause()
         {
+            // послать операцию клиенту
             _timer.Stop();
            Close();
         }
