@@ -43,13 +43,33 @@ namespace Sea_Battleship
         private void audioChanged(object sender, RoutedEventArgs e)
         {
             WindowConfig.AudioChanged((Image)sender);
-            
+
         }
 
         private void ExitItem_Click(object sender, RoutedEventArgs e)
         {
             Owner.Show();
             Close();
+        }
+
+        private void Pause_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (!(OnlineGame is null))
+            {
+                if (OnlineGame.PlayerRole == PlayerRole.Server)
+                {
+                    OnlineGame.Turn(-2, -2);
+                }
+            }
+            CheckPause();
+        }
+
+        public void CheckPause()
+        {
+            OnlineGame.TurnTimer.Stop();
+            PauseWindow window = new PauseWindow(OnlineGame.PlayerRole);
+            window.ShowDialog();
+            OnlineGame.TurnTimer.Start();
         }
     }
 }

@@ -41,10 +41,10 @@ namespace Sea_Battleship
                 gg = _onlineGame.Game;
                 _onlineGame.TurnTimer.Interval = 5000;
                 _turnTimer = _onlineGame.TurnTimer;
-                if (_onlineGame.isStart)
+                if (_onlineGame.IsStart)
                 {
                     _turnTimer.Tick += (sender, e) => SwitchTurn(true);
-                    _onlineGame.isStart = false;
+                    _onlineGame.IsStart = false;
                 }
                 if (_onlineGame.PlayerRole == PlayerRole.Client)
                 {
@@ -141,9 +141,9 @@ namespace Sea_Battleship
 
         public void SwitchTurn(bool isFromTimer)
         {
-            _turnTimer.Enabled = false;
             if (_onlineGame.IsMyTurn)
             {
+                WindowConfig.PlayWindowCon.Pause.IsEnabled = false;
                 if (isFromTimer)
                 {
                     _onlineGame.Turn(-1, -1);
@@ -160,6 +160,10 @@ namespace Sea_Battleship
             }
             else
             {
+                if (_onlineGame.PlayerRole == PlayerRole.Server)
+                {
+                    WindowConfig.PlayWindowCon.Pause.IsEnabled = true;
+                }
                 LogService.Trace("Теперь твой ход");
                 // <--- Переключалка хода
                 WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
@@ -168,7 +172,6 @@ namespace Sea_Battleship
                 });
                 _onlineGame.IsMyTurn = true;
             }
-            _turnTimer.Enabled = true;
         }
 
 
@@ -254,7 +257,6 @@ namespace Sea_Battleship
 
         private void OnlineMyTurn(object obj)
         {
-            _turnTimer.Enabled = false;
             Vector vect = (Vector)obj;
             try
             {
@@ -297,6 +299,11 @@ namespace Sea_Battleship
                         {
                             needSwitch = false;
                             break;
+                        }
+                        if ((int)comeVector.X == -2 && (int)comeVector.Y == -2)
+                        {
+                            WindowConfig.PlayWindowCon.CheckPause();
+                            OnlineEnemyTurn(null);
                         }
                         shotRes = _onlineGame.CheckShot(comeVector);
                         SetShotOnField((int)comeVector.X, (int)comeVector.Y, shotRes, true);

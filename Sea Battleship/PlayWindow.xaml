@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sea_Battleship"
+        xmlns:engine="clr-namespace:Sea_Battleship.Engine"
         mc:Ignorable="d"
         Title="PlayWindow" Height="300" Width="300" MinWidth="640" MinHeight="480">
     <Grid Margin="0">
@@ -33,7 +34,7 @@
                 <MenuItem Header="Об авторах" />
             </Menu>
             <Menu Margin="0" Grid.Column="3" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
-                <MenuItem Header="Пауза" />
+                <MenuItem Header="Пауза" Name="Pause" Click="Pause_OnClick" IsEnabled="false"/>
             </Menu>
             <Menu Margin="0" Grid.Column="4" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
                 <MenuItem Header="Выход" Name="ExitItem" Click="ExitItem_Click"/>

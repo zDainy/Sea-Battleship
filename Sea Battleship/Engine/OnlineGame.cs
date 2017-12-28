@@ -22,7 +22,8 @@ namespace Sea_Battleship.Engine
         public bool IsMyTurn { get; set; }
         public bool IsOne { get; set; } = false;
         public Timer TurnTimer { get; set; }
-        public bool isStart { get; set; } = true;
+        public bool IsStart { get; set; } = true;
+        public bool IsPaused { get; set; } = false;
 
         public OnlineGame(PlayerRole playerRole, PlacementState placement, IPAddress ip = null)
         {
@@ -98,7 +99,7 @@ namespace Sea_Battleship.Engine
         public CellStatе Turn(int x, int y)
         {
             Connect.SendOperation(PlayerRole, OpearationTypes.Shot, new Shot(new Vector(x, y)));
-            if (x == -1 && y == -1)
+            if (x == -1 && y == -1 || x == -2 && y == -2)
             {
                 return CellStatе.BlankShot;
             }
