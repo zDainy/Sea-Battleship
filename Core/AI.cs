@@ -155,11 +155,11 @@ namespace Core
                         if (fx + 1 < 10 && g.ServerShipArrangement.GetCellState(fx + 1, fy) == CellStatе.WoundedShip)
                         {
                             int px = fx + 1;
-                            while ((g.ServerShipArrangement.GetCellState(px, fy) == CellStatе.WoundedShip) && (px < 10))
+                            while ((px < 10) && (g.ServerShipArrangement.GetCellState(px, fy) == CellStatе.WoundedShip))
                             {
                                 px++;
                             }
-                            if ((px == 10) || (g.ServerShipArrangement.GetCellState(px, fy) == CellStatе.WoundedWater))
+                            if (fx - 1 >= 0 && (px == 10) || (g.ServerShipArrangement.GetCellState(px, fy) == CellStatе.WoundedWater))
                             {
                                 g.MakeAMove(fx - 1, fy);
                                 x = fx - 1;
@@ -175,11 +175,11 @@ namespace Core
                         else if (fy + 1 < 10 && g.ServerShipArrangement.GetCellState(fx, fy + 1) == CellStatе.WoundedShip)
                         {
                             int py = fy + 1;
-                            while ((g.ServerShipArrangement.GetCellState(fx, py) == CellStatе.WoundedShip) && (py < 10))
+                            while ((py < 10) && (g.ServerShipArrangement.GetCellState(fx, py) == CellStatе.WoundedShip))
                             {
                                 py++;
                             }
-                            if ((py == 10) || (g.ServerShipArrangement.GetCellState(fx, py) == CellStatе.WoundedWater))
+                            if (fy - 1 >= 0 && (py == 10) || (g.ServerShipArrangement.GetCellState(fx, py) == CellStatе.WoundedWater))
                             {
                                 g.MakeAMove(fx, fy - 1);
                                 x = fx;
@@ -281,12 +281,12 @@ namespace Core
                                         x = random.Next(10);
                                         double r = random.NextDouble();
                                         sum = r < 0.077 ? 0 : r < 0.308 ? 4 : r < 0.693 ? 8 : r < 0.924 ? 12 : 16;
+                                        k++;
                                     }
-                                    while (sum + 8 - x < 0 || sum + 8 - x >= 10);
-                                    k++;
+                                    while (k < 52 && (sum + 8 - x < 0 || sum + 8 - x >= 10));
                                 }
-                                while (k < 20 && g.MakeAMove(x, y) == MoveResult.Error);
-                                if (k == 20)
+                                while (k < 52 && g.MakeAMove(x, sum + 8 - x) == MoveResult.Error);
+                                if (k == 52)
                                     do
                                     {
                                         x = random.Next(10);
@@ -312,11 +312,11 @@ namespace Core
                         if (fx + 1 < 10 && g.ServerShipArrangement.GetCellState(fx + 1, fy) == CellStatе.WoundedShip)
                         {
                             int px = fx + 1;
-                            while ((g.ServerShipArrangement.GetCellState(px, fy) == CellStatе.WoundedShip) && (px < 10))
+                            while ((px < 10) && (g.ServerShipArrangement.GetCellState(px, fy) == CellStatе.WoundedShip))
                             {
                                 px++;
                             }
-                            if ((px == 10) || (g.ServerShipArrangement.GetCellState(px, fy) == CellStatе.WoundedWater))
+                            if (fx - 1 >= 0 && (px == 10) || (g.ServerShipArrangement.GetCellState(px, fy) == CellStatе.WoundedWater))
                             {
                                 g.MakeAMove(fx - 1, fy);
                                 x = fx - 1;
@@ -332,11 +332,11 @@ namespace Core
                         else if (fy + 1 < 10 && g.ServerShipArrangement.GetCellState(fx, fy + 1) == CellStatе.WoundedShip)
                         {
                             int py = fy + 1;
-                            while ((g.ServerShipArrangement.GetCellState(fx, py) == CellStatе.WoundedShip) && (py < 10))
+                            while ((py < 10) && (g.ServerShipArrangement.GetCellState(fx, py) == CellStatе.WoundedShip))
                             {
                                 py++;
                             }
-                            if ((py == 10) || (g.ServerShipArrangement.GetCellState(fx, py) == CellStatе.WoundedWater))
+                            if (fy - 1 >= 0 && (py == 10) || (g.ServerShipArrangement.GetCellState(fx, py) == CellStatе.WoundedWater))
                             {
                                 g.MakeAMove(fx, fy - 1);
                                 x = fx;
