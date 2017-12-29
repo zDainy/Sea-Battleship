@@ -6,14 +6,14 @@ namespace Core
         public ShipArrangement ServerShipArrangement { get; set; }
         public ShipArrangement ClientShipArrangement { get; set; }
         public GameConfig GameConfig { get; set; }
-       public PlayerRole TurnOwner { get; set; }
-      private ShipArrangement _currentArrangement
-      {
-        get
+        public PlayerRole TurnOwner { get; set; }
+        private ShipArrangement _currentArrangement
         {
-          return TurnOwner == PlayerRole.Server?ClientShipArrangement:ServerShipArrangement;
+            get
+            {
+                return TurnOwner == PlayerRole.Server ? ClientShipArrangement : ServerShipArrangement;
+            }
         }
-      }
 
 
         /// <summary>
@@ -30,21 +30,6 @@ namespace Core
             GameConfig = gameConfig;
             TurnOwner = turnOwner;
         }
-
-        /// <summary>
-        /// Метод совершения хода для ИИ.
-        /// </summary>
-        /*public void MakeAMove()
-        {
-            System.Windows.Vector vector = new System.Windows.Vector();
-            MoveResult result = MoveResult.Error;
-            do
-            {
-                vector = AI.MakeAMove(GameConfig.BotLvl, ServerShipArrangement, result);
-                result = MakeAMove((int)vector.X, (int)vector.Y);
-            }
-            while (_turnOwner == PlayerRole.Client);
-        }*/
 
         /// <summary>
         /// Метод совершения хода для онлайн игры.

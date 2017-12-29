@@ -61,6 +61,7 @@ namespace Core
         /// <param name="input">Расстановка кораблей.</param>
         public static void SaveArrangement(string name, ShipArrangement input)
         {
+            if (!Directory.Exists("arr")) Directory.CreateDirectory("arr");
             bool[,] arrangement = new bool[10, 10];
             for (int i = 0; i < 10; i++)
             {
@@ -71,7 +72,7 @@ namespace Core
                 }
             }
             string s = saveArrangement(arrangement);
-            FileStream fileStream = new FileStream(name, FileMode.Create);
+            FileStream fileStream = new FileStream("arr\\" + name, FileMode.Create);
             Encoding e = Encoding.ASCII;
             fileStream.Write(e.GetBytes(s), 0, e.GetBytes(s).Length);
             fileStream.Close();
@@ -125,8 +126,8 @@ namespace Core
         /// <returns></returns>
         public static ShipArrangement LoadArrangement(string name)
         {
-            if (!File.Exists(name)) throw new LoadingArrangementException();
-            FileStream fileStream = new FileStream(name, FileMode.Open);
+            if (!File.Exists("arr\\" + name)) throw new LoadingArrangementException();
+            FileStream fileStream = new FileStream("arr\\" + name, FileMode.Open);
             byte[] bytes = new byte[68];
             fileStream.Read(bytes, 0, bytes.Length);
             Encoding e = Encoding.ASCII;
@@ -417,8 +418,9 @@ namespace Core
         /// <param name="input">Текущая игра.</param>
         public static void SaveGame(string name, Game input)
         {
+            if (!Directory.Exists("games")) Directory.CreateDirectory("games");
             string s = saveGame(input);
-            FileStream fileStream = new FileStream(name, FileMode.Create);
+            FileStream fileStream = new FileStream("games\\" + name, FileMode.Create);
             Encoding e = Encoding.ASCII;
             fileStream.Write(e.GetBytes(s), 0, e.GetBytes(s).Length);
             fileStream.Close();
@@ -512,8 +514,8 @@ namespace Core
         /// </summary>
         public static Game LoadGame(string name)
         {
-            if (!File.Exists(name)) throw new GameLoadingException();
-            FileStream fileStream = new FileStream(name, FileMode.Open);
+            if (!File.Exists("games\\" + name)) throw new GameLoadingException();
+            FileStream fileStream = new FileStream("games\\" + name, FileMode.Open);
             byte[] bytes = new byte[200];
             fileStream.Read(bytes, 0, bytes.Length);
             Encoding e = Encoding.ASCII;
@@ -521,5 +523,25 @@ namespace Core
             fileStream.Close();
             return loadGame(s);
         }
+
+        public static List<string> SavedArrangementList()
+        {
+            List<string> res = new List<string>();
+            foreach (string s in Directory.EnumerateFiles("arr\\"))
+            {
+                if (s.EndsWith(".arr")) res.Add(s);
+            }
+            return res;
+        }
+
+        public static List<string> SavedGameList()
+        {
+            List<string> res = new List<string>();
+            foreach (string s in Directory.EnumerateFiles("games\\"))
+            {
+                if (s.EndsWith(".sb")) res.Add(s);
+            }
+            return res;
         }
     }
+}
