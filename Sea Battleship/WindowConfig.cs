@@ -13,6 +13,7 @@ namespace Sea_Battleship
 {
     static class WindowConfig
     {
+        public static bool IsLoaded = false;
         public static PlayWindow PlayWindowCon;
         public enum State { Online, Offline };
         public static State GameState;

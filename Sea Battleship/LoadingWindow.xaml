@@ -44,7 +44,8 @@
                 <SolidColorBrush Color="White" Opacity="0.7"/>
             </Grid.Background>
             <Label Content="Выберите игру" Margin="0"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Background="White"/>
-            <Button Content="Загрузить" Grid.Column="1" Grid.Row="1" Margin="0" Background="White" BorderBrush="{x:Null}" BorderThickness="0"/>
+            <Button Content="Загрузить" Click="Button_Click" Grid.Column="1" Grid.Row="1" Margin="0" Background="White" BorderBrush="{x:Null}" BorderThickness="0"/>
+            <Label Content="azaza" Name="labl" Margin="0" Grid.Row="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
         </Grid>
     </Grid>
 </Window>

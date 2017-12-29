@@ -430,17 +430,82 @@ namespace Sea_Battleship
 
         private void ReadyButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!(_onlineGame is null))
+            ShipArrangement arr;
+            try
             {
-                _onlineGame.CreateGame(CreateShipArrangement());
-                new PlayWindow(_onlineGame) { Owner = Owner}.Show();
-                
+                if (!(_onlineGame is null))
+                {
+                    _onlineGame.CreateGame(CreateShipArrangement());
+                    new PlayWindow(_onlineGame) { Owner = Owner }.Show();
+
+                }
+                else
+                {
+                    arr = CreateShipArrangement();
+                    new PlayWindow(new Game(arr, _arrangementClient, _gameConfig)) { Owner = Owner }.Show();
+                }
+                Close();
             }
-            else
+            catch
             {
-                new PlayWindow(new Game(CreateShipArrangement(), _arrangementClient, _gameConfig)) { Owner = Owner }.Show();
+                MessageBox.Show("Остались нерасставленные корабли");
             }
-            Close();
+        }
+
+        private void SaveArrItem_Click(object sender, RoutedEventArgs e)
+        {
+            ShipArrangement arr;
+            try
+            {
+                arr = CreateShipArrangement();
+                new SaveArrangementWindow(arr) { Owner = this}.Show();
+            }
+            catch
+            {
+                MessageBox.Show("Остались нерасставленные корабли");
+            }
+        }
+
+        private void LoadArrItem_Click(object sender, RoutedEventArgs e)
+        {
+            new LoadArrangementWindow() { Owner = this}.Show();
+        }
+
+        public void ArrangeLoad(ShipArrangement arrangement)//доделать
+        {
+            foreach (ShipListItem ship in shipList)
+            {
+                if (ship.ShipPanel.Orientation == Orientation.Vertical)
+                {
+                    tmpShip = ship.ShipPanel;
+                    ChangeOrientation();
+                }
+                Grid.SetZIndex(ship.ShipPanel, 0);
+                ShipListItem listItem = null;
+                foreach (ShipListItem sh in shipList)
+                {
+                    if (sh.ShipPanel == ship.ShipPanel)
+                    {
+                        listItem = sh;
+                        break;
+                    }
+                }
+                if (listItem != null)
+                    if (listItem.PointList != null)
+                        listItem.PointList = null;
+                if (ship.ShipPanel.Parent == gr)
+                {
+                    Grid.SetZIndex(ship.ShipPanel, 0);
+                    gr.Children.Remove(ship.ShipPanel);
+                    CurGrid.Children.Add(ship.ShipPanel);
+                }
+            }
+
+        }
+
+        private void RuleItem_Click(object sender, RoutedEventArgs e)
+        {
+            ArrangeLoad(null);
         }
     }
 }

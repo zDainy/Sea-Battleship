@@ -22,6 +22,7 @@ namespace Sea_Battleship
         public int X { get => x; set => x = value; }
         public int Y { get => y; set => y = value; }
         public int CountAlive { get => countAlive; set => countAlive = value; }
+        public bool IsDead { get => isDead; set => isDead = value; }
 
         public void Place(PlayField field, int x, int y, bool isHorizontal)
         {

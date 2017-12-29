@@ -297,7 +297,28 @@ namespace Sea_Battleship
 
         public bool IsAllDead()
         {
-            if (isDeadCount == 10) return true;
+            int count = 0;
+            foreach(AShip sh in ShipList1)
+            {
+                if (sh.IsDead)
+                    count++;
+            }
+            foreach (AShip sh in ShipList2)
+            {
+                if (sh.IsDead)
+                    count++;
+            }
+            foreach (AShip sh in ShipList3)
+            {
+                if (sh.IsDead)
+                    count++;
+            }
+            foreach (AShip sh in ShipList4)
+            {
+                if (sh.IsDead)
+                    count++;
+            }
+            if (count == 10) return true;
             return false;
         }
     }

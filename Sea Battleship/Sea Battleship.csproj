@@ -74,8 +74,17 @@
       <DependentUpon>ConfigOnlineNotHostWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Engine\OnlineGame.cs" />
+    <Compile Include="LoadArrangementWindow.xaml.cs">
+      <DependentUpon>LoadArrangementWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PlayWindow.xaml.cs">
       <DependentUpon>PlayWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SaveArrangementWindow.xaml.cs">
+      <DependentUpon>SaveArrangementWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SaveGameWindow.xaml.cs">
+      <DependentUpon>SaveGameWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShipFolder\AShip.cs" />
     <Compile Include="PlacingWindow.xaml.cs">
@@ -102,6 +111,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ConfigOnlineNotHostWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LoadArrangementWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -137,6 +150,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PlayWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SaveArrangementWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SaveGameWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -22,9 +22,9 @@
             <Menu Grid.Column="0" VerticalContentAlignment="Center"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Background="{x:Null}" HorizontalAlignment="Center">
                 <MenuItem  Header ="Готов" Name="ReadyButton" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="80" Background="{x:Null}" Click="ReadyButton_Click" Height="25" >
                 </MenuItem>
-                <MenuItem  Header="Сохранить расстановку" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
-                <MenuItem  Header="Загрузить расстановку" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
-                <MenuItem Header="Правила" />
+                <MenuItem Name="SaveArrItem" Click="SaveArrItem_Click" Header="Сохранить расстановку" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+                <MenuItem Name="LoadArrItem" Click="LoadArrItem_Click" Header="Загрузить расстановку" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+                <MenuItem Header="Правила" Name="RuleItem" Click="RuleItem_Click" />
                 <MenuItem Header="Об авторах" />
             </Menu>
             <Menu Margin="0" Grid.Column="5" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">

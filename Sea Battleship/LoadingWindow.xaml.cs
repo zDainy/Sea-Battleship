@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,6 +33,15 @@ namespace Sea_Battleship
         private void BackClick_Click(object sender, RoutedEventArgs e)
         {
             Owner.Show();
+            Close();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Game game = FileSystem.LoadGame(labl.Content.ToString());
+            WindowConfig.game = game;
+            WindowConfig.IsLoaded = true;
+            new PlayWindow(game) { Owner = Owner}.Show();
             Close();
         }
     }

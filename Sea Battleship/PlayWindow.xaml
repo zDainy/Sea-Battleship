@@ -19,7 +19,7 @@
                 <ColumnDefinition Width="30 px"/>
             </Grid.ColumnDefinitions>
             <Menu Grid.Column="0" VerticalContentAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Background="{x:Null}" HorizontalAlignment="Center">
-                <MenuItem  Header ="Сохранить игру" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="130" Background="{x:Null}" Height="25" >
+                <MenuItem  Header ="Сохранить игру" Name="SaveGameItem" Click="SaveGameItem_Click" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="130" Background="{x:Null}" Height="25" >
                 </MenuItem>
                 <MenuItem  Header="Правила" Width="130" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
                 <MenuItem Header="Об авторах" Width="130" />
@@ -35,7 +35,7 @@
         <Grid Height="31" Margin="0,418,0,0" VerticalAlignment="Bottom" IsEnabled="False">
             <Label Name="MyTurnLabel" Content="Ваш ход" Background="#FF00287E" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1"/>
         </Grid>
-
+        <ProgressBar Name="pr1" Height="30" Margin="0" VerticalAlignment="Bottom"/>
 
 
     </Grid>

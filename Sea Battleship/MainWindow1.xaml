@@ -35,6 +35,9 @@
             </Menu>
             <Image Grid.Column="4" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"/>
         </Grid>
+        <TextBox Name="t1" HorizontalAlignment="Left" Height="23" Margin="303,144,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+
+
 
     </Grid>
 </Window>
