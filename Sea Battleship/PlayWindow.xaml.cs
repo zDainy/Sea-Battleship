@@ -35,7 +35,6 @@ namespace Sea_Battleship
             InitializeComponent();
             WindowConfig.SetStartColor();
             InitTimer();
-            pr1.Background.Opacity = 10;
         }
 
         private void TimerTick(object sender, EventArgs e)
@@ -50,7 +49,7 @@ namespace Sea_Battleship
                 }
                 else
                 {
-                    EnemyField.SwitchTurn();
+                    EnemyField.SwitchTurn(true);
                 }
             }
             else
@@ -80,7 +79,6 @@ namespace Sea_Battleship
                     break;
             }
             timer.Start();
-            MyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
         }
 
         public PlayWindow(Game game)
@@ -90,6 +88,7 @@ namespace Sea_Battleship
             WindowConfig.GameState = WindowConfig.State.Offline;
             InitializeComponent();
             Game = game;
+            MyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
             InitTimer();
         }
 

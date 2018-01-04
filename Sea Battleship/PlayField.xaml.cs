@@ -135,10 +135,15 @@ namespace Sea_Battleship
             isHiddenField = !isHiddenField;
         }
 
-        public void SwitchTurn()
+        public void SwitchTurn(bool isFromTimer)
         {
+            WindowConfig.PlayWindowCon.pr1.Value = 0;
             if (_onlineGame.IsMyTurn)
             {
+                if (isFromTimer)
+                {
+                    _onlineGame.Turn(-1, -1);
+                }
                 _onlineGame.IsMyTurn = false;
                 _onlineGame.IsOne = false;
                 WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
@@ -257,7 +262,7 @@ namespace Sea_Battleship
                 SetShotOnField((int)vect.X, (int)vect.Y, shotRes, false);
                 if (shotRes == CellStatе.WoundedWater)
                 {
-                    SwitchTurn();
+                    SwitchTurn(false);
                 }
             }
             catch (NullReferenceException)
@@ -287,7 +292,7 @@ namespace Sea_Battleship
                         shotRes = _onlineGame.CheckShot(comeVector);
                         SetShotOnField((int)comeVector.X, (int)comeVector.Y, shotRes, true);
                     } while (shotRes == CellStatе.WoundedShip);
-                    SwitchTurn();
+                    SwitchTurn(false);
                 }
             }
             catch (NullReferenceException)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Threading;
 using System.Windows;
 using Core;
@@ -19,10 +18,11 @@ namespace Sea_Battleship.Engine
         public ShipArrangement EnemyArrangement { get; set; }
         public PlacementState Placement { get; set; }
         public bool IsMyTurn { get; set; }
-        public bool IsOne { get; set; } = false;
+        public bool IsOne { get; set; }
 
         public OnlineGame(PlayerRole playerRole, PlacementState placement, IPAddress ip = null)
         {
+            IsOne = false;
             PlayerRole = playerRole;
             Placement = placement;
             InitGame(ip);
@@ -94,6 +94,10 @@ namespace Sea_Battleship.Engine
         public CellStatе Turn(int x, int y)
         {
             Connect.SendOperation(PlayerRole, OpearationTypes.Shot, new Shot(new Vector(x, y)));
+            if (x == -1 && y == -1)
+            {
+                return CellStatе.BlankShot;
+            }
             var res = Connect.GetOperation(PlayerRole);
             var shotRes = (ShotResult)res.Item2;
             SetShotResult(shotRes.State, x, y);
@@ -103,7 +107,7 @@ namespace Sea_Battleship.Engine
         public Vector WaitEnemyTurn()
         {
             var res = Connect.GetOperation(PlayerRole);
-            Vector shotRes = new Vector(0, 0);
+            Vector shotRes = new Vector(-1, -1);
             if (res.Item1 == OpearationTypes.Shot)
             {
                 var shot = (Shot)res.Item2;
