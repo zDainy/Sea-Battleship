@@ -25,10 +25,10 @@
             </Menu>
             <Image Grid.Column="3" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"></Image>
         </Grid>
-        <Grid HorizontalAlignment="Center" Margin="88,61,88,51" VerticalAlignment="Center" MinWidth="360" MinHeight="250" Width="456" Height="337" >
+        <Grid Name="LoadGrid" HorizontalAlignment="Center" Margin="88,61,88,51" VerticalAlignment="Center" MinWidth="360" MinHeight="250" Width="456" Height="337" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition Width="0.3*"></ColumnDefinition>
+                <ColumnDefinition Width="0*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -44,8 +44,6 @@
                 <SolidColorBrush Color="White" Opacity="0.7"/>
             </Grid.Background>
             <Label Content="Выберите игру" Margin="0"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Background="White"/>
-            <Button Content="Загрузить" Click="Button_Click" Grid.Column="1" Grid.Row="1" Margin="0" Background="White" BorderBrush="{x:Null}" BorderThickness="0"/>
-            <Label Content="azaza" Name="labl" Margin="0" Grid.Row="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
         </Grid>
     </Grid>
 </Window>

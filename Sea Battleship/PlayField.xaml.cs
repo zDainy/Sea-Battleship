@@ -327,30 +327,43 @@ namespace Sea_Battleship
             }
             else if (!_isOnlineGame)
             {
-                MoveResult result = z.Game.MakeAMove(X, Y); //ход первого игрока
-                switch (result)
+                bool res = false;
+                MoveResult result;
+                do
                 {
-                    case MoveResult.Hit:
-                        ships.Check(X, Y, z, false);
-                        if (ships.IsAllDead())
-                        {
-                            EndOfGame(true);
-                        }
-                        break;
-                    case MoveResult.Miss:
-                        uriString = "/Resources/waterCrushed.png";
-                        SetCell(Grid.GetColumn(image), Grid.GetRow(image), FieldGrid, new Image()
-                        {
-                            Stretch = Stretch.Fill,
-                            Opacity = 100,
-                            Source = new BitmapImage(new Uri(uriString, UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                        });
-                        break;
-                    case MoveResult.Destroyed:
-                        break;
-                    case MoveResult.Error:
-                        break;
+                    result = z.Game.MakeAMove(X, Y); //ход первого игрока
+               
+                    switch (result)
+                    {
+                        case MoveResult.Hit:
+                            ships.Check(X, Y, z, false);
+                            if (ships.IsAllDead())
+                            {
+                                EndOfGame(true);
+                            }
+                            res = false;
+                            break;
+                        case MoveResult.Miss:
+                            uriString = "/Resources/waterCrushed.png";
+                            SetCell(Grid.GetColumn(image), Grid.GetRow(image), FieldGrid, new Image()
+                            {
+                                Stretch = Stretch.Fill,
+                                Opacity = 100,
+                                Source = new BitmapImage(new Uri(uriString, UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                            });
+                            res = false;
+                            break;
+
+                        case MoveResult.Destroyed:
+                            res = true;
+                            break;
+                        case MoveResult.Error:
+                            WindowConfig.game.ChangeTurn();
+                            res = true;
+                            break;
+                    }
                 }
+                while (res);
                 if (result != MoveResult.Hit) //если не попал, ход второго игрока
                 {
                     EnemyStep(z);
@@ -396,8 +409,6 @@ namespace Sea_Battleship
                 });
             }
         }
-
-
 
         private void _SizeChanged(object sender, SizeChangedEventArgs e)
         {

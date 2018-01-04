@@ -30,12 +30,11 @@
                     <MenuItem Header="С компьютером" Click="NewGame_MouseLeftButtonDown"/>
                 </MenuItem>
                 <MenuItem Click="Loading_Click" Header="Загрузка" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
-                <MenuItem Header="Правила" Name="RuleItem" Width="151"/>
+                <MenuItem Header="Правила" Name="RuleItem" Click="MenuItem_Click" Width="151"/>
                 <MenuItem Header="Об авторах" Name="AboutItem" Click="AboutItem_Click" />
             </Menu>
             <Image Grid.Column="4" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"/>
         </Grid>
-        <TextBox Name="t1" HorizontalAlignment="Left" Height="23" Margin="303,144,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
 
 
 

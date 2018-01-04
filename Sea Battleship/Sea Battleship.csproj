@@ -77,6 +77,9 @@
     <Compile Include="LoadArrangementWindow.xaml.cs">
       <DependentUpon>LoadArrangementWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Page1.xaml.cs">
+      <DependentUpon>Page1.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PlayWindow.xaml.cs">
       <DependentUpon>PlayWindow.xaml</DependentUpon>
     </Compile>
@@ -138,6 +141,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MainWindow1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Page1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -251,6 +258,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\shipCrushed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Spravka.html" />
+    <Resource Include="Resources\Spravka.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

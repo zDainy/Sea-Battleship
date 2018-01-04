@@ -61,9 +61,14 @@ namespace Sea_Battleship
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            //TestWindow test = new TestWindow();
-            //test.Show();
-            //Hide();
+            try
+            {
+                System.Diagnostics.Process.Start("C:/Users/Пользователь/Desktop/Наиболее морской бой/Sea-Battleship/Sea Battleship/Resources/Spravka.html");
+            }
+            catch
+            {
+                MessageBox.Show("Справка отсутствует");
+            }
         }
 
         private void CreateLobby_Click(object sender, RoutedEventArgs e)
@@ -88,7 +93,7 @@ namespace Sea_Battleship
 
         private void AboutItem_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Нет", "да", MessageBoxButton.OK);
+            MessageBox.Show("Игру создали студенты группы 6403:\nКотов Алексей\nОнисич Степан\nШибаева Александра", "Об авторах", MessageBoxButton.OK);
             
         }
         
