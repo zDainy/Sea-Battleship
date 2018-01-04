@@ -22,34 +22,34 @@ namespace Network
         public static IPAddress GetExternalIp()
         {
             LogService.Trace("Получаем внешний IP-адрес с сайта...");
-            //try
-            //{
-            //    WebClient wClient = new WebClient();
-            //    _stream = wClient.OpenRead("http://www.ip-ping.ru/");
-            //    _sr = new StreamReader(_stream ?? throw new InvalidOperationException());
-            //    string newLine;
-            //    Regex regex = new Regex("<div class=\"hc2\">(.*)</div>");
-            //    while ((newLine = _sr.ReadLine()) != null)
-            //    {
-            //        Match match = regex.Match(newLine);
-            //        string str = match.Groups[1].ToString();
-            //        if (str != "")
-            //        {
-            //            _ip = IPAddress.Parse(str);
-            //            LogService.Trace($"Внешний IP-адрес получен: {str}");
-            //        }
-            //    }
-            //}
-            //catch (Exception e)
-            //{
-            //    LogService.Trace($"Ошибка получения внешнего IP-адреса: {e.Message}");
-            //}
-            //finally
-            //{
-            //    _sr.Close();
-            //    _stream?.Close();
-            //}
-            return IPAddress.Parse("192.168.0.1");
+            try
+            {
+                WebClient wClient = new WebClient();
+                _stream = wClient.OpenRead("http://www.ip-ping.ru/");
+                _sr = new StreamReader(_stream ?? throw new InvalidOperationException());
+                string newLine;
+                Regex regex = new Regex("<div class=\"hc2\">(.*)</div>");
+                while ((newLine = _sr.ReadLine()) != null)
+                {
+                    Match match = regex.Match(newLine);
+                    string str = match.Groups[1].ToString();
+                    if (str != "")
+                    {
+                        _ip = IPAddress.Parse(str);
+                        LogService.Trace($"Внешний IP-адрес получен: {str}");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                LogService.Trace($"Ошибка получения внешнего IP-адреса: {e.Message}");
+            }
+            finally
+            {
+                _sr.Close();
+                _stream?.Close();
+            }
+            return _ip;
         }
 
         /// <summary>

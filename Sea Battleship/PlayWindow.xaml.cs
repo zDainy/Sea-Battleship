@@ -31,17 +31,25 @@ namespace Sea_Battleship
             WindowConfig.PlayWindowCon = this;
             WindowConfig.OnlineGame = onlineGame;
             OnlineGame = onlineGame;
+            WindowConfig.GameState = WindowConfig.State.Online;
             InitializeComponent();
-            WindowConfig.ChangeSwitch();
+            WindowConfig.SetStartColor();
         }
 
-        private void timerTick(object sender, EventArgs e)
+        private void TimerTick(object sender, EventArgs e)
         {
             if (pr1.Value == 100)
             {
                 pr1.Value = 0;
-                Game.ChangeTurn();
-                EnemyField.ChangeTurn(this);
+                if (WindowConfig.GameState == WindowConfig.State.Offline)
+                {
+                    Game.ChangeTurn();
+                    EnemyField.ChangeTurn(this);
+                }
+                else
+                {
+                    EnemyField.SwitchTurn();
+                }
             }
             else
             {
@@ -49,16 +57,12 @@ namespace Sea_Battleship
             }
         }
 
-        public PlayWindow(Game game)
+        public void InitTimer()
         {
-            WindowConfig.PlayWindowCon = this;
-            WindowConfig.game = game;
-            WindowConfig.GameState = WindowConfig.State.Offline;
-            InitializeComponent();
-            Game = game;
             timer = new DispatcherTimer();  // если надо, то в скобках указываем приоритет, например DispatcherPriority.Render
-            timer.Tick += new EventHandler(timerTick);
-            switch (game.GameConfig.GameSpeed)
+            timer.Tick += TimerTick;
+            GameSpeed gs = WindowConfig.GameState == WindowConfig.State.Online ? OnlineGame.Game.GameConfig.GameSpeed : Game.GameConfig.GameSpeed;
+            switch (gs)
             {
                 case GameSpeed.Fast:
                     timer.Interval = new TimeSpan(0, 0, 0, 0, 300);
@@ -75,6 +79,16 @@ namespace Sea_Battleship
             }
             timer.Start();
             MyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
+        }
+
+        public PlayWindow(Game game)
+        {
+            WindowConfig.PlayWindowCon = this;
+            WindowConfig.game = game;
+            WindowConfig.GameState = WindowConfig.State.Offline;
+            InitializeComponent();
+            Game = game;
+            
         }
 
         private void audioChanged(object sender, RoutedEventArgs e)
