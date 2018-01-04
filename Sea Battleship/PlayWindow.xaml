@@ -37,6 +37,5 @@
         </Grid>
         <ProgressBar Name="pr1" Height="30" Margin="0" VerticalAlignment="Bottom"/>
 
-
     </Grid>
 </Window>

@@ -143,8 +143,10 @@ namespace Sea_Battleship
                 _onlineGame.IsOne = false;
                 WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
                 {
+                    WindowConfig.PlayWindowCon.pr1.Visibility = Visibility.Hidden;
                     WindowConfig.PlayWindowCon.MyTurnLabel.Background =
                         new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E"));
+                    WindowConfig.PlayWindowCon.MyTurnLabel.Content = "Чужой ход";
                 });
                 ThreadPool.QueueUserWorkItem(OnlineEnemyTurn);
             }
@@ -153,8 +155,10 @@ namespace Sea_Battleship
                 _onlineGame.IsMyTurn = true;
                 WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
                 {
+                    WindowConfig.PlayWindowCon.pr1.Visibility = Visibility.Visible;
                     WindowConfig.PlayWindowCon.MyTurnLabel.Background =
                         new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
+                    WindowConfig.PlayWindowCon.MyTurnLabel.Content = "Ваш ход";
                 });
             }
         }

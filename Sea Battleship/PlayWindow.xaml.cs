@@ -34,6 +34,8 @@ namespace Sea_Battleship
             WindowConfig.GameState = WindowConfig.State.Online;
             InitializeComponent();
             WindowConfig.SetStartColor();
+            InitTimer();
+            pr1.Background.Opacity = 10;
         }
 
         private void TimerTick(object sender, EventArgs e)
@@ -61,7 +63,7 @@ namespace Sea_Battleship
         {
             timer = new DispatcherTimer();  // если надо, то в скобках указываем приоритет, например DispatcherPriority.Render
             timer.Tick += TimerTick;
-            GameSpeed gs = WindowConfig.GameState == WindowConfig.State.Online ? OnlineGame.Game.GameConfig.GameSpeed : Game.GameConfig.GameSpeed;
+            GameSpeed gs = WindowConfig.GameState == WindowConfig.State.Online ? OnlineGame.GameConfig.GameSpeed : Game.GameConfig.GameSpeed;
             switch (gs)
             {
                 case GameSpeed.Fast:
@@ -88,7 +90,7 @@ namespace Sea_Battleship
             WindowConfig.GameState = WindowConfig.State.Offline;
             InitializeComponent();
             Game = game;
-            
+            InitTimer();
         }
 
         private void audioChanged(object sender, RoutedEventArgs e)
