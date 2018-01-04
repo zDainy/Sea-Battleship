@@ -260,10 +260,13 @@ namespace Sea_Battleship
             try
             {
                 var shotRes = _onlineGame.Turn((int)vect.X, (int)vect.Y);
-                SetShotOnField((int)vect.X, (int)vect.Y, shotRes, false);
-                if (shotRes == CellStatе.WoundedWater)
+                if (shotRes != CellStatе.BlankShot)
                 {
-                    SwitchTurn(false);
+                    SetShotOnField((int) vect.X, (int) vect.Y, shotRes, false);
+                    if (shotRes == CellStatе.WoundedWater)
+                    {
+                        SwitchTurn(false);
+                    }
                 }
             }
             catch (NullReferenceException)
@@ -283,6 +286,7 @@ namespace Sea_Battleship
         {
             try
             {
+                bool needSwitch = true;
                 if (!_onlineGame.IsOne)
                 {
                     CellStatе shotRes;
@@ -290,6 +294,11 @@ namespace Sea_Battleship
                     do
                     {
                         var comeVector = _onlineGame.WaitEnemyTurn();
+                        if ((int)comeVector.X == -1 && (int)comeVector.Y == -1)
+                        {
+                            needSwitch = false;
+                            break;
+                        }
                         shotRes = _onlineGame.CheckShot(comeVector);
                         SetShotOnField((int)comeVector.X, (int)comeVector.Y, shotRes, true);
                     } while (shotRes == CellStatе.WoundedShip);
