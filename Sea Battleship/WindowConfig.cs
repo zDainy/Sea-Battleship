@@ -11,7 +11,7 @@ namespace Sea_Battleship
     static class WindowConfig
     {
         public static bool IsLoaded = false;
-        public static PlayWindow PlayWindowCon;
+        public static PlayPage PlayPageCon;
 
         public enum State
         {
@@ -56,19 +56,19 @@ namespace Sea_Battleship
         {
             if (OnlineGame.PlayerRole == PlayerRole.Client)
             {
-                PlayWindowCon.Dispatcher.Invoke(() =>
+                PlayPageCon.Dispatcher.Invoke(() =>
                 {
-                    PlayWindowCon.pr1.Visibility = Visibility.Hidden;
-                    PlayWindowCon.MyTurnLabel.Background =
+                    PlayPageCon.pr1.Visibility = Visibility.Hidden;
+                    PlayPageCon.MyTurnLabel.Background =
                         new SolidColorBrush((Color) ColorConverter.ConvertFromString("#FF00287E"));
-                    PlayWindowCon.MyTurnLabel.Content = "Чужой ход";
+                    PlayPageCon.MyTurnLabel.Content = "Чужой ход";
                 });
             }
             else
             {
-                PlayWindowCon.Dispatcher.Invoke(() =>
+                PlayPageCon.Dispatcher.Invoke(() =>
                 {
-                    PlayWindowCon.MyTurnLabel.Background =
+                    PlayPageCon.MyTurnLabel.Background =
                         new SolidColorBrush((Color) ColorConverter.ConvertFromString("#FF93FF3A"));
                 });
             }

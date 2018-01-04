@@ -12,52 +12,48 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Common;
-using Core;
-using System.Threading;
-using System.Windows.Threading;
 
 namespace Sea_Battleship
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow1.xaml
+    /// Логика взаимодействия для MainPage.xaml
     /// </summary>
-    public partial class MainWindow1 : Window
+    public partial class MainPage : Page
     {
-        private int x;
-
-        public MainWindow1()
+        public MainPage()
         {
             InitializeComponent();
-            MainFrame.Content = new MainPage();
-            LogService.Start();
-            LogService.Trace("==============================================");
         }
-
-        private void audioChanged(object sender, RoutedEventArgs e)
+        private void audioChanged(object sender, RoutedEventArgs e)//
         {
             WindowConfig.AudioChanged((Image)sender);
         }
 
-        private void Loading_Click(object sender, RoutedEventArgs e)
+        private void Loading_Click(object sender, RoutedEventArgs e)//
         {
-            LoadingWindow lw = new LoadingWindow
-            {
-                Owner = this
-            };
-            lw.Show();
-            Hide();
+            NavigationService.Navigate(new Uri("LoadingPage.xaml", UriKind.Relative));
         }
 
-        private void NewGame_MouseLeftButtonDown(object sender, RoutedEventArgs e)
+        private void NewGame_MouseLeftButtonDown(object sender, RoutedEventArgs e)//
         {
             WindowConfig.GameState = WindowConfig.State.Offline;
-            ConfigOfflineWindow window = new ConfigOfflineWindow() { Owner = this};
-            window.Show();
-            Hide();
+            ConfigOfflineWindow window = new ConfigOfflineWindow();
+            if (window.ShowDialog() == true)
+            {
+                if (WindowConfig.game == null)
+                {
+                    PlacingPage placingPage = new PlacingPage(window.ArrangementClient, window.Game);
+                    NavigationService.Navigate(placingPage, UriKind.Relative);
+                }
+                else
+                {
+                    PlayPage playPage = new PlayPage(WindowConfig.game);
+                    NavigationService.Navigate(playPage, UriKind.Relative);
+                }
+            }
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void MenuItem_Click(object sender, RoutedEventArgs e)//
         {
             try
             {
@@ -73,9 +69,7 @@ namespace Sea_Battleship
         {
             WindowConfig.GameState = WindowConfig.State.Online;
             ConfigOnlineHostWindow window = new ConfigOnlineHostWindow();
-            window.Owner = this;
-            window.Show();
-            this.Hide();
+            window.ShowDialog();
         }
 
 
@@ -84,16 +78,14 @@ namespace Sea_Battleship
         {
             WindowConfig.GameState = WindowConfig.State.Online;
             ConfigOnlineNotHostWindow window = new ConfigOnlineNotHostWindow();
-            window.Owner = this;
-            window.Show();
-            this.Hide();
+            window.ShowDialog();
         }
 
         private void AboutItem_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Игру создали студенты группы 6403:\nКотов Алексей\nОнисич Степан\nШибаева Александра", "Об авторах", MessageBoxButton.OK);
-            
+
         }
-        
+
     }
 }

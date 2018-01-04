@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Core;
+using Sea_Battleship.Engine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,25 +12,24 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Core;
-using Sea_Battleship.Engine;
 using System.Windows.Threading;
 
 namespace Sea_Battleship
 {
     /// <summary>
-    /// Логика взаимодействия для PlayWindow.xaml
+    /// Логика взаимодействия для PlayPage.xaml
     /// </summary>
-    public partial class PlayWindow : Window
+    public partial class PlayPage : Page
     {
         public DispatcherTimer Timer;
         public OnlineGame OnlineGame { get; set; }
         public Game Game { get; set; }
 
-        public PlayWindow(OnlineGame onlineGame)
+        public PlayPage(OnlineGame onlineGame)
         {
-            //WindowConfig.PlayWindowCon = this;
+            WindowConfig.PlayPageCon = this;
             WindowConfig.OnlineGame = onlineGame;
             OnlineGame = onlineGame;
             WindowConfig.GameState = WindowConfig.State.Online;
@@ -46,7 +47,7 @@ namespace Sea_Battleship
                 if (WindowConfig.GameState == WindowConfig.State.Offline)
                 {
                     Game.ChangeTurn();
-                   // EnemyField.ChangeTurn(this);
+                    EnemyField.ChangeTurn(this);
                 }
                 else
                 {
@@ -81,9 +82,9 @@ namespace Sea_Battleship
             }
         }
 
-        public PlayWindow(Game game)
+        public PlayPage(Game game)
         {
-           // WindowConfig.PlayWindowCon = this;
+            WindowConfig.PlayPageCon = this;
             WindowConfig.game = game;
             WindowConfig.GameState = WindowConfig.State.Offline;
             InitializeComponent();
@@ -96,23 +97,21 @@ namespace Sea_Battleship
         private void audioChanged(object sender, RoutedEventArgs e)
         {
             WindowConfig.AudioChanged((Image)sender);
-            
+
         }
 
         private void ExitItem_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult res = MessageBox.Show("Сохранить игру перед выходом?", "", MessageBoxButton.YesNoCancel);
-            switch(res)
+            switch (res)
             {
                 case MessageBoxResult.Yes:
                     Save();
-                    Owner.Show();
-                    Close();
+                    NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
                     break;
                 case MessageBoxResult.No:
                     //наверно уведомить второго игрока
-                    Owner.Show();
-                    Close();
+                    NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
                     break;
                 case MessageBoxResult.Cancel:
                     break;
@@ -132,7 +131,7 @@ namespace Sea_Battleship
             }
             else
             {
-                new SaveGameWindow().Show();
+                new SaveGameWindow().ShowDialog();
             }
         }
     }

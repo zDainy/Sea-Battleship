@@ -90,7 +90,7 @@ namespace Sea_Battleship
             }
         }
 
-        public bool Check(int X, int Y, PlayWindow z, bool isOnline)
+        public bool Check(int X, int Y, PlayPage z, bool isOnline)
         {
             bool isDead = false;
             bool was = false;
@@ -158,7 +158,7 @@ namespace Sea_Battleship
             return was;
         }
 
-        public bool Check(Image im, PlayWindow z, bool isOnline)
+        public bool Check(Image im, PlayPage z, bool isOnline)
         {
             bool isDead = false;
             bool was = false;
@@ -228,7 +228,7 @@ namespace Sea_Battleship
             return was;
         }
 
-        public void CheckEnemy(Point p, PlayWindow z, bool isOnline)
+        public void CheckEnemy(Point p, PlayPage z, bool isOnline)
         {
             bool isDead = false;
             Image image = (Image)z.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];

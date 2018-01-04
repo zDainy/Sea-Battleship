@@ -59,21 +59,21 @@ namespace Sea_Battleship
             //{
                 //FileSystem.LoadArrangement(textBoxSave.Text);
                 ShipArrangement arr = FileSystem.LoadArrangement(((Button)sender).Content.ToString());
-            if (!(WindowConfig.OnlineGame is null))
-            {
-                WindowConfig.OnlineGame.CreateGame(arr);
-                new PlayWindow(WindowConfig.OnlineGame) { Owner = Owner.Owner }.Show();
-                Owner.Close();
-                Close();
+            //if (!(WindowConfig.OnlineGame is null))
+            //{
+            //    WindowConfig.OnlineGame.CreateGame(arr);
+            //    new PlayWindow(WindowConfig.OnlineGame) { Owner = Owner.Owner }.Show();
+            //    Owner.Close();
+            //    Close();
 
-            }
-            else
-            {
-                new PlayWindow(new Game(arr, _arrangementClient, _gameConfig)) { Owner = Owner.Owner }.Show();
-                Owner.Close();
-                Close();
+            //}
+            //else
+            //{
+            //    new PlayWindow(new Game(arr, _arrangementClient, _gameConfig)) { Owner = Owner.Owner }.Show();
+            //    Owner.Close();
+            //    Close();
 
-            }
+            //}
         }
     }
 }

@@ -11,6 +11,7 @@ using Sea_Battleship.Engine;
 using System.Threading;
 using Common;
 using System.Collections.Generic;
+using System.Windows.Navigation;
 
 namespace Sea_Battleship
 {
@@ -19,7 +20,7 @@ namespace Sea_Battleship
     /// </summary>
     public partial class PlayField : UserControl
     {
-        private PlayWindow _pw;
+        private PlayPage _pw;
 
         Ships ships;
         private static bool isHiddenField = true;
@@ -145,26 +146,26 @@ namespace Sea_Battleship
                 }
                 _onlineGame.IsMyTurn = false;
                 _onlineGame.IsOne = false;
-                WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
+                WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
                 {
-                    WindowConfig.PlayWindowCon.pr1.Value = 0;
-                    WindowConfig.PlayWindowCon.pr1.Visibility = Visibility.Hidden;
-                    WindowConfig.PlayWindowCon.MyTurnLabel.Background =
+                    WindowConfig.PlayPageCon.pr1.Value = 0;
+                    WindowConfig.PlayPageCon.pr1.Visibility = Visibility.Hidden;
+                    WindowConfig.PlayPageCon.MyTurnLabel.Background =
                         new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E"));
-                    WindowConfig.PlayWindowCon.MyTurnLabel.Content = "Чужой ход";
+                    WindowConfig.PlayPageCon.MyTurnLabel.Content = "Чужой ход";
                 });
                 ThreadPool.QueueUserWorkItem(OnlineEnemyTurn);
             }
             else
             {
                 _onlineGame.IsMyTurn = true;
-                WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
+                WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
                 {
-                    WindowConfig.PlayWindowCon.pr1.Value = 0;
-                    WindowConfig.PlayWindowCon.pr1.Visibility = Visibility.Visible;
-                    WindowConfig.PlayWindowCon.MyTurnLabel.Background =
+                    WindowConfig.PlayPageCon.pr1.Value = 0;
+                    WindowConfig.PlayPageCon.pr1.Visibility = Visibility.Visible;
+                    WindowConfig.PlayPageCon.MyTurnLabel.Background =
                         new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
-                    WindowConfig.PlayWindowCon.MyTurnLabel.Content = "Ваш ход";
+                    WindowConfig.PlayPageCon.MyTurnLabel.Content = "Ваш ход";
                 });
             }
         }
@@ -204,7 +205,7 @@ namespace Sea_Battleship
 
         private void SetShotOnField(int x, int y, CellStatе state, bool onMyField)
         {
-            _pw = (PlayWindow)((Grid)Parent).Parent;
+            _pw = WindowConfig.PlayPageCon;
             var fg = onMyField ? _pw.MyField.FieldGrid : _pw.EnemyField.FieldGrid;
             //string uri = state == CellStatе.WoundedShip ? "/Resources/shipCrushed.png" : "/Resources/waterCrushed.png";
             if (onMyField)
@@ -321,7 +322,7 @@ namespace Sea_Battleship
 
         private void FieldCell_Click(object sender, MouseButtonEventArgs e)
         {
-            PlayWindow z = (PlayWindow)((Grid)Parent).Parent;
+            PlayPage z = (PlayPage)((Grid)Parent).Parent;
             Image image = (Image)sender;
             int X = Grid.GetColumn(image);
             int Y = Grid.GetRow(image);
@@ -377,12 +378,12 @@ namespace Sea_Battleship
             }
         }
 
-        public void ChangeTurn(PlayWindow z)
+        public void ChangeTurn(PlayPage z)
         {
             EnemyStep(z);
         }
 
-        private void EnemyStep(PlayWindow z)
+        private void EnemyStep(PlayPage z)
         {
             z.pr1.Value = 0;
             Image image;
@@ -748,7 +749,7 @@ namespace Sea_Battleship
         // bool isTimer = false;
         private void SetShotOnField(int x, int y, Grid grid, Image image)
         {
-            // _pw = (PlayWindow)((Grid)Parent).Parent;
+            // _pw = (PlayPage)((Grid)Parent).Parent;
             // Grid fg = onMyField ? _pw.MyField.FieldGrid : _pw.EnemyField.FieldGrid;
             grid.Dispatcher.Invoke(() =>
             {
@@ -761,25 +762,25 @@ namespace Sea_Battleship
         {
             if (isPlayerWin)
             {
-                MessageBoxResult res = MessageBox.Show(WindowConfig.PlayWindowCon, "Вы выиграли!", "Конец игры", MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.No, MessageBoxOptions.None);
+                MessageBoxResult res = MessageBox.Show("Вы выиграли!", "Конец игры", MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.No, MessageBoxOptions.None);
                 if (!_isOnlineGame)
                     WindowConfig.game = null;
                 else
                     WindowConfig.OnlineGame = null;
-                WindowConfig.PlayWindowCon.Owner.Show();
-                WindowConfig.PlayWindowCon.Close();
+                WindowConfig.PlayPageCon.NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
+                WindowConfig.PlayPageCon = null;
 
             }
             else
             {
-                MessageBoxResult res = MessageBox.Show(WindowConfig.PlayWindowCon, "Вы проиграли...", "Конец игры", MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.No, MessageBoxOptions.None);
+                MessageBoxResult res = MessageBox.Show("Вы проиграли...", "Конец игры", MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.No, MessageBoxOptions.None);
 
                 if (!_isOnlineGame)
                     WindowConfig.game = null;
                 else
                     WindowConfig.OnlineGame = null;
-                WindowConfig.PlayWindowCon.Owner.Show();
-                WindowConfig.PlayWindowCon.Close();
+                WindowConfig.PlayPageCon.NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
+                WindowConfig.PlayPageCon = null;
 
             }
         }

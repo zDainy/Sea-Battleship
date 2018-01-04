@@ -75,7 +75,7 @@ namespace Sea_Battleship
             }
         }
 
-        public bool isHere(Image image, PlayWindow window, bool isOnline, out bool isDead)
+        public bool isHere(Image image, PlayPage window, bool isOnline, out bool isDead)
         {
             isDead = false;
             if (!isOnline)
@@ -294,7 +294,7 @@ namespace Sea_Battleship
             }
         }
 
-        public bool isHere(int x, int y, PlayWindow window, bool isOnline, out bool isDead)
+        public bool isHere(int x, int y, PlayPage window, bool isOnline, out bool isDead)
         {
             isDead = false;
             if (!isOnline)

@@ -2,6 +2,7 @@
 using Common;
 using Core;
 using Sea_Battleship.Engine;
+using System;
 
 namespace Sea_Battleship
 {
@@ -25,7 +26,17 @@ namespace Sea_Battleship
         public void Wait()
         {
             while (!OnlineGame.Connect.Server.IsClientConnected) { }
-            OnlineGame.GoToGameWindow(Placement, Arrangment, Owner);
+            if (Placement != PlacementState.Manualy)
+            {
+                OnlineGame.CreateGame(Arrangment);
+                PlayPage window = new PlayPage(OnlineGame);
+                WindowConfig.PlayPageCon.NavigationService.Navigate(window, UriKind.Relative);
+            }
+            else
+            {
+                PlacingPage window = new PlacingPage(OnlineGame);
+                WindowConfig.PlayPageCon.NavigationService.Navigate(window, UriKind.Relative);
+            }
             Close();
         }
     }

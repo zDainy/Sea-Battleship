@@ -9,34 +9,5 @@
         mc:Ignorable="d"
         Title="Морской бой" Height="500" Width="900" MinWidth="640" MinHeight="480" ResizeMode="NoResize">
 
-    <Grid  Margin="0">
-        <Grid.Background>
-            <ImageBrush ImageSource="Resources/main.jpg" Stretch="UniformToFill"/>
-        </Grid.Background>
-        <Grid Height="25" VerticalAlignment="Top">
-            <Grid.Background>
-                <SolidColorBrush Color="White" Opacity="0.635"/>
-            </Grid.Background>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="30 px"/>
-            </Grid.ColumnDefinitions>
-            <Menu Grid.Column="0" VerticalContentAlignment="Center"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Background="{x:Null}" HorizontalAlignment="Center">
-                <MenuItem  Header ="Новая игра" HeaderStringFormat="" VerticalContentAlignment="Center" Padding="0" HorizontalContentAlignment="Center" Width="150" Background="{x:Null}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="25" >
-                    <MenuItem Header="Онлайн">
-                        <MenuItem Header="Создать лобби" Name="CreateLobbyItem" Click="CreateLobby_Click" />
-                        <MenuItem Header="Подключиться к лобби" Name="ConnetToLobbyItem" Click="ConnetToLobbyItem_Click"/>
-                    </MenuItem>
-                    <MenuItem Header="С компьютером" Click="NewGame_MouseLeftButtonDown"/>
-                </MenuItem>
-                <MenuItem Click="Loading_Click" Header="Загрузка" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
-                <MenuItem Header="Правила" Name="RuleItem" Click="MenuItem_Click" Width="151"/>
-                <MenuItem Header="Об авторах" Name="AboutItem" Click="AboutItem_Click" />
-            </Menu>
-            <Image Grid.Column="4" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"/>
-        </Grid>
-
-
-
-    </Grid>
+    <Frame Name="MainFrame"></Frame>
 </Window>

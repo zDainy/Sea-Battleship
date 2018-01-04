@@ -31,7 +31,17 @@ namespace Sea_Battleship
             {
                 OnlineGame = new OnlineGame(PlayerRole.Client, _placement, ServerUtils.StringToIP(KeyTextBox.Text));
                 Thread.Sleep(2000);
-                OnlineGame.GoToGameWindow(_placement, _shipArrangement, Owner);
+                if (_placement != PlacementState.Manualy)
+                {
+                    OnlineGame.CreateGame(_shipArrangement);
+                    PlayPage window = new PlayPage(OnlineGame);
+                    WindowConfig.PlayPageCon.NavigationService.Navigate(window, UriKind.Relative);
+                }
+                else
+                {
+                    PlacingPage window = new PlacingPage(OnlineGame);
+                    WindowConfig.PlayPageCon.NavigationService.Navigate(window, UriKind.Relative);
+                }
                 Close();
             }
             catch (Exception exception)
@@ -43,7 +53,6 @@ namespace Sea_Battleship
 
         private void ButtonPrev_Click(object sender, RoutedEventArgs e)
         {
-            Owner.Show();
             Close();
         }
 
