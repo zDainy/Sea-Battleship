@@ -158,11 +158,12 @@ namespace Core
                 r = false;
                 k = 0;
                 arrangement.ClearFieldbyWater();
-                bool dir = random.NextDouble() < 0.5;
+                bool dir;
                 int x = 0;
                 int y = 0;
                 do
                 {
+                    dir = random.NextDouble() < 0.5;
                     x = random.Next(dir ? 10 : 7);
                     y = random.Next(dir ? 7 : 10);
                 }
@@ -171,9 +172,9 @@ namespace Core
                 {
                     if (!r)
                     {
-                        dir = random.NextDouble() < 0.5;
                         do
                         {
+                            dir = random.NextDouble() < 0.5;
                             x = random.Next(dir ? 10 : 8);
                             y = random.Next(dir ? 8 : 10);
                             r = k++ == n;
@@ -181,14 +182,14 @@ namespace Core
                         while (!r && !arrangement.SetShip(x, y, dir ? Direction.Right : Direction.Down, 3));
                     }
                 }
-                k = r ? n : 0;
+                k = 0;
                 for (int i = 0; i < 3; i++) // установка двухпалубных кораблей
                 {
                     if (!r)
                     {
-                        dir = random.NextDouble() < 0.5;
                         do
                         {
+                            dir = random.NextDouble() < 0.5;
                             x = random.Next(dir ? 10 : 9);
                             y = random.Next(dir ? 9 : 10);
                             r = k++ == n;
@@ -196,7 +197,6 @@ namespace Core
                         while (!r && !arrangement.SetShip(x, y, dir ? Direction.Right : Direction.Down, 2));
                     }
                 }
-                k = r ? n : 0;
                 for (int i = 0; i < 4; i++)                    // установка однопалубных кораблей
                 {
                     if (!r)
