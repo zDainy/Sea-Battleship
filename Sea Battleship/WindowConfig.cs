@@ -1,9 +1,6 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Sea_Battleship.Engine;
@@ -35,14 +32,14 @@ namespace Sea_Battleship
 
         public static void AudioChanged(Image image)
         {
-            if (WindowConfig.Audio)
+            if (Audio)
             {
                 image.Source =
                     new BitmapImage(new Uri("/Resources/no-audio.png", UriKind.Relative))
                     {
                         CreateOptions = BitmapCreateOptions.IgnoreImageCache
                     };
-                WindowConfig.Audio = false;
+                Audio = false;
             }
             else
             {
@@ -51,7 +48,7 @@ namespace Sea_Battleship
                     {
                         CreateOptions = BitmapCreateOptions.IgnoreImageCache
                     };
-                WindowConfig.Audio = true;
+                Audio = true;
             }
         }
 
@@ -59,17 +56,19 @@ namespace Sea_Battleship
         {
             if (OnlineGame.PlayerRole == PlayerRole.Client)
             {
-                WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
+                PlayWindowCon.Dispatcher.Invoke(() =>
                 {
-                    WindowConfig.PlayWindowCon.MyTurnLabel.Background =
+                    PlayWindowCon.pr1.Visibility = Visibility.Hidden;
+                    PlayWindowCon.MyTurnLabel.Background =
                         new SolidColorBrush((Color) ColorConverter.ConvertFromString("#FF00287E"));
+                    PlayWindowCon.MyTurnLabel.Content = "Чужой ход";
                 });
             }
             else
             {
-                WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
+                PlayWindowCon.Dispatcher.Invoke(() =>
                 {
-                    WindowConfig.PlayWindowCon.MyTurnLabel.Background =
+                    PlayWindowCon.MyTurnLabel.Background =
                         new SolidColorBrush((Color) ColorConverter.ConvertFromString("#FF93FF3A"));
                 });
             }
