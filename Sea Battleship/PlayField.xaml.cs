@@ -302,7 +302,8 @@ namespace Sea_Battleship
                         shotRes = _onlineGame.CheckShot(comeVector);
                         SetShotOnField((int)comeVector.X, (int)comeVector.Y, shotRes, true);
                     } while (shotRes == CellStatе.WoundedShip);
-                    SwitchTurn(false);
+                    if (needSwitch)
+                        SwitchTurn(false);
                 }
             }
             catch (NullReferenceException)
