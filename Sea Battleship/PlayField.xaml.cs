@@ -137,7 +137,6 @@ namespace Sea_Battleship
 
         public void SwitchTurn(bool isFromTimer)
         {
-            WindowConfig.PlayWindowCon.pr1.Value = 0;
             if (_onlineGame.IsMyTurn)
             {
                 if (isFromTimer)
@@ -148,6 +147,7 @@ namespace Sea_Battleship
                 _onlineGame.IsOne = false;
                 WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
                 {
+                    WindowConfig.PlayWindowCon.pr1.Value = 0;
                     WindowConfig.PlayWindowCon.pr1.Visibility = Visibility.Hidden;
                     WindowConfig.PlayWindowCon.MyTurnLabel.Background =
                         new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E"));
@@ -160,6 +160,7 @@ namespace Sea_Battleship
                 _onlineGame.IsMyTurn = true;
                 WindowConfig.PlayWindowCon.Dispatcher.Invoke(() =>
                 {
+                    WindowConfig.PlayWindowCon.pr1.Value = 0;
                     WindowConfig.PlayWindowCon.pr1.Visibility = Visibility.Visible;
                     WindowConfig.PlayWindowCon.MyTurnLabel.Background =
                         new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));

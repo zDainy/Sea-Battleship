@@ -22,7 +22,7 @@ namespace Sea_Battleship
     /// </summary>
     public partial class PlayWindow : Window
     {
-        public DispatcherTimer timer;
+        public DispatcherTimer Timer;
         public OnlineGame OnlineGame { get; set; }
         public Game Game { get; set; }
 
@@ -35,6 +35,7 @@ namespace Sea_Battleship
             InitializeComponent();
             WindowConfig.SetStartColor();
             InitTimer();
+            Timer.Start();
         }
 
         private void TimerTick(object sender, EventArgs e)
@@ -60,25 +61,24 @@ namespace Sea_Battleship
 
         public void InitTimer()
         {
-            timer = new DispatcherTimer();  // если надо, то в скобках указываем приоритет, например DispatcherPriority.Render
-            timer.Tick += TimerTick;
+            Timer = new DispatcherTimer();  // если надо, то в скобках указываем приоритет, например DispatcherPriority.Render
+            Timer.Tick += TimerTick;
             GameSpeed gs = WindowConfig.GameState == WindowConfig.State.Online ? OnlineGame.GameConfig.GameSpeed : Game.GameConfig.GameSpeed;
             switch (gs)
             {
                 case GameSpeed.Fast:
-                    timer.Interval = new TimeSpan(0, 0, 0, 0, 300);
+                    Timer.Interval = new TimeSpan(0, 0, 0, 0, 300);
                     break;
                 case GameSpeed.Medium:
-                    timer.Interval = new TimeSpan(0, 0, 0, 0, 600);
+                    Timer.Interval = new TimeSpan(0, 0, 0, 0, 600);
                     break;
                 case GameSpeed.Slow:
-                    timer.Interval = new TimeSpan(0, 0, 0, 1, 200);
+                    Timer.Interval = new TimeSpan(0, 0, 0, 1, 200);
                     break;
                 case GameSpeed.Turtle:
-                    timer.Interval = new TimeSpan(0, 0, 0, 3, 0);
+                    Timer.Interval = new TimeSpan(0, 0, 0, 3, 0);
                     break;
             }
-            timer.Start();
         }
 
         public PlayWindow(Game game)
@@ -90,6 +90,7 @@ namespace Sea_Battleship
             Game = game;
             MyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
             InitTimer();
+            Timer.Start();
         }
 
         private void audioChanged(object sender, RoutedEventArgs e)
