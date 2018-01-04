@@ -34,7 +34,6 @@ namespace Sea_Battleship
                 Stretch = Stretch.Fill,
                 Source = new BitmapImage(new Uri("/Resources/4n.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
             };
-            ShipInit();
         }
     }
 }

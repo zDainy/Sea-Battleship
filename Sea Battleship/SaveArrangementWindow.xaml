@@ -1,0 +1,21 @@
+﻿<Window x:Class="Sea_Battleship.SaveArrangementWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sea_Battleship"
+        mc:Ignorable="d"
+        Title="SaveArrangementWindow" Height="119.117" Width="300" WindowStyle="None" ResizeMode="NoResize">
+    <Grid>
+        <TextBox Name="textBoxSave" Height="23" Margin="10,41,9,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+        <Label Content="Введите название расстановки" Margin="60,10,57,0" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Width="183" HorizontalAlignment="Center"/>
+        <Grid Height="23" Margin="0,0,0,10" VerticalAlignment="Bottom" Width="258">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Отмена" Name="RetButton" Click="RetButton_Click" Margin="5,0,0,0" HorizontalContentAlignment="Center" Grid.Column="1"/>
+            <Button Content="Сохранить" Name="SaveButton" Click="SaveButton_Click" Margin="0,0,5,0" VerticalContentAlignment="Center"/>
+        </Grid>
+    </Grid>
+</Window>

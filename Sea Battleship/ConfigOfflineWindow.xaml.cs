@@ -45,7 +45,7 @@ namespace Sea_Battleship
                         arrangementClient = ShipArrangement.Random();
                     else
                         arrangementClient = ShipArrangement.Strategy();
-                    new PlayWindow(new Game(arrangement, arrangementClient, game)).Show();
+                    new PlayWindow(new Game(arrangement, arrangementClient, game)) { Owner = this.Owner }.Show();
                     Close();
                     break;
                 case PlacementState.Strategily:
@@ -54,7 +54,7 @@ namespace Sea_Battleship
                         arrangementClient = ShipArrangement.Random();
                     else
                         arrangementClient = ShipArrangement.Strategy();
-                    new PlayWindow(new Game(arrangement, arrangementClient, game)).Show();
+                    new PlayWindow(new Game(arrangement, arrangementClient, game)) { Owner = this.Owner }.Show();
                     Close();
                     break;
                 case PlacementState.Manualy:
@@ -62,7 +62,7 @@ namespace Sea_Battleship
                         arrangementClient = ShipArrangement.Random();
                     else
                         arrangementClient = ShipArrangement.Strategy();
-                    new PlacingWindow(arrangementClient, game).Show();
+                    new PlacingWindow(arrangementClient, game) { Owner = this.Owner }.Show();
                     Close();
                     break;
             }
@@ -71,7 +71,8 @@ namespace Sea_Battleship
 
         private void ButtonPrev_Click(object sender, RoutedEventArgs e)
         {
-
+            Owner.Show();
+            Close();
         }
 
         private void TimeLength_Click(object sender, RoutedEventArgs e)

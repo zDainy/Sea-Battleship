@@ -74,8 +74,20 @@
       <DependentUpon>ConfigOnlineNotHostWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Engine\OnlineGame.cs" />
+    <Compile Include="LoadArrangementWindow.xaml.cs">
+      <DependentUpon>LoadArrangementWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Page1.xaml.cs">
+      <DependentUpon>Page1.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PlayWindow.xaml.cs">
       <DependentUpon>PlayWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SaveArrangementWindow.xaml.cs">
+      <DependentUpon>SaveArrangementWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SaveGameWindow.xaml.cs">
+      <DependentUpon>SaveGameWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShipFolder\AShip.cs" />
     <Compile Include="PlacingWindow.xaml.cs">
@@ -89,9 +101,6 @@
     <Compile Include="ShipFolder\Ship3.cs" />
     <Compile Include="ShipFolder\Ship4.cs" />
     <Compile Include="ShipFolder\Ships.cs" />
-    <Compile Include="TestWindow.xaml.cs">
-      <DependentUpon>TestWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WaitingWindow.xaml.cs">
       <DependentUpon>WaitingWindow.xaml</DependentUpon>
     </Compile>
@@ -105,6 +114,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ConfigOnlineNotHostWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LoadArrangementWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -131,6 +144,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Page1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PlacingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -143,7 +160,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TestWindow.xaml">
+    <Page Include="SaveArrangementWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SaveGameWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -237,6 +258,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\shipCrushed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Spravka.html" />
+    <Resource Include="Resources\Spravka.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

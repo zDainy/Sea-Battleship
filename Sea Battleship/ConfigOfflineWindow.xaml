@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sea_Battleship"
         mc:Ignorable="d"
-        Title="ConfigOfflineWindow" Height="354.667" Width="300" WindowStartupLocation="CenterOwner" WindowStyle="None">
+        Title="ConfigOfflineWindow" Height="354.667" Width="300" WindowStartupLocation="CenterOwner" WindowStyle="None" ResizeMode="NoResize">
     <Grid Margin="0,0,0,2">
         <RadioButton Click="TimeLength_Click" Content="30 секунд" Margin="10,129,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Top" GroupName="TimeLength" IsChecked="True"/>
         <Label Content="Выберите длительность хода" HorizontalAlignment="Left" Margin="10,95,0,0" VerticalAlignment="Top"/>
@@ -21,7 +21,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Content="Далее" Margin="0,0,2,0" VerticalAlignment="Center" HorizontalContentAlignment="Center" RenderTransformOrigin="0.308,0.5" Width="115" x:Name="ButtonNext" Click="ButtonNext_Click" VerticalContentAlignment="Stretch"/>
+            <Button Content="Далее" Margin="12,0,14,0" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" RenderTransformOrigin="0.308,0.5" Width="115" x:Name="ButtonNext" Click="ButtonNext_Click" VerticalContentAlignment="Stretch"/>
             <Button Content="Назад" Margin="2,0,0,0" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="115" x:Name="ButtonPrev" Click="ButtonPrev_Click" Grid.Column="1" VerticalContentAlignment="Stretch"/>
         </Grid>
         <RadioButton Click="Complexity_Click" Content="Лёгкая" Margin="10,35,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Top" GroupName="Complexity" IsChecked="True"/>

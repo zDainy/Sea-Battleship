@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sea_Battleship"
         mc:Ignorable="d"
-        Title="PlacingWindow" Height="480" Width="640" MinWidth="640" MinHeight="480">
+        Title="PlacingWindow" Height="500" Width="700" MinWidth="640" MinHeight="480" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="None">
 
     <Grid Name="MainGrid" MouseMove="Grid_MouseMove" Margin="0">
         <Grid.Background>
@@ -17,27 +17,14 @@
             </Grid.Background>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition Width="30 px"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Menu Grid.Column="0" VerticalContentAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Background="{x:Null}" VerticalAlignment="Center">
-                <MenuItem  Header ="Готов" Name="ReadyButton" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="150" Background="{x:Null}" Click="ReadyButton_Click" >
+            <Menu Grid.Column="0" VerticalContentAlignment="Center"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Background="{x:Null}" HorizontalAlignment="Center">
+                <MenuItem  Header ="Готов" Name="ReadyButton" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="80" Background="{x:Null}" Click="ReadyButton_Click" Height="25" >
                 </MenuItem>
-            </Menu>
-            <Menu Margin="0" Grid.Column="1" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
-                <MenuItem  Header="Сохранить расстановку" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
-            </Menu>
-            <Menu Margin="0" Grid.Column="2" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
-                <MenuItem  Header="Загрузить расстановку" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
-            </Menu>
-            <Menu Margin="0" Grid.Column="3" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
-                <MenuItem Header="Правила" />
-            </Menu>
-            <Menu Margin="0" Grid.Column="4" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
+                <MenuItem Name="SaveArrItem" Click="SaveArrItem_Click" Header="Сохранить расстановку" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+                <MenuItem Name="LoadArrItem" Click="LoadArrItem_Click" Header="Загрузить расстановку" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+                <MenuItem Header="Правила" Name="RuleItem" Click="RuleItem_Click" />
                 <MenuItem Header="Об авторах" />
             </Menu>
             <Menu Margin="0" Grid.Column="5" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
@@ -45,9 +32,9 @@
             </Menu>
             <Image Grid.Column="6" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"></Image>
         </Grid>
-        
-        <Grid SizeChanged="Grid_SizeChanged" HorizontalAlignment="Center" Width="632">
-            <Grid Name="gr" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="50,50,0,99" Width="300" ShowGridLines="True" Panel.ZIndex="1">
+
+        <Grid SizeChanged="Grid_SizeChanged" Name="CurGrid" HorizontalAlignment="Center" Width="700">
+            <Grid Name="gr" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="50,50,0,55" Width="400" ShowGridLines="True" Panel.ZIndex="1" Height="400">
                 <Grid.Background>
                     <SolidColorBrush Color="Black" Opacity="0"/>
                 </Grid.Background>
@@ -76,9 +63,9 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
             </Grid>
-            <Image Focusable="False" Source="Resources/Water.jpg" Margin="50,50,0,99" Width="300" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Fill"></Image>
+            <Image Focusable="False" Source="Resources/Water.jpg" Margin="50,50,0,0" Width="400" Height="400" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="None"/>
             <!--<StackPanel Name="st" MouseDown="st_MouseDown" MouseUp="st_MouseUp" Height="30" Margin="392,53,0,0" Width="60" Background="#FFFF6969" HorizontalAlignment="Left" VerticalAlignment="Top"/>-->
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" Margin="400,80,0,0" VerticalAlignment="Top" Orientation="Horizontal" HorizontalAlignment="Left" Width="120" Height="30">
+            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" Margin="500,80,0,0" VerticalAlignment="Top" Orientation="Horizontal" HorizontalAlignment="Left" Width="160" Height="40">
                 <StackPanel.BindingGroup>
                     <BindingGroup Name="ship4"/>
                 </StackPanel.BindingGroup>
@@ -87,7 +74,7 @@
                 <Image Source="Resources/3n.png" />
                 <Image Source="Resources/4n.png" />
             </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="400,120,0,0" VerticalAlignment="Top" Width="90" Height="30" Orientation="Horizontal">
+            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,140,0,0" VerticalAlignment="Top" Width="120" Height="40" Orientation="Horizontal">
                 <StackPanel.BindingGroup>
                     <BindingGroup Name="ship3"/>
                 </StackPanel.BindingGroup>
@@ -95,7 +82,7 @@
                 <Image Source="Resources/2n2.png" />
                 <Image Source="Resources/3n2.png" />
             </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="400,120,0,0" VerticalAlignment="Top" Width="90" Height="30" Orientation="Horizontal">
+            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,140,0,0" VerticalAlignment="Top" Width="120" Height="40" Orientation="Horizontal">
                 <StackPanel.BindingGroup>
                     <BindingGroup Name="ship3"/>
                 </StackPanel.BindingGroup>
@@ -103,46 +90,46 @@
                 <Image Source="Resources/2n2.png" />
                 <Image Source="Resources/3n2.png" />
             </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="400,160,0,0" VerticalAlignment="Top" Width="60" Height="30" Orientation="Horizontal">
+            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,200,0,0" VerticalAlignment="Top" Width="80" Height="40" Orientation="Horizontal">
                 <StackPanel.BindingGroup>
                     <BindingGroup Name="ship2"/>
                 </StackPanel.BindingGroup>
                 <Image Source="Resources/1n3.png" />
                 <Image Source="Resources/2n3.png" />
             </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="400,160,0,0" VerticalAlignment="Top" Width="60" Height="30" Orientation="Horizontal">
+            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,200,0,0" VerticalAlignment="Top" Width="80" Height="40" Orientation="Horizontal">
                 <StackPanel.BindingGroup>
                     <BindingGroup Name="ship2"/>
                 </StackPanel.BindingGroup>
                 <Image Source="Resources/1n3.png" />
                 <Image Source="Resources/2n3.png" />
             </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="400,160,0,0" VerticalAlignment="Top" Width="60" Height="30" Orientation="Horizontal">
+            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,200,0,0" VerticalAlignment="Top" Width="80" Height="40" Orientation="Horizontal">
                 <StackPanel.BindingGroup>
                     <BindingGroup Name="ship2"/>
                 </StackPanel.BindingGroup>
                 <Image Source="Resources/1n3.png" />
                 <Image Source="Resources/2n3.png" />
             </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="400,200,0,0" VerticalAlignment="Top" Width="30" Height="30" Orientation="Horizontal">
+            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,260,0,0" VerticalAlignment="Top" Width="40" Height="40" Orientation="Horizontal">
                 <StackPanel.BindingGroup>
                     <BindingGroup Name="ship1"/>
                 </StackPanel.BindingGroup>
                 <Image Source="Resources/n4.png" />
             </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="400,200,0,0" VerticalAlignment="Top" Width="30" Height="30" Orientation="Horizontal">
+            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,260,0,0" VerticalAlignment="Top" Width="40" Height="40" Orientation="Horizontal">
                 <StackPanel.BindingGroup>
                     <BindingGroup Name="ship1"/>
                 </StackPanel.BindingGroup>
                 <Image Source="Resources/n4.png" />
             </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="400,200,0,0" VerticalAlignment="Top" Width="30" Height="30" Orientation="Horizontal">
+            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,260,0,0" VerticalAlignment="Top" Width="40" Height="40" Orientation="Horizontal">
                 <StackPanel.BindingGroup>
                     <BindingGroup Name="ship1"/>
                 </StackPanel.BindingGroup>
                 <Image Source="Resources/n4.png" />
             </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="400,200,0,0" VerticalAlignment="Top" Width="30" Height="30" Orientation="Horizontal">
+            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,260,0,0" VerticalAlignment="Top" Width="40" Height="40" Orientation="Horizontal">
                 <StackPanel.BindingGroup>
                     <BindingGroup Name="ship1"/>
                 </StackPanel.BindingGroup>

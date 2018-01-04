@@ -1,0 +1,79 @@
+﻿using Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace Sea_Battleship
+{
+    /// <summary>
+    /// Логика взаимодействия для LoadArrangementWindow.xaml
+    /// </summary>
+    public partial class LoadArrangementWindow : Window
+    {
+        private ShipArrangement _arrangementClient;
+        private GameConfig _gameConfig;
+        public LoadArrangementWindow(ShipArrangement arrangementClient, GameConfig gameConfig)
+        {
+            _arrangementClient = arrangementClient;
+            _gameConfig = gameConfig;
+            InitializeComponent();
+            List<string> list = FileSystem.SavedArrangementList();
+            int i = 0;
+            Button button;
+            foreach(string str in list)
+            {
+                string[] tmp = str.Split('\\', '.');
+                string str1 = "";
+
+                str1 += tmp[1];
+
+                str1 = str1.TrimEnd('.');
+                button = new Button();
+                button.Content = str1;
+                button.Click += SaveButton_Click;
+                LoadGrid.Children.Add(button);
+                Grid.SetRow(button, i);
+                i++;
+            }
+        }
+
+
+        private void RetButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            //if (WindowConfig.GameState == WindowConfig.State.Offline)
+            //{
+                //FileSystem.LoadArrangement(textBoxSave.Text);
+                ShipArrangement arr = FileSystem.LoadArrangement(((Button)sender).Content.ToString());
+            if (!(WindowConfig.OnlineGame is null))
+            {
+                WindowConfig.OnlineGame.CreateGame(arr);
+                new PlayWindow(WindowConfig.OnlineGame) { Owner = Owner.Owner }.Show();
+                Owner.Close();
+                Close();
+
+            }
+            else
+            {
+                new PlayWindow(new Game(arr, _arrangementClient, _gameConfig)) { Owner = Owner.Owner }.Show();
+                Owner.Close();
+                Close();
+
+            }
+        }
+    }
+}
