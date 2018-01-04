@@ -62,7 +62,8 @@ namespace Core
         public static void SaveArrangement(string name, ShipArrangement input)
         {
             name += ".arr";
-          !Directory.Exists("arr")) Directory.CreateDirectory("arr");
+            if(!Directory.Exists("arr"))
+            Directory.CreateDirectory("arr");
             bool[,] arrangement = new bool[10, 10];
             for (int i = 0; i < 10; i++)
             {
@@ -540,12 +541,6 @@ namespace Core
                 return res;
             }
             return null;
-            List<string> res = new List<string>();
-            foreach (string s in Directory.EnumerateFiles("arr\\"))
-            {
-                if (s.EndsWith(".arr")) res.Add(s);
-            }
-            return res;
         }
 
         public static List<string> SavedGameList()
@@ -560,12 +555,6 @@ namespace Core
                 return res;
             }
             return null;
-            List<string> res = new List<string>();
-            foreach (string s in Directory.EnumerateFiles("games\\"))
-            {
-                if (s.EndsWith(".sb")) res.Add(s);
-            }
-            return res;
         }
     }
 }
