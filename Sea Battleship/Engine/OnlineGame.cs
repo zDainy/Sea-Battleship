@@ -52,17 +52,17 @@ namespace Sea_Battleship.Engine
 
         public void GoToGameWindow(PlacementState placement, ShipArrangement shipArrangement, Window owner)
         {
-            if (placement != PlacementState.Manualy)
-            {
-                CreateGame(shipArrangement);
-                PlayWindow window = new PlayWindow(this) { Owner = owner };
-                window.Show();
-            }
-            else
-            {
-                PlacingWindow window = new PlacingWindow(this) { Owner = owner };
-                window.Show();
-            }
+            //if (placement != PlacementState.Manualy)
+            //{
+            //    CreateGame(shipArrangement);
+            //    PlayWindow window = new PlayWindow(this) { Owner = owner };
+            //    window.Show();
+            //}
+            //else
+            //{
+            //    PlacingWindow window = new PlacingWindow(this) { Owner = owner };
+            //    window.Show();
+            //}
         }
 
         public void CreateGame(ShipArrangement arragment)
