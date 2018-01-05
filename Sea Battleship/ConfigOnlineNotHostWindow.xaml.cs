@@ -35,12 +35,12 @@ namespace Sea_Battleship
                 {
                     OnlineGame.CreateGame(_shipArrangement);
                     PlayPage window = new PlayPage(OnlineGame);
-                    WindowConfig.PlayPageCon.NavigationService.Navigate(window, UriKind.Relative);
+                    WindowConfig.MainPage.NavigationService.Navigate(window, UriKind.Relative);
                 }
                 else
                 {
                     PlacingPage window = new PlacingPage(OnlineGame);
-                    WindowConfig.PlayPageCon.NavigationService.Navigate(window, UriKind.Relative);
+                    WindowConfig.MainPage.NavigationService.Navigate(window, UriKind.Relative);
                 }
                 Close();
             }

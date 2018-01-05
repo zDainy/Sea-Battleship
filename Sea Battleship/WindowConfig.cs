@@ -10,6 +10,7 @@ namespace Sea_Battleship
 {
     static class WindowConfig
     {
+        public static MainPage MainPage;
         public static bool IsLoaded = false;
         public static PlayPage PlayPageCon;
 

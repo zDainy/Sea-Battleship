@@ -21,6 +21,7 @@ namespace Sea_Battleship
             OnlineGame = onlineGame;
             Arrangment = arrangment;
             Placement = placement;
+           //Wait();
         }
 
         public void Wait()
@@ -30,12 +31,12 @@ namespace Sea_Battleship
             {
                 OnlineGame.CreateGame(Arrangment);
                 PlayPage window = new PlayPage(OnlineGame);
-                WindowConfig.PlayPageCon.NavigationService.Navigate(window, UriKind.Relative);
+                WindowConfig.MainPage.NavigationService.Navigate(window, UriKind.Relative);
             }
             else
             {
                 PlacingPage window = new PlacingPage(OnlineGame);
-                WindowConfig.PlayPageCon.NavigationService.Navigate(window, UriKind.Relative);
+                WindowConfig.MainPage.NavigationService.Navigate(window, UriKind.Relative);
             }
             Close();
         }

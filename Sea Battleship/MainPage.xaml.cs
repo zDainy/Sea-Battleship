@@ -23,6 +23,7 @@ namespace Sea_Battleship
         public MainPage()
         {
             InitializeComponent();
+            WindowConfig.MainPage = this;
         }
         private void audioChanged(object sender, RoutedEventArgs e)//
         {
@@ -83,8 +84,9 @@ namespace Sea_Battleship
 
         private void AboutItem_Click(object sender, RoutedEventArgs e)
         {
+            LoadingPage window = new LoadingPage();
+            WindowConfig.MainPage.NavigationService.Navigate(window, UriKind.Relative);
             MessageBox.Show("Игру создали студенты группы 6403:\nКотов Алексей\nОнисич Степан\nШибаева Александра", "Об авторах", MessageBoxButton.OK);
-
         }
 
     }
