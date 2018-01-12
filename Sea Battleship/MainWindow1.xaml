@@ -9,5 +9,7 @@
         mc:Ignorable="d"
         Title="Морской бой" Height="500" Width="900" MinWidth="640" MinHeight="480" ResizeMode="NoResize">
 
-    <Frame Name="MainFrame"></Frame>
+    <Frame Name="MainFrame" NavigationUIVisibility="Hidden"></Frame>
+   
+
 </Window>

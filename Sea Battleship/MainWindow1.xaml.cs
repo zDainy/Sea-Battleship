@@ -29,7 +29,8 @@ namespace Sea_Battleship
         public MainWindow1()
         {
             InitializeComponent();
-            MainFrame.Content = new MainPage();
+          //  MainFrame.Content = new PlacingPage(null);
+             MainFrame.Content = new MainPage();
             LogService.Start();
             LogService.Trace("==============================================");
         }

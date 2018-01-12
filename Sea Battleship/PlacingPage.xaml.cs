@@ -35,13 +35,13 @@ namespace Sea_Battleship
             public StackPanel ShipPanel { get => _shipPanel; set => _shipPanel = value; }
             public List<Point> PointList { get => _pointList; set => _pointList = value; }
         }
-        private double tmpX4 = 500;
+        private double tmpX4 = 582;
         private double tmpY4 = 80;
-        private double tmpX3 = 500;
+        private double tmpX3 = 582;
         private double tmpY3 = 140;
-        private double tmpX2 = 500;
+        private double tmpX2 = 582;
         private double tmpY2 = 200;
-        private double tmpX1 = 500;
+        private double tmpX1 = 582;
         private double tmpY1 = 260;
         private StackPanel tmpShip;
         private List<ShipListItem> shipList = new List<ShipListItem>();
@@ -293,13 +293,13 @@ namespace Sea_Battleship
         {
             if (Yes)
             {
-                tmpShip.Margin = new Thickness(e.GetPosition(null).X - 20, e.GetPosition(null).Y - 20, 0, 0);
+                tmpShip.Margin = new Thickness(e.GetPosition(null).X-20 , e.GetPosition(null).Y-20, 0, 0);//!!
             }
         }
 
         private void ship_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            Yes = !Yes;
+            Yes = false;
             Grid.SetZIndex(tmpShip, 0);
             if (tmpShip.Orientation == Orientation.Vertical)
             {

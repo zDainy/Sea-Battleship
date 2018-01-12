@@ -6,8 +6,8 @@
       xmlns:local="clr-namespace:Sea_Battleship"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
-      Title="PlacingPage">
-    <Grid Name="MainGrid" MouseMove="Grid_MouseMove" Margin="0">
+      Title="PlacingPage" Width="894" Height="471">
+    <Grid Name="CurGrid"  MouseMove="Grid_MouseMove" Margin="0">
         <Grid.Background>
             <ImageBrush ImageSource="Resources/main.jpg" Stretch="UniformToFill"/>
         </Grid.Background>
@@ -33,108 +33,106 @@
             <Image Grid.Column="6" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"></Image>
         </Grid>
 
-        <Grid SizeChanged="Grid_SizeChanged" Name="CurGrid" HorizontalAlignment="Center" Width="700">
-            <Grid Name="gr" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="50,50,0,55" Width="400" ShowGridLines="True" Panel.ZIndex="1" Height="400">
-                <Grid.Background>
-                    <SolidColorBrush Color="Black" Opacity="0"/>
-                </Grid.Background>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-            </Grid>
-            <Image Focusable="False" Source="Resources/Water.jpg" Margin="50,50,0,0" Width="400" Height="400" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="None"/>
-            <!--<StackPanel Name="st" MouseDown="st_MouseDown" MouseUp="st_MouseUp" Height="30" Margin="392,53,0,0" Width="60" Background="#FFFF6969" HorizontalAlignment="Left" VerticalAlignment="Top"/>-->
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" Margin="500,80,0,0" VerticalAlignment="Top" Orientation="Horizontal" HorizontalAlignment="Left" Width="160" Height="40">
-                <StackPanel.BindingGroup>
-                    <BindingGroup Name="ship4"/>
-                </StackPanel.BindingGroup>
-                <Image Source="Resources/1n.png" />
-                <Image Source="Resources/2n.png" />
-                <Image Source="Resources/3n.png" />
-                <Image Source="Resources/4n.png" />
-            </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,140,0,0" VerticalAlignment="Top" Width="120" Height="40" Orientation="Horizontal">
-                <StackPanel.BindingGroup>
-                    <BindingGroup Name="ship3"/>
-                </StackPanel.BindingGroup>
-                <Image Source="Resources/1n2.png" />
-                <Image Source="Resources/2n2.png" />
-                <Image Source="Resources/3n2.png" />
-            </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,140,0,0" VerticalAlignment="Top" Width="120" Height="40" Orientation="Horizontal">
-                <StackPanel.BindingGroup>
-                    <BindingGroup Name="ship3"/>
-                </StackPanel.BindingGroup>
-                <Image Source="Resources/1n2.png" />
-                <Image Source="Resources/2n2.png" />
-                <Image Source="Resources/3n2.png" />
-            </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,200,0,0" VerticalAlignment="Top" Width="80" Height="40" Orientation="Horizontal">
-                <StackPanel.BindingGroup>
-                    <BindingGroup Name="ship2"/>
-                </StackPanel.BindingGroup>
-                <Image Source="Resources/1n3.png" />
-                <Image Source="Resources/2n3.png" />
-            </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,200,0,0" VerticalAlignment="Top" Width="80" Height="40" Orientation="Horizontal">
-                <StackPanel.BindingGroup>
-                    <BindingGroup Name="ship2"/>
-                </StackPanel.BindingGroup>
-                <Image Source="Resources/1n3.png" />
-                <Image Source="Resources/2n3.png" />
-            </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,200,0,0" VerticalAlignment="Top" Width="80" Height="40" Orientation="Horizontal">
-                <StackPanel.BindingGroup>
-                    <BindingGroup Name="ship2"/>
-                </StackPanel.BindingGroup>
-                <Image Source="Resources/1n3.png" />
-                <Image Source="Resources/2n3.png" />
-            </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,260,0,0" VerticalAlignment="Top" Width="40" Height="40" Orientation="Horizontal">
-                <StackPanel.BindingGroup>
-                    <BindingGroup Name="ship1"/>
-                </StackPanel.BindingGroup>
-                <Image Source="Resources/n4.png" />
-            </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,260,0,0" VerticalAlignment="Top" Width="40" Height="40" Orientation="Horizontal">
-                <StackPanel.BindingGroup>
-                    <BindingGroup Name="ship1"/>
-                </StackPanel.BindingGroup>
-                <Image Source="Resources/n4.png" />
-            </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,260,0,0" VerticalAlignment="Top" Width="40" Height="40" Orientation="Horizontal">
-                <StackPanel.BindingGroup>
-                    <BindingGroup Name="ship1"/>
-                </StackPanel.BindingGroup>
-                <Image Source="Resources/n4.png" />
-            </StackPanel>
-            <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="500,260,0,0" VerticalAlignment="Top" Width="40" Height="40" Orientation="Horizontal">
-                <StackPanel.BindingGroup>
-                    <BindingGroup Name="ship1"/>
-                </StackPanel.BindingGroup>
-                <Image Source="Resources/n4.png" />
-            </StackPanel>
+        <Grid Name="gr" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="150,49,0,22" Width="400" ShowGridLines="True" Panel.ZIndex="1" Height="400">
+            <Grid.Background>
+                <SolidColorBrush Color="Black" Opacity="0"/>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
         </Grid>
+        <Image Focusable="False"  Source="Resources/Water.jpg" Margin="150,49,0,0" Width="400" Height="400" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="None"/>
+
+        <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" Margin="582,80,0,0" VerticalAlignment="Top" Orientation="Horizontal" HorizontalAlignment="Left" Width="160" Height="40">
+            <StackPanel.BindingGroup>
+                <BindingGroup Name="ship4"/>
+            </StackPanel.BindingGroup>
+            <Image Source="Resources/1n.png" />
+            <Image Source="Resources/2n.png" />
+            <Image Source="Resources/3n.png" />
+            <Image Source="Resources/4n.png" />
+        </StackPanel>
+        <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="582,140,0,0" VerticalAlignment="Top" Width="120" Height="40" Orientation="Horizontal">
+            <StackPanel.BindingGroup>
+                <BindingGroup Name="ship3"/>
+            </StackPanel.BindingGroup>
+            <Image Source="Resources/1n2.png" />
+            <Image Source="Resources/2n2.png" />
+            <Image Source="Resources/3n2.png" />
+        </StackPanel>
+        <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="582,140,0,0" VerticalAlignment="Top" Width="120" Height="40" Orientation="Horizontal">
+            <StackPanel.BindingGroup>
+                <BindingGroup Name="ship3"/>
+            </StackPanel.BindingGroup>
+            <Image Source="Resources/1n2.png" />
+            <Image Source="Resources/2n2.png" />
+            <Image Source="Resources/3n2.png" />
+        </StackPanel>
+        <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="582,200,0,0" VerticalAlignment="Top" Width="80" Height="40" Orientation="Horizontal">
+            <StackPanel.BindingGroup>
+                <BindingGroup Name="ship2"/>
+            </StackPanel.BindingGroup>
+            <Image Source="Resources/1n3.png" />
+            <Image Source="Resources/2n3.png" />
+        </StackPanel>
+        <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="582,200,0,0" VerticalAlignment="Top" Width="80" Height="40" Orientation="Horizontal">
+            <StackPanel.BindingGroup>
+                <BindingGroup Name="ship2"/>
+            </StackPanel.BindingGroup>
+            <Image Source="Resources/1n3.png" />
+            <Image Source="Resources/2n3.png" />
+        </StackPanel>
+        <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="582,200,0,0" VerticalAlignment="Top" Width="80" Height="40" Orientation="Horizontal">
+            <StackPanel.BindingGroup>
+                <BindingGroup Name="ship2"/>
+            </StackPanel.BindingGroup>
+            <Image Source="Resources/1n3.png" />
+            <Image Source="Resources/2n3.png" />
+        </StackPanel>
+        <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="582,260,0,0" VerticalAlignment="Top" Width="40" Height="40" Orientation="Horizontal">
+            <StackPanel.BindingGroup>
+                <BindingGroup Name="ship1"/>
+            </StackPanel.BindingGroup>
+            <Image Source="Resources/n4.png" />
+        </StackPanel>
+        <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="582,260,0,0" VerticalAlignment="Top" Width="40" Height="40" Orientation="Horizontal">
+            <StackPanel.BindingGroup>
+                <BindingGroup Name="ship1"/>
+            </StackPanel.BindingGroup>
+            <Image Source="Resources/n4.png" />
+        </StackPanel>
+        <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="582,260,0,0" VerticalAlignment="Top" Width="40" Height="40" Orientation="Horizontal">
+            <StackPanel.BindingGroup>
+                <BindingGroup Name="ship1"/>
+            </StackPanel.BindingGroup>
+            <Image Source="Resources/n4.png" />
+        </StackPanel>
+        <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="582,260,0,0" VerticalAlignment="Top" Width="40" Height="40" Orientation="Horizontal">
+            <StackPanel.BindingGroup>
+                <BindingGroup Name="ship1"/>
+            </StackPanel.BindingGroup>
+            <Image Source="Resources/n4.png" />
+        </StackPanel>
     </Grid>
 </Page>
