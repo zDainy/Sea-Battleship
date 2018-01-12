@@ -1,4 +1,5 @@
 ﻿using Core;
+using Sea_Battleship.Engine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,15 +12,15 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Sea_Battleship.Engine;
 
 namespace Sea_Battleship
 {
     /// <summary>
-    /// Логика взаимодействия для PlacingWindow.xaml
+    /// Логика взаимодействия для PlacingPage.xaml
     /// </summary>
-    public partial class PlacingWindow : Window
+    public partial class PlacingPage : Page
     {
         private class ShipListItem
         {
@@ -34,21 +35,21 @@ namespace Sea_Battleship
             public StackPanel ShipPanel { get => _shipPanel; set => _shipPanel = value; }
             public List<Point> PointList { get => _pointList; set => _pointList = value; }
         }
-        private double tmpX4;
-        private double tmpY4;
-        private double tmpX3;
-        private double tmpY3;
-        private double tmpX2;
-        private double tmpY2;
-        private double tmpX1;
-        private double tmpY1;
+        private double tmpX4 = 582;
+        private double tmpY4 = 80;
+        private double tmpX3 = 582;
+        private double tmpY3 = 140;
+        private double tmpX2 = 582;
+        private double tmpY2 = 200;
+        private double tmpX1 = 582;
+        private double tmpY1 = 260;
         private StackPanel tmpShip;
         private List<ShipListItem> shipList = new List<ShipListItem>();
         private ShipArrangement _arrangementClient;
         private GameConfig _gameConfig;
         private OnlineGame _onlineGame;
 
-        public PlacingWindow(ShipArrangement arrangementClient, GameConfig game)
+        public PlacingPage(ShipArrangement arrangementClient, GameConfig game)
         {
             _arrangementClient = arrangementClient;
             _gameConfig = game;
@@ -56,7 +57,7 @@ namespace Sea_Battleship
             Init();
         }
 
-        public PlacingWindow(OnlineGame game)
+        public PlacingPage(OnlineGame game)
         {
             _onlineGame = game;
             InitializeComponent();
@@ -79,9 +80,10 @@ namespace Sea_Battleship
                     gr.Children.Add(img);
                     Grid.SetColumn(img, x);
                     Grid.SetRow(img, y);
+                    Grid.SetZIndex(img, 1);
                 }
             }
-            foreach (Object ship in ((Grid)MainGrid.Children[1]).Children)
+            foreach (Object ship in CurGrid.Children)
             {
                 if (ship.GetType().ToString() == "System.Windows.Controls.StackPanel")
                     shipList.Add(new ShipListItem { ShipPanel = (StackPanel)ship });
@@ -92,7 +94,7 @@ namespace Sea_Battleship
         {
             if (tmpShip.Orientation == Orientation.Horizontal)
             {
-                for (int i = x - 1; i < x + tmpShip.Children.Count+1; i++)
+                for (int i = x - 1; i < x + tmpShip.Children.Count + 1; i++)
                 {
                     for (int j = y - 1; j < y + 2; j++)
                     {
@@ -106,7 +108,7 @@ namespace Sea_Battleship
             }
             else
             {
-                for (int i = y - 1; i < y + tmpShip.Children.Count+1; i++)
+                for (int i = y - 1; i < y + tmpShip.Children.Count + 1; i++)
                 {
                     for (int j = x - 1; j < x + 2; j++)
                     {
@@ -291,13 +293,13 @@ namespace Sea_Battleship
         {
             if (Yes)
             {
-                tmpShip.Margin = new Thickness(e.GetPosition(null).X-15, e.GetPosition(null).Y-15, 0, 0);
+                tmpShip.Margin = new Thickness(e.GetPosition(null).X-20 , e.GetPosition(null).Y-20, 0, 0);//!!
             }
         }
 
         private void ship_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            Yes = !Yes;
+            Yes = false;
             Grid.SetZIndex(tmpShip, 0);
             if (tmpShip.Orientation == Orientation.Vertical)
             {
@@ -327,6 +329,7 @@ namespace Sea_Battleship
             Yes = !Yes;
             StackPanel ship = (StackPanel)sender;
             tmpShip = ship;
+            Grid.SetZIndex(tmpShip, 0);
             ShipListItem listItem = null;
             foreach (ShipListItem sh in shipList)
             {
@@ -343,36 +346,14 @@ namespace Sea_Battleship
             {
                 Grid.SetZIndex(ship, 0);
                 gr.Children.Remove(ship);
-                MainGrid.Children.Add(ship);
-            }
-            else
-            {
-                switch (tmpShip.BindingGroup.Name)
-                {
-                    case "ship4":
-                        tmpX4 = tmpShip.Margin.Left;
-                        tmpY4 = tmpShip.Margin.Top;
-                        break;
-                    case "ship3":
-                        tmpX3 = tmpShip.Margin.Left;
-                        tmpY3 = tmpShip.Margin.Top;
-                        break;
-                    case "ship2":
-                        tmpX2 = tmpShip.Margin.Left;
-                        tmpY2 = tmpShip.Margin.Top;
-                        break;
-                    case "ship1":
-                        tmpX1 = tmpShip.Margin.Left;
-                        tmpY1 = tmpShip.Margin.Top;
-                        break;
-                }
+                CurGrid.Children.Add(ship);
             }
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-            Owner.Show();
-            Close();
+            //Owner.Show();
+            //Close();
         }
 
         private void ChangeOrientation()
@@ -403,7 +384,7 @@ namespace Sea_Battleship
 
         private void ship_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if(Yes)
+            if (Yes)
             {
                 ChangeOrientation();
             }
@@ -413,11 +394,11 @@ namespace Sea_Battleship
         {
             ((Grid)sender).Width = ((Grid)sender).ActualHeight * 632 / 449;
             gr.Width = gr.ActualHeight;
-            foreach(ShipListItem sh in shipList)
+            foreach (ShipListItem sh in shipList)
             {
-                if(sh.PointList==null)
+                if (sh.PointList == null)
                 {
-                    sh.ShipPanel.Margin = new Thickness(100+ gr.ActualHeight, sh.ShipPanel.Margin.Top, 0,0);
+                    sh.ShipPanel.Margin = new Thickness(100 + gr.ActualHeight, sh.ShipPanel.Margin.Top, 0, 0);
                 }
             }
         }
@@ -450,17 +431,321 @@ namespace Sea_Battleship
 
         private void ReadyButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!(_onlineGame is null))
+            ShipArrangement arr;
+            try
             {
-                _onlineGame.CreateGame(CreateShipArrangement());
-                new PlayWindow(_onlineGame).Show();
-                
+                if (!(_onlineGame is null))
+                {
+                    _onlineGame.CreateGame(CreateShipArrangement());
+                   // new PlayWindow(_onlineGame) { Owner = Owner }.Show();
+                    PlayPage page = new PlayPage(_onlineGame);
+                    NavigationService.Navigate(page, UriKind.Relative);
+                }
+                else
+                {
+                    arr = CreateShipArrangement();
+                    WindowConfig.game = new Game(arr, _arrangementClient, _gameConfig);
+                    PlayPage page = new PlayPage(WindowConfig.game);
+                    NavigationService.Navigate(page, UriKind.Relative);
+                   //new PlayWindow(new Game(arr, _arrangementClient, _gameConfig)) { Owner = Owner }.Show();
+                }
+               // Close();
+            }
+            catch
+            {
+                MessageBox.Show("Остались нерасставленные корабли");
+            }
+        }
+
+        private void SaveArrItem_Click(object sender, RoutedEventArgs e)
+        {
+            ShipArrangement arr;
+            try
+            {
+                arr = CreateShipArrangement();
+                new SaveArrangementWindow(arr).Show();
+            }
+            catch
+            {
+                MessageBox.Show("Остались нерасставленные корабли");
+            }
+        }
+
+        private void LoadArrItem_Click(object sender, RoutedEventArgs e)
+        {
+            new LoadArrangementWindow(_arrangementClient, _gameConfig).Show();
+        }
+
+        public void ArrangeLoad(ShipArrangement arrangement)//доделать
+        {
+            CellStatе[,] cells = arrangement.GetArrangement();
+            foreach (ShipListItem ship in shipList)
+            {
+                if (ship.ShipPanel.Orientation == Orientation.Vertical)
+                {
+                    tmpShip = ship.ShipPanel;
+                    ChangeOrientation();
+                }
+                Grid.SetZIndex(ship.ShipPanel, 0);
+                ShipListItem listItem = null;
+                foreach (ShipListItem sh in shipList)
+                {
+                    if (sh.ShipPanel == ship.ShipPanel)
+                    {
+                        listItem = sh;
+                        break;
+                    }
+                }
+                if (listItem != null)
+                    if (listItem.PointList != null)
+                        listItem.PointList = null;
+                if (ship.ShipPanel.Parent == gr)
+                {
+                    Grid.SetZIndex(ship.ShipPanel, 0);
+                    gr.Children.Remove(ship.ShipPanel);
+                    CurGrid.Children.Add(ship.ShipPanel);
+                }
+            }
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if (cells[i, j] == CellStatе.Ship)
+                        PluckShip(i, j, cells);
+                }
+            }
+        }
+
+        private void RuleItem_Click(object sender, RoutedEventArgs e)
+        {
+            //ArrangeLoad(null);
+        }
+
+        private void PluckShip(int i, int j, CellStatе[,] cells)
+        {
+            int len = 1;
+            cells[i, j] = CellStatе.Water;
+            if (i + 1 < 10 && cells[i + 1, j] == CellStatе.Ship)
+            {
+                len++;
+                cells[i + 1, j] = CellStatе.Water;
+                if (i + 2 < 10 && cells[i + 2, j] == CellStatе.Ship)
+                {
+                    len++;
+                    cells[i + 2, j] = CellStatе.Water;
+                    if (i + 3 < 10 && cells[i + 3, j] == CellStatе.Ship)
+                    {
+                        len++;
+                        cells[i + 3, j] = CellStatе.Water;
+                        ShipListItem listItem = null;
+                        foreach (ShipListItem sh in shipList)
+                        {
+                            if (sh.ShipPanel.BindingGroup.Name == "ship4" && (Grid)sh.ShipPanel.Parent != gr)
+                            {
+                                listItem = sh;
+                                break;
+                            }
+                        }
+                        Grid.SetZIndex(listItem.ShipPanel, 1);
+                        Grid parent;
+                        parent = (Grid)listItem.ShipPanel.Parent;
+                        parent.Children.Remove(listItem.ShipPanel);
+                        listItem.ShipPanel.Margin = new Thickness();
+                        gr.Children.Add(listItem.ShipPanel);
+                        Grid.SetColumn(listItem.ShipPanel, i);
+                        Grid.SetRow(listItem.ShipPanel, j);
+                        //if (listItem.ShipPanel.Orientation == Orientation.Vertical)
+                        //{
+                        Grid.SetRowSpan(listItem.ShipPanel, 4);
+                        listItem.PointList = new List<Point>();
+                        listItem.PointList.Add(new Point(i, j));
+                        listItem.PointList.Add(new Point(i, j + 1));
+                        listItem.PointList.Add(new Point(i, j + 2));
+                        listItem.PointList.Add(new Point(i, j + 3));
+                        //else
+                        //{
+                        //    Grid.SetColumnSpan(listItem.ShipPanel, 4);
+                        //    listItem.PointList = new List<Point>();
+                        //    listItem.PointList.Add(new Point(i, j));
+                        //    listItem.PointList.Add(new Point(i + 1, j));
+                        //    listItem.PointList.Add(new Point(i + 2, j));
+                        //    listItem.PointList.Add(new Point(i + 3, j));
+                        //}
+
+                    }
+                    else
+                    {
+                        ShipListItem listItem = null;
+                        foreach (ShipListItem sh in shipList)
+                        {
+                            if (sh.ShipPanel.BindingGroup.Name == "ship3" && (Grid)sh.ShipPanel.Parent != gr)
+                            {
+                                listItem = sh;
+                                break;
+                            }
+                        }
+                        Grid.SetZIndex(listItem.ShipPanel, 1);
+                        Grid parent;
+                        parent = (Grid)listItem.ShipPanel.Parent;
+                        parent.Children.Remove(listItem.ShipPanel);
+                        listItem.ShipPanel.Margin = new Thickness();
+                        gr.Children.Add(listItem.ShipPanel);
+                        Grid.SetColumn(listItem.ShipPanel, i);
+                        Grid.SetRow(listItem.ShipPanel, j);
+                        //if (listItem.ShipPanel.Orientation == Orientation.Vertical)
+                        //{
+                        Grid.SetRowSpan(listItem.ShipPanel, 3);
+                        listItem.PointList = new List<Point>();
+                        listItem.PointList.Add(new Point(i, j));
+                        listItem.PointList.Add(new Point(i, j + 1));
+                        listItem.PointList.Add(new Point(i, j + 2));
+                    }
+                }
+                else
+                {
+                    ShipListItem listItem = null;
+                    foreach (ShipListItem sh in shipList)
+                    {
+                        if (sh.ShipPanel.BindingGroup.Name == "ship2" && (Grid)sh.ShipPanel.Parent != gr)
+                        {
+                            listItem = sh;
+                            break;
+                        }
+                    }
+                    Grid.SetZIndex(listItem.ShipPanel, 1);
+                    Grid parent;
+                    parent = (Grid)listItem.ShipPanel.Parent;
+                    parent.Children.Remove(listItem.ShipPanel);
+                    listItem.ShipPanel.Margin = new Thickness();
+                    gr.Children.Add(listItem.ShipPanel);
+                    Grid.SetColumn(listItem.ShipPanel, i);
+                    Grid.SetRow(listItem.ShipPanel, j);
+                    //if (listItem.ShipPanel.Orientation == Orientation.Vertical)
+                    //{
+                    Grid.SetRowSpan(listItem.ShipPanel, 2);
+                    listItem.PointList = new List<Point>();
+                    listItem.PointList.Add(new Point(i, j));
+                    listItem.PointList.Add(new Point(i, j + 1));
+                }
+            }
+            else if (j + 1 < 10 && cells[i, j + 1] == CellStatе.Ship)
+            {
+                len++;
+                cells[i, j + 1] = CellStatе.Water;
+                if (j + 2 < 10 && cells[i, j + 2] == CellStatе.Ship)
+                {
+                    len++;
+                    cells[i, j + 2] = CellStatе.Water;
+                    if (j + 3 < 10 && cells[i, j + 3] == CellStatе.Ship)
+                    {
+                        len++;
+                        cells[i, j + 3] = CellStatе.Water;
+                        ShipListItem listItem = null;
+                        foreach (ShipListItem sh in shipList)
+                        {
+                            if (sh.ShipPanel.BindingGroup.Name == "ship4" && (Grid)sh.ShipPanel.Parent != gr)
+                            {
+                                listItem = sh;
+                                break;
+                            }
+                        }
+                        Grid.SetZIndex(listItem.ShipPanel, 1);
+                        Grid parent;
+                        parent = (Grid)listItem.ShipPanel.Parent;
+                        parent.Children.Remove(listItem.ShipPanel);
+                        listItem.ShipPanel.Margin = new Thickness();
+                        gr.Children.Add(listItem.ShipPanel);
+                        Grid.SetColumn(listItem.ShipPanel, i);
+                        Grid.SetRow(listItem.ShipPanel, j);
+                        tmpShip = listItem.ShipPanel;
+                        ChangeOrientation();
+                        tmpShip = null;
+                        Grid.SetColumnSpan(listItem.ShipPanel, 4);
+                        listItem.PointList = new List<Point>();
+                        listItem.PointList.Add(new Point(i, j));
+                        listItem.PointList.Add(new Point(i + 1, j));
+                        listItem.PointList.Add(new Point(i + 2, j));
+                        listItem.PointList.Add(new Point(i + 3, j));
+                    }
+                    else
+                    {
+                        ShipListItem listItem = null;
+                        foreach (ShipListItem sh in shipList)
+                        {
+                            if (sh.ShipPanel.BindingGroup.Name == "ship3" && (Grid)sh.ShipPanel.Parent != gr)
+                            {
+                                listItem = sh;
+                                break;
+                            }
+                        }
+                        Grid.SetZIndex(listItem.ShipPanel, 1);
+                        Grid parent;
+                        parent = (Grid)listItem.ShipPanel.Parent;
+                        parent.Children.Remove(listItem.ShipPanel);
+                        listItem.ShipPanel.Margin = new Thickness();
+                        gr.Children.Add(listItem.ShipPanel);
+                        Grid.SetColumn(listItem.ShipPanel, i);
+                        Grid.SetRow(listItem.ShipPanel, j);
+                        tmpShip = listItem.ShipPanel;
+                        ChangeOrientation();
+                        tmpShip = null;
+                        Grid.SetColumnSpan(listItem.ShipPanel, 3);
+                        listItem.PointList = new List<Point>();
+                        listItem.PointList.Add(new Point(i, j));
+                        listItem.PointList.Add(new Point(i + 1, j));
+                        listItem.PointList.Add(new Point(i + 2, j));
+                    }
+                }
+                else
+                {
+                    ShipListItem listItem = null;
+                    foreach (ShipListItem sh in shipList)
+                    {
+                        if (sh.ShipPanel.BindingGroup.Name == "ship2" && (Grid)sh.ShipPanel.Parent != gr)
+                        {
+                            listItem = sh;
+                            break;
+                        }
+                    }
+                    Grid.SetZIndex(listItem.ShipPanel, 1);
+                    Grid parent;
+                    parent = (Grid)listItem.ShipPanel.Parent;
+                    parent.Children.Remove(listItem.ShipPanel);
+                    listItem.ShipPanel.Margin = new Thickness();
+                    gr.Children.Add(listItem.ShipPanel);
+                    Grid.SetColumn(listItem.ShipPanel, i);
+                    Grid.SetRow(listItem.ShipPanel, j);
+                    tmpShip = listItem.ShipPanel;
+                    ChangeOrientation();
+                    tmpShip = null;
+                    Grid.SetColumnSpan(listItem.ShipPanel, 2);
+                    listItem.PointList = new List<Point>();
+                    listItem.PointList.Add(new Point(i, j));
+                    listItem.PointList.Add(new Point(i + 1, j));
+                }
             }
             else
             {
-                new PlayWindow(new Game(CreateShipArrangement(), _arrangementClient, _gameConfig)).Show();
+                ShipListItem listItem = null;
+                foreach (ShipListItem sh in shipList)
+                {
+                    if (sh.ShipPanel.BindingGroup.Name == "ship1" && (Grid)sh.ShipPanel.Parent != gr)
+                    {
+                        listItem = sh;
+                        break;
+                    }
+                }
+                Grid.SetZIndex(listItem.ShipPanel, 1);
+                Grid parent;
+                parent = (Grid)listItem.ShipPanel.Parent;
+                parent.Children.Remove(listItem.ShipPanel);
+                listItem.ShipPanel.Margin = new Thickness();
+                gr.Children.Add(listItem.ShipPanel);
+                Grid.SetColumn(listItem.ShipPanel, i);
+                Grid.SetRow(listItem.ShipPanel, j);
+                listItem.PointList = new List<Point>();
+                listItem.PointList.Add(new Point(i, j));
             }
-            Close();
         }
     }
 }

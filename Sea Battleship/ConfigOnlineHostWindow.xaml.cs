@@ -6,6 +6,7 @@ using Core;
 using Network;
 using Sea_Battleship.Engine;
 using ShipArrangement = Core.ShipArrangement;
+using System;
 
 namespace Sea_Battleship
 {
@@ -31,21 +32,31 @@ namespace Sea_Battleship
 
             if (OnlineGame.Connect.Server.IsClientConnected)
             {
-                OnlineGame.GoToGameWindow(_placement, _shipArrangement, Owner);
+               // OnlineGame.GoToGameWindow(_placement, _shipArrangement, Owner);
+                if (_placement != PlacementState.Manualy)
+                {
+                    OnlineGame.CreateGame(_shipArrangement);
+                    PlayPage window = new PlayPage(OnlineGame) ;
+                    WindowConfig.MainPage.NavigationService.Navigate(window, UriKind.Relative);
+                }
+                else
+                {
+                    PlacingPage window = new PlacingPage(OnlineGame);
+                    WindowConfig.MainPage.NavigationService.Navigate(window, UriKind.Relative);
+                }
                 Close();
             }
             else
             {
                 WaitingWindow window = new WaitingWindow(OnlineGame, _shipArrangement, _placement);
                 window.Show();
-                Close();
                 window.Wait();
+                Close();
             }
         }
 
         private void ButtonPrev_Click(object sender, RoutedEventArgs e)
         {
-            Owner.Show();
             Close();
         }
         private void TimeLength_Click(object sender, RoutedEventArgs e)

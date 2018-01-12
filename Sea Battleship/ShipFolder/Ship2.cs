@@ -29,7 +29,6 @@ namespace Sea_Battleship.ShipFolder
                 Stretch = Stretch.Fill,
                 Source = new BitmapImage(new Uri("/Resources/2n3.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
             };
-            ShipInit();
         }
     }
 }

@@ -74,13 +74,28 @@
       <DependentUpon>ConfigOnlineNotHostWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Engine\OnlineGame.cs" />
-    <Compile Include="PlayWindow.xaml.cs">
-      <DependentUpon>PlayWindow.xaml</DependentUpon>
+    <Compile Include="LoadArrangementWindow.xaml.cs">
+      <DependentUpon>LoadArrangementWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LoadingPage.xaml.cs">
+      <DependentUpon>LoadingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PlacingPage.xaml.cs">
+      <DependentUpon>PlacingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PlayPage.xaml.cs">
+      <DependentUpon>PlayPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SaveArrangementWindow.xaml.cs">
+      <DependentUpon>SaveArrangementWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SaveGameWindow.xaml.cs">
+      <DependentUpon>SaveGameWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShipFolder\AShip.cs" />
-    <Compile Include="PlacingWindow.xaml.cs">
-      <DependentUpon>PlacingWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="PlayField.xaml.cs">
       <DependentUpon>PlayField.xaml</DependentUpon>
     </Compile>
@@ -89,9 +104,6 @@
     <Compile Include="ShipFolder\Ship3.cs" />
     <Compile Include="ShipFolder\Ship4.cs" />
     <Compile Include="ShipFolder\Ships.cs" />
-    <Compile Include="TestWindow.xaml.cs">
-      <DependentUpon>TestWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WaitingWindow.xaml.cs">
       <DependentUpon>WaitingWindow.xaml</DependentUpon>
     </Compile>
@@ -108,7 +120,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LoadingWindow.xaml">
+    <Page Include="LoadArrangementWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LoadingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -120,9 +140,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LoadingWindow.xaml.cs">
-      <DependentUpon>LoadingWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -131,7 +148,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PlacingWindow.xaml">
+    <Page Include="PlacingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -139,11 +156,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PlayWindow.xaml">
+    <Page Include="PlayPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TestWindow.xaml">
+    <Page Include="SaveArrangementWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SaveGameWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -238,5 +259,10 @@
   <ItemGroup>
     <Resource Include="Resources\shipCrushed.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Spravka.html" />
+    <Resource Include="Resources\Spravka.xml" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

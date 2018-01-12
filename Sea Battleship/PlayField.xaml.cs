@@ -10,6 +10,8 @@ using Core;
 using Sea_Battleship.Engine;
 using System.Threading;
 using Common;
+using System.Collections.Generic;
+using System.Windows.Navigation;
 
 namespace Sea_Battleship
 {
@@ -18,13 +20,12 @@ namespace Sea_Battleship
     /// </summary>
     public partial class PlayField : UserControl
     {
-        private PlayWindow _pw;
+        private PlayPage _pw;
 
         Ships ships;
         private static bool isHiddenField = true;
         private OnlineGame _onlineGame;
         private bool _isOnlineGame;
-        private Timer _turnTimer;
 
 
         public PlayField()
@@ -39,7 +40,6 @@ namespace Sea_Battleship
             {
                 _isOnlineGame = true;
                 gg = _onlineGame.Game;
-                _turnTimer = new Timer { Interval = (int)_onlineGame.GameConfig.GameSpeed };
                 if (_onlineGame.PlayerRole == PlayerRole.Client)
                 {
                     myArr = _onlineGame.MyArrangement.GetArrangement();
@@ -61,7 +61,15 @@ namespace Sea_Battleship
             Ships = new Ships(this);
             if (isHiddenField)
             {
-                //  ships.Init();
+                CellStatе[,] arr = enemyArr;
+                CellStatе[,] copyarr = new CellStatе[10, 10];
+                for (int i = 0; i < 10; i++)
+                {
+                    for (int j = 0; j < 10; j++)
+                    {
+                        copyarr[i, j] = arr[i, j];
+                    }
+                }
                 for (int y = 0; y < 10; y++)
                 {
                     for (int x = 0; x < 10; x++)
@@ -78,7 +86,20 @@ namespace Sea_Battleship
                         Grid.SetRow(img, y);
                     }
                 }
-                CellStatе[,] arr = enemyArr;
+                if (WindowConfig.IsLoaded)
+                {
+                    gg.TurnOwner = PlayerRole.Server;
+                    PlaceFromMassive(copyarr, Ships, false, true);
+                }
+                else
+                {
+                    PlaceFromMassive(copyarr, Ships, false);
+
+                }
+            }
+            else
+            {
+                CellStatе[,] arr = myArr;
                 CellStatе[,] copyarr = new CellStatе[10, 10];
                 for (int i = 0; i < 10; i++)
                 {
@@ -87,10 +108,6 @@ namespace Sea_Battleship
                         copyarr[i, j] = arr[i, j];
                     }
                 }
-                PlaceFromMassive(copyarr, Ships, false);
-            }
-            else
-            {
                 for (int y = 0; y < 10; y++)
                 {
                     for (int x = 0; x < 10; x++)
@@ -108,49 +125,51 @@ namespace Sea_Battleship
                     }
 
                 }
-                CellStatе[,] arr = myArr;
-                CellStatе[,] copyarr = new CellStatе[10, 10];
-                for (int i = 0; i < 10; i++)
+                if (WindowConfig.IsLoaded)
+                    PlaceFromMassive(copyarr, Ships, true, true);
+                else
                 {
-                    for (int j = 0; j < 10; j++)
-                    {
-                        copyarr[i, j] = arr[i, j];
-                    }
+                    
+                    PlaceFromMassive(copyarr, ships, true);
                 }
-                PlaceFromMassive(copyarr, ships, true);
-                // ShipArrangement arr = ShipArrangement.Strategy();
-                // PlaceFromMassive(arr.GetArrangement());
-
-                //ships.ShipList4[0].Place(this, 0, 0, true);
-
-                //ships.ShipList3[0].Place(this, 1, 1, false);
-
-                //ships.ShipList2[0].Place(this, 5, 5, false);
-
-                //ships.ShipList1[0].Place(this, 9, 9, true);
             }
             isHiddenField = !isHiddenField;
-            //   _turnTimer.Tick += (sender, e) => SwitchTurn();
-            // _turnTimer.Start();
         }
 
-        public void SwitchTurn()
+        public void SwitchTurn(bool isFromTimer)
         {
-            //  _turnTimer.Stop();
             if (_onlineGame.IsMyTurn)
             {
-                // <--- Переключалка хода
+                if (isFromTimer)
+                {
+                    _onlineGame.Turn(-1, -1);
+                }
                 _onlineGame.IsMyTurn = false;
                 _onlineGame.IsOne = false;
+                WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
+                {
+                    WindowConfig.PlayPageCon.pr1.Value = 0;
+                    WindowConfig.PlayPageCon.pr1.Visibility = Visibility.Hidden;
+                    WindowConfig.PlayPageCon.MyTurnLabel.Background =
+                        new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E"));
+                    WindowConfig.PlayPageCon.MyTurnLabel.Content = "Чужой ход";
+                });
                 ThreadPool.QueueUserWorkItem(OnlineEnemyTurn);
             }
             else
             {
-                // <--- Переключалка хода
                 _onlineGame.IsMyTurn = true;
+                WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
+                {
+                    WindowConfig.PlayPageCon.pr1.Value = 0;
+                    WindowConfig.PlayPageCon.pr1.Visibility = Visibility.Visible;
+                    WindowConfig.PlayPageCon.MyTurnLabel.Background =
+                        new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
+                    WindowConfig.PlayPageCon.MyTurnLabel.Content = "Ваш ход";
+                });
             }
-            //  _turnTimer.Start();
         }
+
 
         public Ships Ships { get => ships; set => ships = value; }
 
@@ -186,18 +205,53 @@ namespace Sea_Battleship
 
         private void SetShotOnField(int x, int y, CellStatе state, bool onMyField)
         {
-            _pw = (PlayWindow)((Grid)Parent).Parent;
+            _pw = WindowConfig.PlayPageCon;
             var fg = onMyField ? _pw.MyField.FieldGrid : _pw.EnemyField.FieldGrid;
-            string uri = state == CellStatе.WoundedShip ? "/Resources/shipCrushed.png" : "/Resources/waterCrushed.png";
-            fg.Dispatcher.Invoke(() =>
+            //string uri = state == CellStatе.WoundedShip ? "/Resources/shipCrushed.png" : "/Resources/waterCrushed.png";
+            if (onMyField)
             {
-                SetCell(x, y, fg, new Image()
+                fg.Dispatcher.Invoke(() =>
                 {
-                    Stretch = Stretch.Fill,
-                    Opacity = 100,
-                    Source = new BitmapImage(new Uri(uri, UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                    switch (state)
+                    {
+                        case CellStatе.WoundedShip:
+                            _pw.MyField.Ships.CheckEnemy(new Point(x, y), _pw, true);
+                            if(_pw.MyField.Ships.IsAllDead())
+                                EndOfGame(false);
+                            break;
+                        case CellStatе.WoundedWater:
+                            SetCell(x, y, fg, new Image()
+                            {
+                                Stretch = Stretch.Fill,
+                                Opacity = 100,
+                                Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                            });
+                            break;
+                    }
                 });
-            });
+            }
+            else
+            {
+                fg.Dispatcher.Invoke(() =>
+                {
+                    switch (state)
+                    {
+                        case CellStatе.WoundedShip:
+                            ships.Check(x, y, _pw, true);
+                            if (_pw.MyField.Ships.IsAllDead())
+                                EndOfGame(true);
+                            break;
+                        case CellStatе.WoundedWater:
+                            SetCell(x, y, fg, new Image()
+                            {
+                                Stretch = Stretch.Fill,
+                                Opacity = 100,
+                                Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                            });
+                            break;
+                    }
+                });
+            }
         }
 
 
@@ -207,10 +261,13 @@ namespace Sea_Battleship
             try
             {
                 var shotRes = _onlineGame.Turn((int)vect.X, (int)vect.Y);
-                SetShotOnField((int)vect.X, (int)vect.Y, shotRes, false);
-                if (shotRes == CellStatе.WoundedWater)
+                if (shotRes != CellStatе.BlankShot)
                 {
-                    SwitchTurn();
+                    SetShotOnField((int) vect.X, (int) vect.Y, shotRes, false);
+                    if (shotRes == CellStatе.WoundedWater)
+                    {
+                        SwitchTurn(false);
+                    }
                 }
             }
             catch (NullReferenceException)
@@ -230,6 +287,7 @@ namespace Sea_Battleship
         {
             try
             {
+                bool needSwitch = true;
                 if (!_onlineGame.IsOne)
                 {
                     CellStatе shotRes;
@@ -237,10 +295,16 @@ namespace Sea_Battleship
                     do
                     {
                         var comeVector = _onlineGame.WaitEnemyTurn();
+                        if ((int)comeVector.X == -1 && (int)comeVector.Y == -1)
+                        {
+                            needSwitch = false;
+                            break;
+                        }
                         shotRes = _onlineGame.CheckShot(comeVector);
                         SetShotOnField((int)comeVector.X, (int)comeVector.Y, shotRes, true);
                     } while (shotRes == CellStatе.WoundedShip);
-                    SwitchTurn();
+                    if (needSwitch)
+                        SwitchTurn(false);
                 }
             }
             catch (NullReferenceException)
@@ -258,7 +322,7 @@ namespace Sea_Battleship
 
         private void FieldCell_Click(object sender, MouseButtonEventArgs e)
         {
-            PlayWindow z = (PlayWindow)((Grid)Parent).Parent;
+            PlayPage z = (PlayPage)((Grid)Parent).Parent;
             Image image = (Image)sender;
             int X = Grid.GetColumn(image);
             int Y = Grid.GetRow(image);
@@ -269,87 +333,43 @@ namespace Sea_Battleship
             }
             else if (!_isOnlineGame)
             {
-                MoveResult result = z.Game.MakeAMove(X, Y); //ход первого игрока
-                switch (result)
+                bool res = false;
+                MoveResult result;
+                do
                 {
-                    case MoveResult.Hit:
-                        bool was = false;
-                        uriString = "/Resources/shipCrushed.png";
-                        foreach (AShip sh in ships.ShipList1)
-                        {
-                            if (sh.isHere(X, Y, z))
+                    result = z.Game.MakeAMove(X, Y); //ход первого игрока
+               
+                    switch (result)
+                    {
+                        case MoveResult.Hit:
+                            ships.Check(X, Y, z, false);
+                            if (ships.IsAllDead())
                             {
-                                SetCell((int)X, (int)Y, FieldGrid, new Image()
-                                {
-                                    Stretch = Stretch.Fill,
-                                    Opacity = 100,
-                                    Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                                });
-                                was = true;
-                                break;
+                                EndOfGame(true);
                             }
-                        }
-                        if (!was)
-                            foreach (AShip sh in ships.ShipList2)
+                            res = false;
+                            break;
+                        case MoveResult.Miss:
+                            uriString = "/Resources/waterCrushed.png";
+                            SetCell(Grid.GetColumn(image), Grid.GetRow(image), FieldGrid, new Image()
                             {
-                                if (sh.isHere(X, Y, z))
-                                {
-                                    SetCell((int)X, (int)Y, FieldGrid, new Image()
-                                    {
-                                        Stretch = Stretch.Fill,
-                                        Opacity = 100,
-                                        Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                                    });
-                                    was = true;
-                                    break;
-                                }
-                            }
-                        if (!was)
-                            foreach (AShip sh in ships.ShipList3)
-                            {
-                                if (sh.isHere(X, Y, z))
-                                {
-                                    SetCell((int)X, (int)Y, FieldGrid, new Image()
-                                    {
-                                        Stretch = Stretch.Fill,
-                                        Opacity = 100,
-                                        Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                                    });
-                                    was = true;
-                                    break;
-                                }
-                            }
-                        if (!was)
-                            foreach (AShip sh in ships.ShipList4)
-                            {
-                                if (sh.isHere(X, Y, z))
-                                {
-                                    SetCell((int)X, (int)Y, FieldGrid, new Image()
-                                    {
-                                        Stretch = Stretch.Fill,
-                                        Opacity = 100,
-                                        Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                                    });
-                                    was = true;
-                                    break;
-                                }
-                            }
+                                Stretch = Stretch.Fill,
+                                Opacity = 100,
+                                Source = new BitmapImage(new Uri(uriString, UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                            });
+                            res = false;
+                            break;
 
-                        break;
-                    case MoveResult.Miss:
-                        uriString = "/Resources/waterCrushed.png";
-                        SetCell(Grid.GetColumn(image), Grid.GetRow(image), FieldGrid, new Image()
-                        {
-                            Stretch = Stretch.Fill,
-                            Opacity = 100,
-                            Source = new BitmapImage(new Uri(uriString, UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                        });
-                        break;
-                    case MoveResult.Destroyed:
-                        break;
-                    case MoveResult.Error:
-                        break;
+                        case MoveResult.Destroyed:
+                            res = true;
+                            break;
+                        case MoveResult.Error:
+                            WindowConfig.game.ChangeTurn();
+                            res = true;
+                            break;
+                    }
                 }
+                while (res);
                 if (result != MoveResult.Hit) //если не попал, ход второго игрока
                 {
                     EnemyStep(z);
@@ -358,78 +378,31 @@ namespace Sea_Battleship
             }
         }
 
-        private void EnemyStep(PlayWindow z)
+        public void ChangeTurn(PlayPage z)
         {
+            EnemyStep(z);
+        }
+
+        private void EnemyStep(PlayPage z)
+        {
+            z.pr1.Value = 0;
             Image image;
             Point p = AI.MakeAMove(z.Game);
             bool was = false;
             do //ходит, пока не промахнётся
             {
                 image = (Image)z.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
-                was = false;
-                foreach (AShip sh in z.MyField.ships.ShipList1)
-                {
-                    if (sh.isHere(image, z))
-                    {
-                        SetShotOnField((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
-                        {
-                            Stretch = Stretch.Fill,
-                            Opacity = 100,
-                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                        });
-                        was = true;
-                        break;
-                    }
-                }
-                if (!was)
-                    foreach (AShip sh in z.MyField.ships.ShipList2)
-                    {
-                        if (sh.isHere(image, z))
-                        {
-                            SetShotOnField((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
-                            {
-                                Stretch = Stretch.Fill,
-                                Opacity = 100,
-                                Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                            });
-                            was = true;
-                            break;
-                        }
-                    }
-                if (!was)
-                    foreach (AShip sh in z.MyField.ships.ShipList3)
-                    {
-                        if (sh.isHere(image, z))
-                        {
-                            SetShotOnField((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
-                            {
-                                Stretch = Stretch.Fill,
-                                Opacity = 100,
-                                Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                            });
-                            was = true;
-                            break;
-                        }
-                    }
-                if (!was)
-                    foreach (AShip sh in z.MyField.ships.ShipList4)
-                    {
-                        if (sh.isHere(image, z))
-                        {
-                            SetShotOnField((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
-                            {
-                                Stretch = Stretch.Fill,
-                                Opacity = 100,
-                                Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                            });
-                            was = true;
-                            break;
-                        }
-                    }
+                was = z.MyField.ships.Check(image, z, false);
                 if (was)
                 {
                     p = AI.MakeAMove(z.Game);
                 }
+                if (z.MyField.ships.IsAllDead())
+                {
+                    EndOfGame(false);
+                    break;
+                }
+
             }
             while (was);
             if (!was)
@@ -443,8 +416,6 @@ namespace Sea_Battleship
             }
         }
 
-
-
         private void _SizeChanged(object sender, SizeChangedEventArgs e)
         {
             FieldGrid.Width = FieldGrid.ActualHeight;
@@ -456,12 +427,50 @@ namespace Sea_Battleship
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    if (cells[i, j] == CellStatе.Ship)
+                    if (cells[i, j] == CellStatе.Ship|| cells[i, j] == CellStatе.WoundedShip)
                         PluckShip(i, j, cells, ships);
                 }
             }
             if (isPlace)
                 PlaceShips();
+        }
+
+        public void PlaceFromMassive(CellStatе[,] cells, Ships ships, bool isPlace, bool isLoaded)
+        {
+
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if (cells[i, j] == CellStatе.Ship || cells[i, j] == CellStatе.WoundedShip || cells[i, j] == CellStatе.DestroyedShip)
+                        PluckShip(i, j, cells, ships, isLoaded);
+                    else if (cells[i, j] == CellStatе.WoundedWater)
+                    {
+                        Image img = new Image
+                        {
+                            Stretch = Stretch.Fill,
+                            Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
+                        };
+                        //img.MouseLeftButtonDown += FieldCell_Click;
+                        FieldGrid.Children.Add(img);
+                        Grid.SetColumn(img, i);
+                        Grid.SetRow(img, j);
+                    }
+                }
+            }
+            if (isPlace)
+                PlaceShips();
+            foreach(Point p in hitShipList)
+            {
+                Image img = new Image
+                {
+                    Stretch = Stretch.Fill,
+                    Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
+                };
+                FieldGrid.Children.Add(img);
+                Grid.SetColumn(img, (int)p.X);
+                Grid.SetRow(img, (int)p.Y);
+            }
         }
 
         private void PluckShip(int i, int j, CellStatе[,] cells, Ships Ships)
@@ -564,15 +573,216 @@ namespace Sea_Battleship
             }
         }
 
-        bool isTimer = false;
+        List<Point> hitShipList = new List<Point>();
+
+        private void PluckShip(int i, int j, CellStatе[,] cells, Ships Ships, bool isLoaded)
+        {
+            bool isDead = false;
+            int countHit = 0;
+            if (cells[i, j] == CellStatе.WoundedShip|| cells[i, j] == CellStatе.DestroyedShip)
+            {
+                hitShipList.Add(new Point(i, j));
+                countHit++;
+            }
+            int len = 1;
+            cells[i, j] = CellStatе.Water;
+            if (i + 1 < 10 && (cells[i + 1, j] == CellStatе.Ship|| cells[i + 1, j] == CellStatе.WoundedShip || cells[i+1, j] == CellStatе.DestroyedShip))
+            {
+                if (cells[i+1, j] == CellStatе.WoundedShip || cells[i, j] == CellStatе.DestroyedShip)
+                {
+                    hitShipList.Add(new Point(i, j));
+                    countHit++;
+                }
+                len++;
+                cells[i + 1, j] = CellStatе.Water;
+                if (i + 2 < 10 && (cells[i + 2, j] == CellStatе.Ship|| cells[i + 2, j] == CellStatе.Ship || cells[i+2, j] == CellStatе.DestroyedShip))
+                {
+                    if (cells[i+2, j] == CellStatе.WoundedShip)
+                    {
+                        hitShipList.Add(new Point(i, j));
+                        countHit++;
+                    }
+                    len++;
+                    cells[i + 2, j] = CellStatе.Water;
+                    if (i + 3 < 10 && (cells[i + 3, j] == CellStatе.Ship|| cells[i + 3, j] == CellStatе.Ship || cells[i+3, j] == CellStatе.DestroyedShip))
+                    {
+                        if (cells[i+3, j] == CellStatе.WoundedShip)
+                        {
+                            hitShipList.Add(new Point(i, j));
+                            countHit++;
+                        }
+                        len++;
+                        cells[i + 3, j] = CellStatе.Water;
+                        if (len - countHit == 0) isDead = true;
+                        Ships.ShipList4.Add(new Ship4()
+                        {
+                            IsHorizontal = true,
+                            X = i,
+                            Y = j,
+                            Size = len,
+                            CountAlive = len - countHit,
+                            IsDead = isDead
+                        });
+                    }
+                    else
+                    {
+                        if (len - countHit == 0) isDead = true;
+                        Ships.ShipList3.Add(new Ship3()
+                        {
+                            IsHorizontal = true,
+                            X = i,
+                            Y = j,
+                            Size = len,
+                            CountAlive = len - countHit,
+                            IsDead = isDead
+                        });
+                    }
+                }
+                else
+                {
+                    if (len - countHit == 0) isDead = true;
+                    Ships.ShipList2.Add(new Ship2()
+                    {
+                        IsHorizontal = true,
+                        X = i,
+                        Y = j,
+                        Size = len,
+                        IsDead = isDead,
+                        CountAlive = len - countHit
+                    });
+                }
+            }
+            else if (j + 1 < 10 && (cells[i, j + 1] == CellStatе.Ship|| cells[i, j + 1] == CellStatе.WoundedShip || cells[i, j+1] == CellStatе.DestroyedShip))
+            {
+                if (cells[i, j+1] == CellStatе.WoundedShip)
+                {
+                    hitShipList.Add(new Point(i, j+1));
+                    countHit++;
+                }
+                len++;
+                cells[i, j + 1] = CellStatе.Water;
+                if (j + 2 < 10 && (cells[i, j + 2] == CellStatе.Ship|| cells[i, j + 2] == CellStatе.WoundedShip || cells[i, j+2] == CellStatе.DestroyedShip))
+                {
+                    if (cells[i, j + 2] == CellStatе.WoundedShip)
+                    {
+                        hitShipList.Add(new Point(i, j + 2));
+                        countHit++;
+                    }
+                    len++;
+                    cells[i, j + 2] = CellStatе.Water;
+                    if (j + 3 < 10 && (cells[i, j + 3] == CellStatе.Ship || cells[i, j + 3] == CellStatе.WoundedShip || cells[i, j+3] == CellStatе.DestroyedShip))
+                    {
+                        if (cells[i, j + 3] == CellStatе.WoundedShip)
+                        {
+                            hitShipList.Add(new Point(i, j + 3));
+                            countHit++;
+                        }
+                        len++;
+                        cells[i, j + 3] = CellStatе.Water;
+                        if (len - countHit == 0) isDead = true;
+                        Ships.ShipList4.Add(new Ship4()
+                        {
+                            IsHorizontal = false,
+                            X = i,
+                            Y = j,
+                            Size = len,
+                            CountAlive = len - countHit,
+                            IsDead = isDead
+                        });
+                    }
+                    else
+                    {
+                        if (len - countHit == 0) isDead = true;
+                        Ships.ShipList3.Add(new Ship3()
+                        {
+                            IsHorizontal = false,
+                            X = i,
+                            Y = j,
+                            Size = len,
+                            CountAlive = len - countHit,
+                            IsDead = isDead
+                        });
+                    }
+                }
+                else
+                {
+                    if (len - countHit == 0) isDead = true;
+                    Ships.ShipList2.Add(new Ship2()
+                    {
+                        IsHorizontal = false,
+                        X = i,
+                        Y = j,
+                        Size = len,
+                        CountAlive = len - countHit,
+                        IsDead = isDead
+                    });
+                }
+            }
+            else
+            {
+                if (len - countHit == 0) isDead = true;
+                Ships.ShipList1.Add(new Ship1()
+                {
+                    IsHorizontal = true,
+                    X = i,
+                    Y = j,
+                    Size = len,
+                    CountAlive = len - countHit,
+                    IsDead = isDead
+                });
+            }
+        }
+
+        private void setSellFromLoaded(int x, int y)
+        {
+            Image img = new Image
+            {
+                Stretch = Stretch.Fill,
+                Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
+                //Opacity = 0
+            };
+            FieldGrid.Children.Add(img);
+            Grid.SetColumn(img, x);
+            Grid.SetRow(img, y);
+        }
+
+        // bool isTimer = false;
         private void SetShotOnField(int x, int y, Grid grid, Image image)
         {
-            // _pw = (PlayWindow)((Grid)Parent).Parent;
+            // _pw = (PlayPage)((Grid)Parent).Parent;
             // Grid fg = onMyField ? _pw.MyField.FieldGrid : _pw.EnemyField.FieldGrid;
             grid.Dispatcher.Invoke(() =>
             {
                 SetCell(x, y, grid, image);
             });
+        }
+
+
+        private void EndOfGame(bool isPlayerWin)
+        {
+            if (isPlayerWin)
+            {
+                MessageBoxResult res = MessageBox.Show("Вы выиграли!", "Конец игры", MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.No, MessageBoxOptions.None);
+                if (!_isOnlineGame)
+                    WindowConfig.game = null;
+                else
+                    WindowConfig.OnlineGame = null;
+                WindowConfig.PlayPageCon.NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
+                WindowConfig.PlayPageCon = null;
+
+            }
+            else
+            {
+                MessageBoxResult res = MessageBox.Show("Вы проиграли...", "Конец игры", MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.No, MessageBoxOptions.None);
+
+                if (!_isOnlineGame)
+                    WindowConfig.game = null;
+                else
+                    WindowConfig.OnlineGame = null;
+                WindowConfig.PlayPageCon.NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
+                WindowConfig.PlayPageCon = null;
+
+            }
         }
     }
 }

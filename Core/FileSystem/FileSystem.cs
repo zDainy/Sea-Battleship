@@ -61,7 +61,9 @@ namespace Core
         /// <param name="input">Расстановка кораблей.</param>
         public static void SaveArrangement(string name, ShipArrangement input)
         {
-            if (!Directory.Exists("arr")) Directory.CreateDirectory("arr");
+            name += ".arr";
+            if(!Directory.Exists("arr"))
+            Directory.CreateDirectory("arr");
             bool[,] arrangement = new bool[10, 10];
             for (int i = 0; i < 10; i++)
             {
@@ -126,6 +128,7 @@ namespace Core
         /// <returns></returns>
         public static ShipArrangement LoadArrangement(string name)
         {
+            name += ".arr";
             if (!File.Exists("arr\\" + name)) throw new LoadingArrangementException();
             FileStream fileStream = new FileStream("arr\\" + name, FileMode.Open);
             byte[] bytes = new byte[68];
@@ -418,6 +421,7 @@ namespace Core
         /// <param name="input">Текущая игра.</param>
         public static void SaveGame(string name, Game input)
         {
+            name += ".sb";
             if (!Directory.Exists("games")) Directory.CreateDirectory("games");
             string s = saveGame(input);
             FileStream fileStream = new FileStream("games\\" + name, FileMode.Create);
@@ -514,6 +518,7 @@ namespace Core
         /// </summary>
         public static Game LoadGame(string name)
         {
+            name += ".sb";
             if (!File.Exists("games\\" + name)) throw new GameLoadingException();
             FileStream fileStream = new FileStream("games\\" + name, FileMode.Open);
             byte[] bytes = new byte[200];
@@ -526,22 +531,30 @@ namespace Core
 
         public static List<string> SavedArrangementList()
         {
-            List<string> res = new List<string>();
-            foreach (string s in Directory.EnumerateFiles("arr\\"))
+            if (Directory.Exists("arr"))
             {
-                if (s.EndsWith(".arr")) res.Add(s);
+                List<string> res = new List<string>();
+                foreach (string s in Directory.EnumerateFiles("arr\\"))
+                {
+                    if (s.EndsWith(".arr")) res.Add(s);
+                }
+                return res;
             }
-            return res;
+            return null;
         }
 
         public static List<string> SavedGameList()
         {
-            List<string> res = new List<string>();
-            foreach (string s in Directory.EnumerateFiles("games\\"))
+            if (Directory.Exists("games"))
             {
-                if (s.EndsWith(".sb")) res.Add(s);
+                List<string> res = new List<string>();
+                foreach (string s in Directory.EnumerateFiles("games\\"))
+                {
+                    if (s.EndsWith(".sb")) res.Add(s);
+                }
+                return res;
             }
-            return res;
+            return null;
         }
     }
 }

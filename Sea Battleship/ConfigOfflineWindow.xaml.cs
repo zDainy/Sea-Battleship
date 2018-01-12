@@ -24,8 +24,12 @@ namespace Sea_Battleship
         private BotLevels _bot = BotLevels.Easy;
         private GameSpeed _gameSpeed = GameSpeed.Fast;
         private PlacementState _placement = PlacementState.Manualy;
-        //public OnlineGame OnlineGame { get; set; }
-        private ShipArrangement _shipArrangement;
+
+        private ShipArrangement arrangementClient;
+        private GameConfig game;
+
+        public ShipArrangement ArrangementClient { get => arrangementClient; set => arrangementClient = value; }
+        public GameConfig Game { get => game; set => game = value; }
 
         public ConfigOfflineWindow()
         {
@@ -34,44 +38,42 @@ namespace Sea_Battleship
 
         private void ButtonNext_Click(object sender, RoutedEventArgs e)
         {
-            GameConfig game = new GameConfig(_bot, _gameSpeed);
+            Game = new GameConfig(_bot, _gameSpeed);
+            DialogResult = true;
             ShipArrangement arrangement;
-            ShipArrangement arrangementClient;
             switch (_placement)
             {
                 case PlacementState.Randomly:
                     arrangement = ShipArrangement.Random();
                     if (_bot == BotLevels.Easy || _bot == BotLevels.Medium)
-                        arrangementClient = ShipArrangement.Random();
+                        ArrangementClient = ShipArrangement.Random();
                     else
-                        arrangementClient = ShipArrangement.Strategy();
-                    new PlayWindow(new Game(arrangement, arrangementClient, game)).Show();
+                        ArrangementClient = ShipArrangement.Strategy();
+                    WindowConfig.game = new Game(arrangement, ArrangementClient, Game);
                     Close();
                     break;
                 case PlacementState.Strategily:
                     arrangement = ShipArrangement.Strategy();
                     if (_bot == BotLevels.Easy || _bot == BotLevels.Medium)
-                        arrangementClient = ShipArrangement.Random();
+                        ArrangementClient = ShipArrangement.Random();
                     else
-                        arrangementClient = ShipArrangement.Strategy();
-                    new PlayWindow(new Game(arrangement, arrangementClient, game)).Show();
+                        ArrangementClient = ShipArrangement.Strategy();
+                    WindowConfig.game = new Game(arrangement, ArrangementClient, Game);
                     Close();
                     break;
                 case PlacementState.Manualy:
                     if (_bot == BotLevels.Easy || _bot == BotLevels.Medium)
-                        arrangementClient = ShipArrangement.Random();
+                        ArrangementClient = ShipArrangement.Random();
                     else
-                        arrangementClient = ShipArrangement.Strategy();
-                    new PlacingWindow(arrangementClient, game).Show();
+                        ArrangementClient = ShipArrangement.Strategy();
                     Close();
                     break;
             }
-            //PlayWindow playWindow = new PlayWindow();
         }
 
         private void ButtonPrev_Click(object sender, RoutedEventArgs e)
         {
-
+            Close();
         }
 
         private void TimeLength_Click(object sender, RoutedEventArgs e)
@@ -121,10 +123,8 @@ namespace Sea_Battleship
                     break;
                 case "Случайный":
                     _placement = PlacementState.Randomly;
-                    _shipArrangement = ShipArrangement.Random();
                     break;
                 case "По стратегии":
-                    _shipArrangement = ShipArrangement.Strategy();
                     _placement = PlacementState.Strategily;
                     break;
             }

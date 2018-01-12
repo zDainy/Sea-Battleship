@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -22,6 +23,7 @@ namespace Sea_Battleship
         int _shipCount3 = 2;
         int _shipCount4 = 1;
         PlayField _playField;
+        private int isDeadCount = 0;
 
         public PlayField PlayField { get => _playField; set => _playField = value; }
         public int ShipCount3 { get => _shipCount3; set => _shipCount3 = value; }
@@ -32,7 +34,7 @@ namespace Sea_Battleship
         public List<Ship4> ShipList4 { get => _shipList4; set => _shipList4 = value; }
         public List<Ship1> ShipList1 { get => _shipList1; set => _shipList1 = value; }
         public List<Ship2> ShipList2 { get => _shipList2; set => _shipList2 = value; }
-       
+
 
         public Ships()
         {
@@ -86,6 +88,238 @@ namespace Sea_Battleship
             {
                 ship.Place(PlayField);
             }
+        }
+
+        public bool Check(int X, int Y, PlayPage z, bool isOnline)
+        {
+            bool isDead = false;
+            bool was = false;
+            foreach (AShip sh in ShipList1)
+            {
+                if (sh.isHere(X, Y, z, isOnline, out isDead))
+                {
+                    PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
+                    {
+                        Stretch = Stretch.Fill,
+                        Opacity = 100,
+                        Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                    });
+                    was = true;
+                    break;
+                }
+            }
+            if (!was)
+                foreach (AShip sh in ShipList2)
+                {
+                    if (sh.isHere(X, Y, z, isOnline, out isDead))
+                    {
+                        PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (!was)
+                foreach (AShip sh in ShipList3)
+                {
+                    if (sh.isHere(X, Y, z, isOnline, out isDead))
+                    {
+                        PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (!was)
+                foreach (AShip sh in ShipList4)
+                {
+                    if (sh.isHere(X, Y, z, isOnline, out isDead))
+                    {
+                        PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (isDead)
+                isDeadCount++;
+            return was;
+        }
+
+        public bool Check(Image im, PlayPage z, bool isOnline)
+        {
+            bool isDead = false;
+            bool was = false;
+            int X = Grid.GetColumn(im);
+            int Y = Grid.GetRow(im);
+            foreach (AShip sh in ShipList1)
+            {
+                if (sh.isHere(im, z, isOnline, out isDead))
+                {
+                    PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
+                    {
+                        Stretch = Stretch.Fill,
+                        Opacity = 100,
+                        Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                    });
+                    was = true;
+                    break;
+                }
+            }
+            if (!was)
+                foreach (AShip sh in ShipList2)
+                {
+                    if (sh.isHere(im, z, isOnline, out isDead))
+                    {
+                        PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (!was)
+                foreach (AShip sh in ShipList3)
+                {
+                    if (sh.isHere(im, z, isOnline, out isDead))
+                    {
+                        PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (!was)
+                foreach (AShip sh in ShipList4)
+                {
+                    if (sh.isHere(im, z, isOnline, out isDead))
+                    {
+                        PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (isDead)
+                isDeadCount++;
+            return was;
+        }
+
+        public void CheckEnemy(Point p, PlayPage z, bool isOnline)
+        {
+            bool isDead = false;
+            Image image = (Image)z.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
+            bool was = false;
+            foreach (AShip sh in z.MyField.Ships.ShipList1)
+            {
+                if (sh.isHere(image, z, isOnline, out isDead))
+                {
+                    PlayField.SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
+                    {
+                        Stretch = Stretch.Fill,
+                        Opacity = 100,
+                        Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                    });
+                    was = true;
+                    break;
+                }
+            }
+            if (!was)
+                foreach (AShip sh in z.MyField.Ships.ShipList2)
+                {
+                    if (sh.isHere(image, z, isOnline, out isDead))
+                    {
+                        PlayField.SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (!was)
+                foreach (AShip sh in z.MyField.Ships.ShipList3)
+                {
+                    if (sh.isHere(image, z, isOnline, out isDead))
+                    {
+                        PlayField.SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+            if (!was)
+                foreach (AShip sh in z.MyField.Ships.ShipList4)
+                {
+                    if (sh.isHere(image, z, isOnline, out isDead))
+                    {
+                        PlayField.SetCell((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
+                        {
+                            Stretch = Stretch.Fill,
+                            Opacity = 100,
+                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        });
+                        was = true;
+                        break;
+                    }
+                }
+
+        }
+
+        public bool IsAllDead()
+        {
+            int count = 0;
+            foreach(AShip sh in ShipList1)
+            {
+                if (sh.IsDead)
+                    count++;
+            }
+            foreach (AShip sh in ShipList2)
+            {
+                if (sh.IsDead)
+                    count++;
+            }
+            foreach (AShip sh in ShipList3)
+            {
+                if (sh.IsDead)
+                    count++;
+            }
+            foreach (AShip sh in ShipList4)
+            {
+                if (sh.IsDead)
+                    count++;
+            }
+            if (count == 10) return true;
+            return false;
         }
     }
 }

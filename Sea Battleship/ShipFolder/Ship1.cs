@@ -22,7 +22,6 @@ namespace Sea_Battleship.ShipFolder
                 Source = new BitmapImage(new Uri("/Resources/n4.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache },
 
             };
-            ShipInit();
         }
     }
 }
