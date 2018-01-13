@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sea_Battleship"
         mc:Ignorable="d"
-        Title="ConfigOnlineNotHostWindow" Height="204" Width="292.188" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+        Title="ConfigOnlineNotHostWindow" Height="269" Width="292.188" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <Grid>
-        <Label Content="Выберите способ расстановки" HorizontalAlignment="Left" Margin="55,10,0,0" VerticalAlignment="Top"/>
-        <RadioButton Click="Placement_Click" Content="Ручной" HorizontalAlignment="Left" Margin="55,41,0,0" VerticalAlignment="Top" GroupName="Placement" IsChecked="True"/>
-        <TextBox Name="KeyTextBox" HorizontalAlignment="Left" Height="23" Margin="10,162,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="264"/>
-        <RadioButton Click="Placement_Click" Content="Случайный" HorizontalAlignment="Left" Margin="55,61,0,0" VerticalAlignment="Top" GroupName="Placement"/>
-        <RadioButton Click="Placement_Click" Content="По стратегии" HorizontalAlignment="Left" Margin="55,81,0,0" VerticalAlignment="Top" GroupName="Placement"/>
-        <Grid HorizontalAlignment="Left" Height="20" Margin="10,106,0,0" VerticalAlignment="Top" Width="264">
+        <Label Content="Выберите способ расстановки" HorizontalAlignment="Left" Margin="52,79,0,0" VerticalAlignment="Top"/>
+        <RadioButton Click="Placement_Click" Content="Ручной" HorizontalAlignment="Left" Margin="58,107,0,0" VerticalAlignment="Top" GroupName="Placement" IsChecked="True"/>
+        <TextBox Name="KeyTextBox" HorizontalAlignment="Left" Height="23" Margin="13,228,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="264"/>
+        <RadioButton Click="Placement_Click" Content="Случайный" HorizontalAlignment="Left" Margin="58,127,0,0" VerticalAlignment="Top" GroupName="Placement"/>
+        <RadioButton Click="Placement_Click" Content="По стратегии" HorizontalAlignment="Left" Margin="58,147,0,0" VerticalAlignment="Top" GroupName="Placement"/>
+        <Grid HorizontalAlignment="Left" Height="20" Margin="13,172,0,0" VerticalAlignment="Top" Width="264">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -20,7 +20,10 @@
             <Button Name ="ButtonNext" Content="Далее" Margin="0,0,2,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Click="ButtonNext_Click"/>
             <Button Name ="ButtonPrev" Content="Назад" Margin="2,0,0,0" VerticalAlignment="Top" Grid.Column="1" HorizontalContentAlignment="Center" Click="ButtonPrev_Click"/>
         </Grid>
-        <Label Content="Введите ключ" HorizontalAlignment="Left" Margin="99,131,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.888,0.218"/>
+        <Label Content="Введите ключ" HorizontalAlignment="Left" Margin="102,197,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.888,0.218"/>
+        <Label Content="Выберите тип игры" HorizontalAlignment="Left" Margin="52,13,0,0" VerticalAlignment="Top"/>
+        <RadioButton Click="Type_Click" Content="Новая" HorizontalAlignment="Left" Margin="58,39,0,0" VerticalAlignment="Top" GroupName="Type" IsChecked="True"/>
+        <RadioButton Click="Type_Click" Content="Сохранённая" HorizontalAlignment="Left" Margin="58,59,0,0" VerticalAlignment="Top" GroupName="Type"/>
 
     </Grid>
 </Window>
