@@ -86,10 +86,12 @@ namespace Sea_Battleship.Engine
                 GameConfig = new GameConfig(BotLevels.Easy, startConfig.GameSpeed);
                 if (startConfig.GameStatus == Core.GameStatus.Loaded)
                 {
+                    Connect.Client.SendRequest(OpearationTypes.GameStatus, new Network.GameStatus(Core.GameStatus.Game));
                     GameConfig.GameStatus = Core.GameStatus.Loaded;
                     var rArr = Connect.Client.GetResponse();
-                    Network.ShipArrangement myArr = (Network.ShipArrangement)rArr.Item2;
+                    Network.ShipArrangement myArr = (Network.ShipArrangement) rArr.Item2;
                     EnemyArrangement = myArr.Arragment;
+                    Connect.Client.SendRequest(OpearationTypes.GameStatus, new Network.GameStatus(Core.GameStatus.Game));
                 }
                 else
                 {
@@ -110,7 +112,9 @@ namespace Sea_Battleship.Engine
             MyArrangement = game.ServerShipArrangement;
             EnemyArrangement = game.ClientShipArrangement;
             Connect.Server.SendResponse(OpearationTypes.StartConfig, new StartConfig(GameConfig.GameSpeed, Core.GameStatus.Loaded));
+            Connect.Server.GetRequest();
             Connect.Server.SendResponse(OpearationTypes.ShipArrangement, new Network.ShipArrangement(EnemyArrangement));
+            Connect.Server.GetRequest();
             Connect.Server.SendResponse(OpearationTypes.ShipArrangement, new Network.ShipArrangement(MyArrangement));
         }
 

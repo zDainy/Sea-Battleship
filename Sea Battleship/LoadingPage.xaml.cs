@@ -71,6 +71,7 @@ namespace Sea_Battleship
             if (game.GameConfig.IsOnline)
             {
                 OnlineGame onlineGame = new OnlineGame(PlayerRole.Server, PlacementState.Loaded);
+                onlineGame.Game = game;
                 WaitingWindow window = new WaitingWindow(onlineGame, null, PlacementState.Loaded);
                 window.Show();
                 window.Wait();

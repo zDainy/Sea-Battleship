@@ -27,10 +27,9 @@ namespace Sea_Battleship
         public void Wait()
         {
             while (!OnlineGame.Connect.Server.IsClientConnected) { }
-            if (Placement != PlacementState.Manualy)
+            if (Placement == PlacementState.Manualy)
             {
-                OnlineGame.CreateGame(Arrangment);
-                PlayPage window = new PlayPage(OnlineGame);
+                PlacingPage window = new PlacingPage(OnlineGame);
                 WindowConfig.MainPage.NavigationService.Navigate(window, UriKind.Relative);
             }
             else if (Placement == PlacementState.Loaded)
@@ -41,7 +40,8 @@ namespace Sea_Battleship
             }
             else
             {
-                PlacingPage window = new PlacingPage(OnlineGame);
+                OnlineGame.CreateGame(Arrangment);
+                PlayPage window = new PlayPage(OnlineGame);
                 WindowConfig.MainPage.NavigationService.Navigate(window, UriKind.Relative);
             }
             Close();
