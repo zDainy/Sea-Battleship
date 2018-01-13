@@ -137,13 +137,17 @@ namespace Network
         [DataMember]
         public GameSpeed GameSpeed { get; set; }
 
+        [DataMember]
+        public Core.GameStatus GameStatus { get; set; }
+
         /// <summary>
         /// Инициализирует объект начальных настроек
         /// </summary>
         /// <param name="speed"></param>
-        public StartConfig(GameSpeed speed)
+        public StartConfig(GameSpeed speed, Core.GameStatus gameStatus )
         {
             GameSpeed = speed;
+            GameStatus = gameStatus;
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using Core;
+using Sea_Battleship.Engine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,10 +68,20 @@ namespace Sea_Battleship
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Game game = FileSystem.LoadGame(((Button)sender).Content.ToString());
-            WindowConfig.game = game;
-            WindowConfig.IsLoaded = true;
-            PlayPage playPage = new PlayPage(WindowConfig.game);
-            NavigationService.Navigate(playPage, UriKind.Relative);
+            if (game.GameConfig.IsOnline)
+            {
+                OnlineGame onlineGame = new OnlineGame(PlayerRole.Server, PlacementState.Loaded);
+                WaitingWindow window = new WaitingWindow(onlineGame, null, PlacementState.Loaded);
+                window.Show();
+                window.Wait();
+            }
+            else
+            {
+                WindowConfig.game = game;
+                WindowConfig.IsLoaded = true;
+                PlayPage playPage = new PlayPage(WindowConfig.game);
+                NavigationService.Navigate(playPage, UriKind.Relative);
+            }
         }
     }
 }

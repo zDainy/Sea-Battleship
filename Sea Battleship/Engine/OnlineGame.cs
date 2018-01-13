@@ -31,6 +31,7 @@ namespace Sea_Battleship.Engine
         public void SetGameSettings(GameConfig config)
         {
             GameConfig = config;
+            GameConfig.Connection = ServerUtils.GetExternalIp() + ":27015";
         }
 
         private void InitGame(IPAddress ip)
@@ -71,7 +72,7 @@ namespace Sea_Battleship.Engine
             MyArrangement = arragment;
             if (PlayerRole == PlayerRole.Server)
             {
-                Connect.Server.SendResponse(OpearationTypes.StartConfig, new StartConfig(GameConfig.GameSpeed));
+                Connect.Server.SendResponse(OpearationTypes.StartConfig, new StartConfig(GameConfig.GameSpeed, Core.GameStatus.Game));
                 var res = Connect.Server.GetRequest();
                 Network.ShipArrangement clArrangement = (Network.ShipArrangement)res.Item2;
                 Connect.Server.SendResponse(OpearationTypes.ShipArrangement, new Network.ShipArrangement(arragment));
@@ -83,12 +84,34 @@ namespace Sea_Battleship.Engine
                 var res = Connect.Client.GetResponse();
                 StartConfig startConfig = (StartConfig)res.Item2;
                 GameConfig = new GameConfig(BotLevels.Easy, startConfig.GameSpeed);
-                Connect.Client.SendRequest(OpearationTypes.ShipArrangement, new Network.ShipArrangement(arragment));
+                if (startConfig.GameStatus == Core.GameStatus.Loaded)
+                {
+                    GameConfig.GameStatus = Core.GameStatus.Loaded;
+                    var rArr = Connect.Client.GetResponse();
+                    Network.ShipArrangement myArr = (Network.ShipArrangement)rArr.Item2;
+                    EnemyArrangement = myArr.Arragment;
+                }
+                else
+                {
+                    Connect.Client.SendRequest(OpearationTypes.ShipArrangement, new Network.ShipArrangement(arragment));
+                }
                 var resArr = Connect.Client.GetResponse();
                 Network.ShipArrangement enemyArrangementArrangement = (Network.ShipArrangement)resArr.Item2;
                 EnemyArrangement = enemyArrangementArrangement.Arragment;
                 IsMyTurn = false;
             }
+        }
+
+        public void LoadGame(Game game)
+        {
+            Game = game;
+            GameConfig = game.GameConfig;
+            GameConfig.GameStatus = Core.GameStatus.Loaded;
+            MyArrangement = game.ServerShipArrangement;
+            EnemyArrangement = game.ClientShipArrangement;
+            Connect.Server.SendResponse(OpearationTypes.StartConfig, new StartConfig(GameConfig.GameSpeed, Core.GameStatus.Loaded));
+            Connect.Server.SendResponse(OpearationTypes.ShipArrangement, new Network.ShipArrangement(EnemyArrangement));
+            Connect.Server.SendResponse(OpearationTypes.ShipArrangement, new Network.ShipArrangement(MyArrangement));
         }
 
         public CellStatе Turn(int x, int y)

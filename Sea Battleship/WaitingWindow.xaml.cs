@@ -33,6 +33,12 @@ namespace Sea_Battleship
                 PlayPage window = new PlayPage(OnlineGame);
                 WindowConfig.MainPage.NavigationService.Navigate(window, UriKind.Relative);
             }
+            else if (Placement == PlacementState.Loaded)
+            {
+                OnlineGame.LoadGame(OnlineGame.Game);
+                PlayPage window = new PlayPage(OnlineGame);
+                WindowConfig.MainPage.NavigationService.Navigate(window, UriKind.Relative);
+            }
             else
             {
                 PlacingPage window = new PlacingPage(OnlineGame);

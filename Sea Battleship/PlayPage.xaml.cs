@@ -127,7 +127,8 @@ namespace Sea_Battleship
         {
             if (WindowConfig.GameState == WindowConfig.State.Online)
             {
-
+                // Пауза
+                new SaveGameWindow().ShowDialog();
             }
             else
             {
