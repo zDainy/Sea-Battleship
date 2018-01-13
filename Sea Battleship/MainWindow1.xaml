@@ -8,8 +8,7 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Sea_Battleship.MainWindow1"
         mc:Ignorable="d"
         Title="Морской бой" Height="500" Width="900" MinWidth="640" MinHeight="480" ResizeMode="NoResize">
-
-    <Frame Name="MainFrame" NavigationUIVisibility="Hidden"></Frame>
+    <Frame Name="MainFrame" NavigationUIVisibility="Hidden" Content="/Resources/hello"></Frame>
    
 
 </Window>

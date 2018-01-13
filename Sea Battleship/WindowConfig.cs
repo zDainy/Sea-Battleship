@@ -10,9 +10,23 @@ namespace Sea_Battleship
 {
     static class WindowConfig
     {
+        public static MediaPlayer Player = new MediaPlayer();
+       // public static System.Media.SoundPlayer Player = new System.Media.SoundPlayer() {Stream=Properties.Resources.pirat};
+        public static System.Media.SoundPlayer ShotSound = new System.Media.SoundPlayer() { Stream=Properties.Resources.krik};
+        public static string GifPath = "/Resources/drawn2.gif";
         public static MainPage MainPage;
         public static bool IsLoaded = false;
         public static PlayPage PlayPageCon;
+
+        public static void PlaySound()
+        {
+            //MediaPlayer lala = new MediaPlayer();
+            //string str = Properties.Resources.krik.ToString();
+            //Uri uri = new Uri(@"C:\Users\Пользователь\Desktop\Наиболее морской бой\Sea-Battleship\Sea Battleship\Resources\krik.wav", System.UriKind.Relative);
+            //lala.Open(uri);
+            //lala.Play();
+            ShotSound.Play();
+        }
 
         public enum State
         {
@@ -40,6 +54,7 @@ namespace Sea_Battleship
                     {
                         CreateOptions = BitmapCreateOptions.IgnoreImageCache
                     };
+                Player.Stop();
                 Audio = false;
             }
             else
@@ -49,6 +64,7 @@ namespace Sea_Battleship
                     {
                         CreateOptions = BitmapCreateOptions.IgnoreImageCache
                     };
+                Player.Play();
                 Audio = true;
             }
         }
