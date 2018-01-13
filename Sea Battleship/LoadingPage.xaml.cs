@@ -73,6 +73,7 @@ namespace Sea_Battleship
                 OnlineGame onlineGame = new OnlineGame(PlayerRole.Server, PlacementState.Loaded);
                 onlineGame.Game = game;
                 WaitingWindow window = new WaitingWindow(onlineGame, null, PlacementState.Loaded);
+                window.SetNavigationService(NavigationService);
                 window.Show();
                 window.Wait();
             }

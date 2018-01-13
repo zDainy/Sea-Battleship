@@ -3,6 +3,7 @@ using Common;
 using Core;
 using Sea_Battleship.Engine;
 using System;
+using System.Windows.Navigation;
 
 namespace Sea_Battleship
 {
@@ -14,6 +15,7 @@ namespace Sea_Battleship
         public OnlineGame OnlineGame { get; set; }
         public ShipArrangement Arrangment { get; set; }
         public PlacementState Placement { get; set; }
+        private NavigationService _nService;
 
         public WaitingWindow(OnlineGame onlineGame, ShipArrangement arrangment, PlacementState placement)
         {
@@ -21,7 +23,11 @@ namespace Sea_Battleship
             OnlineGame = onlineGame;
             Arrangment = arrangment;
             Placement = placement;
-           //Wait();
+        }
+
+        public void SetNavigationService(NavigationService service)
+        {
+            _nService = service;
         }
 
         public void Wait()
@@ -36,7 +42,7 @@ namespace Sea_Battleship
             {
                 OnlineGame.LoadGame(OnlineGame.Game);
                 PlayPage window = new PlayPage(OnlineGame);
-                WindowConfig.MainPage.NavigationService.Navigate(window, UriKind.Relative);
+                _nService.Navigate(window, UriKind.Relative);
             }
             else
             {

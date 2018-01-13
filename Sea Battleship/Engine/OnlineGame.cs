@@ -90,7 +90,7 @@ namespace Sea_Battleship.Engine
                     GameConfig.GameStatus = Core.GameStatus.Loaded;
                     var rArr = Connect.Client.GetResponse();
                     Network.ShipArrangement myArr = (Network.ShipArrangement) rArr.Item2;
-                    EnemyArrangement = myArr.Arragment;
+                    MyArrangement = myArr.Arragment;
                     Connect.Client.SendRequest(OpearationTypes.GameStatus, new Network.GameStatus(Core.GameStatus.Game));
                 }
                 else
@@ -116,6 +116,7 @@ namespace Sea_Battleship.Engine
             Connect.Server.SendResponse(OpearationTypes.ShipArrangement, new Network.ShipArrangement(EnemyArrangement));
             Connect.Server.GetRequest();
             Connect.Server.SendResponse(OpearationTypes.ShipArrangement, new Network.ShipArrangement(MyArrangement));
+            IsMyTurn = true;
         }
 
         public CellStatе Turn(int x, int y)
