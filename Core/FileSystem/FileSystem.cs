@@ -464,7 +464,8 @@ namespace Core
             }
             GameConfig gc;
             PlayerRole to;
-            if (!CryptSystem.ByteToBool(result[5, 6])[0])
+            bool[] config = CryptSystem.ByteToBool(result[5, 6]);
+            if (!config[0])
             {
                 BotLevels bl = BotLevels.Easy;
                 GameSpeed gs;
@@ -480,7 +481,6 @@ namespace Core
                         bl = BotLevels.Hard;
                         break;
                 }
-                bool[] config = CryptSystem.ByteToBool(result[5, 6]);
                 gs = config[3] ? config[4] ? GameSpeed.Turtle : GameSpeed.Slow : config[4] ? GameSpeed.Medium : GameSpeed.Fast;
                 to = config[1] ? PlayerRole.Client : PlayerRole.Server;
                 gc = new GameConfig(bl, gs, GameStatus.Pause);
@@ -495,11 +495,11 @@ namespace Core
                 }
                 int port = BitConverter.ToInt32(new byte[4] { result[5, 4], result[5, 5], 0, 0 }, 0);
                 string connection = ip[0].ToString() + '.' + ip[1].ToString() + '.' + ip[2].ToString() + '.' + ip[3].ToString() + ":" + port.ToString();
-                bool[] config = CryptSystem.ByteToBool(result[5, 6]);
                 gs = config[3] ? config[4] ? GameSpeed.Turtle : GameSpeed.Slow : config[4] ? GameSpeed.Medium : GameSpeed.Fast;
                 gc = new GameConfig(PlayerRole.Server, connection, gs, GameStatus.Pause);
                 to = config[1] ? PlayerRole.Client : PlayerRole.Server;
             }
+            gc.IsOnline = config[0];
             byte[,] map = new byte[5, 10];
             for (int i = 0; i < 10; i++)
             {
