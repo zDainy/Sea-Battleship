@@ -193,6 +193,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -260,9 +261,31 @@
     <Resource Include="Resources\shipCrushed.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Spravka.html" />
     <Resource Include="Resources\Spravka.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Spravka.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\hello.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pirat.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\drawn.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\udar.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\orig.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\krik.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\drawn2.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
