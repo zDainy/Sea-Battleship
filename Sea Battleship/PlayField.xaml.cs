@@ -90,7 +90,8 @@ namespace Sea_Battleship
                 }
                 if (WindowConfig.IsLoaded)
                 {
-                    gg.TurnOwner = PlayerRole.Server;
+                    if (!(gg is null))
+                        gg.TurnOwner = PlayerRole.Server;
                     PlaceFromMassive(copyarr, Ships, false, true);
                 }
                 else

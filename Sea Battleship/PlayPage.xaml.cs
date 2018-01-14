@@ -31,6 +31,7 @@ namespace Sea_Battleship
         {
             WindowConfig.PlayPageCon = this;
             WindowConfig.OnlineGame = onlineGame;
+            WindowConfig.IsLoaded = onlineGame.GameConfig.GameStatus == GameStatus.Loaded;
             OnlineGame = onlineGame;
             WindowConfig.GameState = WindowConfig.State.Online;
             InitializeComponent();
