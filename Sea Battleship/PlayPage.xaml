@@ -26,7 +26,7 @@
                 </MenuItem>
                 <MenuItem  Header="Правила" Width="130" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
                 <MenuItem Header="Об авторах" Width="130" />
-                <MenuItem Header="Пауза" Width="130" />
+                <MenuItem Header="Пауза" Name="PauseItem"  Width="130" Click="Pause_Click" />
                 <MenuItem Header="Выход" Name="ExitItem" Click="ExitItem_Click"/>
             </Menu>
             <Image Grid.Column="5" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"/>

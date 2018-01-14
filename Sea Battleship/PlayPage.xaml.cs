@@ -15,7 +15,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Network;
 using WpfAnimatedGif;
+using GameStatus = Core.GameStatus;
 
 namespace Sea_Battleship
 {
@@ -27,6 +29,9 @@ namespace Sea_Battleship
         public DispatcherTimer Timer;
         public OnlineGame OnlineGame { get; set; }
         public Game Game { get; set; }
+        public bool IsPaused { get; set; }
+        public int BeforePauseInt { get; set; }
+        public TimeSpan BeforeTimeSpan { get; set; }
 
         public PlayPage(OnlineGame onlineGame)
         {
@@ -37,6 +42,7 @@ namespace Sea_Battleship
             WindowConfig.GameState = WindowConfig.State.Online;
             InitializeComponent();
             WindowConfig.SetStartColor();
+            IsPaused = false;
 
             //ImageBehavior.SetAnimatedSource(TimerImage, new BitmapImage(new Uri("/Resources/timer.gif", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache });
             //ImageBehavior.SetAnimateInDesignMode(TimerImage, true);
@@ -71,6 +77,8 @@ namespace Sea_Battleship
         private void Tick(object sender, object e)
         {
             if (tickCount == 24)
+                if (IsPaused)
+                    Unpause();
                 tickCount = 0;
             var controller = ImageBehavior.GetAnimationController(TimerImage);
             if (controller != null)
@@ -98,7 +106,8 @@ namespace Sea_Battleship
             }
             else
             {
-                pr1.Value++;
+                if (!IsPaused)
+                    pr1.Value++;
             }
         }
 
@@ -182,6 +191,64 @@ namespace Sea_Battleship
         private void SaveGameItem_Click(object sender, RoutedEventArgs e)
         {
             Save();
+        }
+
+        private void Pause_Click(object sender, RoutedEventArgs e)
+        {
+            Pause();
+        }
+
+        public void Pause()
+        {
+            if (!IsPaused)
+            {
+                IsPaused = true;
+                OnlineGame.Connect.Server.SendResponse(OpearationTypes.GameStatus,
+                    new Network.GameStatus(GameStatus.Pause));
+                PauseItem.Header = "Снять паузу";
+                SetPause();
+            }
+            else
+            {
+                IsPaused = false;
+                OnlineGame.Connect.Server.SendResponse(OpearationTypes.GameStatus,
+                    new Network.GameStatus(GameStatus.Game));
+            }
+        }
+
+        public void SetPause()
+        {
+            BeforePauseInt = tickCount;
+            timer.Stop();
+            tickCount = 0;
+            BeforeTimeSpan = timer.Interval;
+            timer.Interval = new TimeSpan(0, 0, 0, 12, 500);
+            timer.Start();
+            pr1.Visibility = Visibility.Hidden;
+            MyTurnLabel.Background =
+                new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFED8337"));
+            MyTurnLabel.Content = "Пауза";
+        }
+
+        public void Unpause()
+        {
+            timer.Stop();
+            tickCount = BeforePauseInt;
+            timer.Interval = BeforeTimeSpan;
+            timer.Start();
+            pr1.Visibility = Visibility.Hidden;
+            if (OnlineGame.PlayerRole == PlayerRole.Server)
+            {
+                WindowConfig.PlayPageCon.MyTurnLabel.Background =
+                    new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
+                WindowConfig.PlayPageCon.MyTurnLabel.Content = "Ваш ход";
+            }
+            else
+            {
+                WindowConfig.PlayPageCon.MyTurnLabel.Background =
+                    new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E"));
+                WindowConfig.PlayPageCon.MyTurnLabel.Content = "Чужой ход";
+            }
         }
 
         private void Save()
