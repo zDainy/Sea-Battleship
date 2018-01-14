@@ -143,6 +143,7 @@ namespace Sea_Battleship
             WindowConfig.GameState = WindowConfig.State.Offline;
             InitializeComponent();
             Game = game;
+            PauseItem.IsEnabled = false;
             MyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
             InitTimer();
             Timer.Start();
@@ -180,15 +181,41 @@ namespace Sea_Battleship
             {
                 case MessageBoxResult.Yes:
                     Save();
-                    NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
+                    Exit();
                     break;
                 case MessageBoxResult.No:
                     //наверно уведомить второго игрока
-                    NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
+                    Exit();
                     break;
                 case MessageBoxResult.Cancel:
                     break;
             }
+        }
+
+        public void Exit()
+        {
+            if (!(OnlineGame is null))
+            {
+                if (OnlineGame.PlayerRole == PlayerRole.Server)
+                {
+                    OnlineGame.Connect.Server.Stop();
+                }
+                else
+                {
+                    OnlineGame.Connect.Client.Close();
+                }
+                tickCount = 0;
+                pr1.Value = 0;
+                timer.Stop();
+                Timer.Stop();
+                OnlineGame = null;
+            }
+            WindowConfig.OnlineGame = null;
+            WindowConfig.game = null;
+            WindowConfig.IsLoaded = false;
+
+
+            NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
         }
 
         private void SaveGameItem_Click(object sender, RoutedEventArgs e)

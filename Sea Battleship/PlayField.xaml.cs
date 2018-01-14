@@ -297,6 +297,10 @@ namespace Sea_Battleship
             {
                 MessageBox.Show("Соединение разорвано", "Противник отключился", MessageBoxButton.OK, MessageBoxImage.Warning);
                 LogService.Trace("Противник отключился");
+                WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
+                {
+                    WindowConfig.PlayPageCon.Exit();
+                });
             }
             catch (Exception e)
             {
@@ -347,6 +351,10 @@ namespace Sea_Battleship
             {
                 MessageBox.Show("Соединение разорвано", "Противник отключился", MessageBoxButton.OK, MessageBoxImage.Warning);
                 LogService.Trace("Противник отключился");
+                WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
+                {
+                    WindowConfig.PlayPageCon.Exit();
+                });
             }
             catch (Exception e)
             {
