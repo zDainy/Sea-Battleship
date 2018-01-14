@@ -29,8 +29,12 @@ namespace Sea_Battleship
         public MainWindow1()
         {
             InitializeComponent();
-          //  MainFrame.Content = new PlacingPage(null);
-             MainFrame.Content = new MainPage();
+            //  MainFrame.Content = new PlacingPage(null);
+            MainFrame.Content = new MainPage();
+
+           // MainFrame.Content = (new Uri(Properties.Resources.hello));
+        //    wb.Navigate(new Uri(Properties.Resources.hello));
+
             LogService.Start();
             LogService.Trace("==============================================");
         }

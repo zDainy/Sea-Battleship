@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Sea_Battleship"
+              xmlns:gif="http://wpfanimatedgif.codeplex.com"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
       Title="MainPage">
@@ -34,7 +35,8 @@
             </Menu>
             <Image Grid.Column="4" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"/>
         </Grid>
-        
-        
+        <Image MouseDown="Image_MouseDown" HorizontalAlignment="Left" Height="63" Margin="106,123,0,0" VerticalAlignment="Top" Width="67" Source="Resources/2.png"/>
+
+
     </Grid>
 </Page>

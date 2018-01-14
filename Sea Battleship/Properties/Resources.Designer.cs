@@ -61,12 +61,59 @@ namespace Sea_Battleship.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream krik {
+            get {
+                return ResourceManager.GetStream("krik", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap no_audio {
             get {
                 object obj = ResourceManager.GetObject("no_audio", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream pirat {
+            get {
+                return ResourceManager.GetStream("pirat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на &lt;html xmlns:v=&quot;urn:schemas-microsoft-com:vml&quot;
+        ///xmlns:o=&quot;urn:schemas-microsoft-com:office:office&quot;
+        ///xmlns:w=&quot;urn:schemas-microsoft-com:office:word&quot;
+        ///xmlns:m=&quot;http://schemas.microsoft.com/office/2004/12/omml&quot;
+        ///xmlns=&quot;http://www.w3.org/TR/REC-html40&quot;&gt;
+        ///
+        ///&lt;head&gt;
+        ///&lt;meta http-equiv=Content-Type content=&quot;text/html; charset=windows-1251&quot;&gt;
+        ///&lt;meta name=ProgId content=Word.Document&gt;
+        ///&lt;meta name=Generator content=&quot;Microsoft Word 15&quot;&gt;
+        ///&lt;meta name=Originator content=&quot;Microsoft Word 15&quot;&gt;
+        ///&lt;link rel=File-List href=&quot;Spravka. [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string Spravka {
+            get {
+                return ResourceManager.GetString("Spravka", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream udar {
+            get {
+                return ResourceManager.GetStream("udar", resourceCulture);
             }
         }
     }

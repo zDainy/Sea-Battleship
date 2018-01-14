@@ -4,7 +4,7 @@ namespace Core
 {
     public class GameConfig
     {
-        public bool IsOnline { get; }
+        public bool IsOnline { get; set; }
         public BotLevels BotLvl { get; }
         public GameStatus GameStatus { get; set; }
         public GameSpeed GameSpeed { get; set; }
