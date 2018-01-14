@@ -5,16 +5,19 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Sea_Battleship.Engine;
 using System.Windows.Media;
+using System.Windows.Navigation;
 
 namespace Sea_Battleship
 {
     static class WindowConfig
     {
+        public static NavigationService NavigationService;
         public static MediaPlayer Player = new MediaPlayer();
        // public static System.Media.SoundPlayer Player = new System.Media.SoundPlayer() {Stream=Properties.Resources.pirat};
         public static System.Media.SoundPlayer ShotSound = new System.Media.SoundPlayer() { Stream=Properties.Resources.krik};
         public static string GifPath = "/Resources/drawn2.gif";
         public static MainPage MainPage;
+        public static PlacingPage PlacingPage;
         public static bool IsLoaded = false;
         public static PlayPage PlayPageCon;
 

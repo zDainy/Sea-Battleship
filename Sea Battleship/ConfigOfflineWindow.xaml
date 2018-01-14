@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sea_Battleship"
         mc:Ignorable="d"
-        Title="ConfigOfflineWindow" Height="354.667" Width="300" WindowStartupLocation="CenterOwner" WindowStyle="None" ResizeMode="NoResize">
+        Title="ConfigOfflineWindow" Height="354.667" Width="300" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="False">
     <Grid Margin="0,0,0,2">
         <RadioButton Click="TimeLength_Click" Content="30 секунд" Margin="10,129,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Top" GroupName="TimeLength" IsChecked="True"/>
         <Label Content="Выберите длительность хода" HorizontalAlignment="Left" Margin="10,95,0,0" VerticalAlignment="Top"/>

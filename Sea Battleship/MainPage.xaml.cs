@@ -29,6 +29,8 @@ namespace Sea_Battleship
             WindowConfig.Player.Open(new Uri(Environment.CurrentDirectory+@"\pirat.wav"));
             WindowConfig.Player.Volume = 50;
             WindowConfig.Player.Play();
+            WindowConfig.game = null;
+            WindowConfig.OnlineGame = null;
         }
         private void audioChanged(object sender, RoutedEventArgs e)//
         {
@@ -42,6 +44,7 @@ namespace Sea_Battleship
 
         private void NewGame_MouseLeftButtonDown(object sender, RoutedEventArgs e)//
         {
+            WindowConfig.NavigationService = NavigationService;
             WindowConfig.GameState = WindowConfig.State.Offline;
             ConfigOfflineWindow window = new ConfigOfflineWindow();
             if (window.ShowDialog() == true)
