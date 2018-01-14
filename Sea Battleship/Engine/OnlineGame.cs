@@ -3,6 +3,7 @@ using System.Threading;
 using System.Windows;
 using Core;
 using Network;
+using GameStatus = Core.GameStatus;
 using ShipArrangement = Core.ShipArrangement;
 
 namespace Sea_Battleship.Engine
@@ -140,6 +141,18 @@ namespace Sea_Battleship.Engine
             {
                 var shot = (Shot)res.Item2;
                 shotRes = shot.TargetPosition;
+            }
+            else if (res.Item1 == OpearationTypes.GameStatus)
+            {
+                Network.GameStatus gs = (Network.GameStatus) res.Item2;
+                if (gs.Status == GameStatus.Pause)
+                {
+                    shotRes = new Vector(-2, -2);
+                }
+                else
+                {
+                    shotRes = new Vector(-3, -3);
+                }
             }
             return shotRes;
         }

@@ -218,6 +218,7 @@ namespace Sea_Battleship
             var fg = onMyField ? _pw.MyField.FieldGrid : _pw.EnemyField.FieldGrid;
             //string uri = state == CellStatе.WoundedShip ? "/Resources/shipCrushed.png" : "/Resources/waterCrushed.png";
             if (onMyField)
+
             {
                 fg.Dispatcher.Invoke(() =>
                 {
@@ -311,6 +312,16 @@ namespace Sea_Battleship
                         {
                             needSwitch = false;
                             break;
+                        }
+                        if ((int)comeVector.X == -2 && (int)comeVector.Y == -2)
+                        {
+                            WindowConfig.PlayPageCon.IsPaused = true;
+                            WindowConfig.PlayPageCon.SetPause();
+                            shotRes = CellStatе.WoundedShip;
+                            _onlineGame.WaitEnemyTurn();
+                            WindowConfig.PlayPageCon.Unpause();
+                            WindowConfig.PlayPageCon.IsPaused = false;
+                            continue;
                         }
                         shotRes = _onlineGame.CheckShot(comeVector);
                         SetShotOnField((int)comeVector.X, (int)comeVector.Y, shotRes, true);
@@ -498,7 +509,7 @@ namespace Sea_Battleship
                 PlaceShips();
             foreach(Point p in hitShipList)
             {
-                _pw = (PlayPage)((Grid)Parent).Parent;
+                _pw = WindowConfig.PlayPageCon;
                 if (isOnMyField)
                     WindowConfig.PlayPageCon.MyField.Ships.CheckEnemy(p, WindowConfig.PlayPageCon, true);
                 else
