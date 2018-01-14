@@ -29,7 +29,7 @@ namespace Sea_Battleship
         private OnlineGame _onlineGame;
         private bool _isOnlineGame;
 
-
+        bool isOnMyField = false;
         public PlayField()
         {
             InitializeComponent();
@@ -92,11 +92,11 @@ namespace Sea_Battleship
                 {
                     gg.TurnOwner = PlayerRole.Server;
                     PlaceFromMassive(copyarr, Ships, false, true);
+                    isOnMyField = true;
                 }
                 else
                 {
                     PlaceFromMassive(copyarr, Ships, false);
-
                 }
             }
             else
@@ -346,7 +346,7 @@ namespace Sea_Battleship
                 do
                 {
                     result = z.Game.MakeAMove(X, Y); //ход первого игрока
-               
+
                     switch (result)
                     {
                         case MoveResult.Hit:
@@ -494,6 +494,11 @@ namespace Sea_Battleship
                 PlaceShips();
             foreach(Point p in hitShipList)
             {
+                if(isOnMyField)
+                    WindowConfig.PlayPageCon.MyField.Ships.CheckEnemy(p, WindowConfig.PlayPageCon, true);
+                else
+                ships.Check((int)p.X, (int)p.Y, _pw, true);
+                
                 Image img = new Image
                 {
                     Stretch = Stretch.Fill,
