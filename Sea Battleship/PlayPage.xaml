@@ -39,6 +39,6 @@
             <Label Name="MyTurnLabel" Content="Ваш ход" Background="#FF00287E" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1"/>
         </Grid>
         <ProgressBar Name="pr1" Height="30" Margin="0" VerticalAlignment="Bottom"/>
-
+        <Image gif:ImageBehavior.AnimateInDesignMode="False" gif:ImageBehavior.RepeatBehavior="20" gif:ImageBehavior.AutoStart="False" gif:ImageBehavior.AnimatedSource="/Resources/timer.gif"  Name="TimerImage"  Height="100" Margin="0,35,0,0" VerticalAlignment="Top" Width="100" HorizontalAlignment="Center"/>
     </Grid>
 </Page>

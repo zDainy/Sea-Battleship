@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using WpfAnimatedGif;
 
 namespace Sea_Battleship
@@ -99,17 +100,8 @@ namespace Sea_Battleship
 
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var image = new BitmapImage();
-            image.BeginInit();
-            image.UriSource = (new Uri(WindowConfig.GifPath, UriKind.Relative));
-            image.EndInit();
-            Image image1 = (Image)sender;
-            ImageBehavior.SetAnimatedSource(image1, image);
-            ImageBehavior.SetRepeatBehavior(image1, new System.Windows.Media.Animation.RepeatBehavior(1));
-            ImageBehavior.SetAnimateInDesignMode(image1, true);
-            var controller =  ImageBehavior.GetAnimationController(image1);
-            WindowConfig.ShotSound.Play();
-            controller.Play();
-        } 
+
+
+        }
     }
 }
