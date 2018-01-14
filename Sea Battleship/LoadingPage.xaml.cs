@@ -72,6 +72,7 @@ namespace Sea_Battleship
             {
                 OnlineGame onlineGame = new OnlineGame(PlayerRole.Server, PlacementState.Loaded);
                 onlineGame.Game = game;
+                WindowConfig.IsLoaded = true;
                 WaitingWindow window = new WaitingWindow(onlineGame, null, PlacementState.Loaded);
                 window.SetNavigationService(NavigationService);
                 window.Show();
@@ -80,10 +81,10 @@ namespace Sea_Battleship
             else
             {
                 WindowConfig.game = game;
+                WindowConfig.IsLoaded = true;
                 PlayPage playPage = new PlayPage(WindowConfig.game);
                 NavigationService.Navigate(playPage, UriKind.Relative);
             }
-            WindowConfig.IsLoaded = true;
         }
     }
 }
