@@ -153,6 +153,11 @@ namespace Sea_Battleship
                 {
                     var controller = ImageBehavior.GetAnimationController(WindowConfig.PlayPageCon.TimerImage);
                     controller.GotoFrame(0);
+                    if (_onlineGame.PlayerRole == PlayerRole.Server)
+                    {
+                        WindowConfig.PlayPageCon.PauseItem.IsEnabled = false;
+                        WindowConfig.PlayPageCon.SaveGameItem.IsEnabled = false;
+                    }
                     WindowConfig.PlayPageCon.tickCount = 0;
                     WindowConfig.PlayPageCon.pr1.Value = 0;
                     WindowConfig.PlayPageCon.pr1.Visibility = Visibility.Hidden;
@@ -169,6 +174,11 @@ namespace Sea_Battleship
                 {
                     var controller = ImageBehavior.GetAnimationController(WindowConfig.PlayPageCon.TimerImage);
                     controller.GotoFrame(0);
+                    if (_onlineGame.PlayerRole == PlayerRole.Server)
+                    {
+                        WindowConfig.PlayPageCon.PauseItem.IsEnabled = true;
+                        WindowConfig.PlayPageCon.SaveGameItem.IsEnabled = true;
+                    }
                     WindowConfig.PlayPageCon.tickCount = 0;
                     WindowConfig.PlayPageCon.pr1.Value = 0;
                     WindowConfig.PlayPageCon.pr1.Visibility = Visibility.Visible;

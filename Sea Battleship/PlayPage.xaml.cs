@@ -39,6 +39,8 @@ namespace Sea_Battleship
             WindowConfig.OnlineGame = onlineGame;
             WindowConfig.IsLoaded = onlineGame.GameConfig.GameStatus == GameStatus.Loaded;
             OnlineGame = onlineGame;
+            PauseItem.IsEnabled = OnlineGame.PlayerRole == PlayerRole.Server;
+            SaveGameItem.IsEnabled = OnlineGame.PlayerRole == PlayerRole.Server;
             WindowConfig.GameState = WindowConfig.State.Online;
             InitializeComponent();
             WindowConfig.SetStartColor();
@@ -237,12 +239,13 @@ namespace Sea_Battleship
             tickCount = BeforePauseInt;
             timer.Interval = BeforeTimeSpan;
             timer.Start();
-            pr1.Visibility = Visibility.Hidden;
             if (OnlineGame.PlayerRole == PlayerRole.Server)
             {
                 WindowConfig.PlayPageCon.MyTurnLabel.Background =
                     new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
                 WindowConfig.PlayPageCon.MyTurnLabel.Content = "Ваш ход";
+                PauseItem.Header = "Пауза";
+                pr1.Visibility = Visibility.Visible;
             }
             else
             {
