@@ -240,6 +240,9 @@ namespace Sea_Battleship
                     {
                         case CellStatе.WoundedShip:
                             ships.Check(x, y, _pw, true);
+                            PlayPage z = (PlayPage)((Grid)Parent).Parent;
+                            var image = (Image)z.EnemyField.FieldGrid.Children[10 * y + x];
+                            ShipHitted(image);
                             if (_pw.MyField.Ships.IsAllDead())
                                 EndOfGame(true);
                             break;

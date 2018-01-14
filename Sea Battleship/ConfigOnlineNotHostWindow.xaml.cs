@@ -96,6 +96,7 @@ namespace Sea_Battleship
                         if ((el is RadioButton)&& (((RadioButton)el).GroupName   == "Placement"))
                         {
                             ((RadioButton)el).IsEnabled = false;
+                            _placement = PlacementState.Randomly;
                         }
                     }
                     break;
