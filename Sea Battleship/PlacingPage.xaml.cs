@@ -51,15 +51,17 @@ namespace Sea_Battleship
 
         public PlacingPage(ShipArrangement arrangementClient, GameConfig game)
         {
-            _arrangementClient = arrangementClient;
-            _gameConfig = game;
+            WindowConfig.PlacingPage = this;
+            ArrangementClient = arrangementClient;
+            GameConfig = game;
             InitializeComponent();
             Init();
         }
 
         public PlacingPage(OnlineGame game)
         {
-            _onlineGame = game;
+            WindowConfig.PlacingPage = this;
+            OnlineGame = game;
             InitializeComponent();
             Init();
         }
@@ -324,6 +326,10 @@ namespace Sea_Battleship
 
         bool Yes = false;
 
+        public OnlineGame OnlineGame { get => _onlineGame; set => _onlineGame = value; }
+        public GameConfig GameConfig { get => _gameConfig; set => _gameConfig = value; }
+        public ShipArrangement ArrangementClient { get => _arrangementClient; set => _arrangementClient = value; }
+
         private void ship_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Yes = !Yes;
@@ -434,17 +440,17 @@ namespace Sea_Battleship
             ShipArrangement arr;
             try
             {
-                if (!(_onlineGame is null))
+                if (!(OnlineGame is null))
                 {
-                    _onlineGame.CreateGame(CreateShipArrangement());
+                    OnlineGame.CreateGame(CreateShipArrangement());
                    // new PlayWindow(_onlineGame) { Owner = Owner }.Show();
-                    PlayPage page = new PlayPage(_onlineGame);
+                    PlayPage page = new PlayPage(OnlineGame);
                     NavigationService.Navigate(page, UriKind.Relative);
                 }
                 else
                 {
                     arr = CreateShipArrangement();
-                    WindowConfig.game = new Game(arr, _arrangementClient, _gameConfig);
+                    WindowConfig.game = new Game(arr, ArrangementClient, GameConfig);
                     PlayPage page = new PlayPage(WindowConfig.game);
                     NavigationService.Navigate(page, UriKind.Relative);
                    //new PlayWindow(new Game(arr, _arrangementClient, _gameConfig)) { Owner = Owner }.Show();
@@ -473,7 +479,7 @@ namespace Sea_Battleship
 
         private void LoadArrItem_Click(object sender, RoutedEventArgs e)
         {
-            new LoadArrangementWindow(_arrangementClient, _gameConfig).Show();
+            new LoadArrangementWindow(ArrangementClient, GameConfig, OnlineGame).Show();
         }
 
         public void ArrangeLoad(ShipArrangement arrangement)//доделать
