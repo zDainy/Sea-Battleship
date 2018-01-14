@@ -80,10 +80,10 @@ namespace Sea_Battleship
             else
             {
                 WindowConfig.game = game;
-                WindowConfig.IsLoaded = true;
                 PlayPage playPage = new PlayPage(WindowConfig.game);
                 NavigationService.Navigate(playPage, UriKind.Relative);
             }
+            WindowConfig.IsLoaded = true;
         }
     }
 }
