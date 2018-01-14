@@ -29,7 +29,7 @@ namespace Sea_Battleship
         private OnlineGame _onlineGame;
         private bool _isOnlineGame;
 
-
+        bool isOnMyField = false;
         public PlayField()
         {
             InitializeComponent();
@@ -93,11 +93,11 @@ namespace Sea_Battleship
                     if (!(gg is null))
                         gg.TurnOwner = PlayerRole.Server;
                     PlaceFromMassive(copyarr, Ships, false, true);
+                    isOnMyField = true;
                 }
                 else
                 {
                     PlaceFromMassive(copyarr, Ships, false);
-
                 }
             }
             else
@@ -151,6 +151,9 @@ namespace Sea_Battleship
                 _onlineGame.IsOne = false;
                 WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
                 {
+                    var controller = ImageBehavior.GetAnimationController(WindowConfig.PlayPageCon.TimerImage);
+                    controller.GotoFrame(0);
+                    WindowConfig.PlayPageCon.tickCount = 0;
                     WindowConfig.PlayPageCon.pr1.Value = 0;
                     WindowConfig.PlayPageCon.pr1.Visibility = Visibility.Hidden;
                     WindowConfig.PlayPageCon.MyTurnLabel.Background =
@@ -164,6 +167,9 @@ namespace Sea_Battleship
                 _onlineGame.IsMyTurn = true;
                 WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
                 {
+                    var controller = ImageBehavior.GetAnimationController(WindowConfig.PlayPageCon.TimerImage);
+                    controller.GotoFrame(0);
+                    WindowConfig.PlayPageCon.tickCount = 0;
                     WindowConfig.PlayPageCon.pr1.Value = 0;
                     WindowConfig.PlayPageCon.pr1.Visibility = Visibility.Visible;
                     WindowConfig.PlayPageCon.MyTurnLabel.Background =
@@ -344,7 +350,7 @@ namespace Sea_Battleship
                 do
                 {
                     result = z.Game.MakeAMove(X, Y); //ход первого игрока
-               
+
                     switch (result)
                     {
                         case MoveResult.Hit:
@@ -411,6 +417,9 @@ namespace Sea_Battleship
 
         private void EnemyStep(PlayPage z)
         {
+            var controller = ImageBehavior.GetAnimationController(WindowConfig.PlayPageCon.TimerImage);
+            controller.GotoFrame(0);
+            WindowConfig.PlayPageCon.tickCount = 0;
             z.pr1.Value = 0;
             Image image;
             Point p = AI.MakeAMove(z.Game);
@@ -489,6 +498,11 @@ namespace Sea_Battleship
                 PlaceShips();
             foreach(Point p in hitShipList)
             {
+                if(isOnMyField)
+                    WindowConfig.PlayPageCon.MyField.Ships.CheckEnemy(p, WindowConfig.PlayPageCon, true);
+                else
+                ships.Check((int)p.X, (int)p.Y, _pw, true);
+                
                 Image img = new Image
                 {
                     Stretch = Stretch.Fill,
