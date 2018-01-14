@@ -14,7 +14,8 @@ namespace Sea_Battleship
         public static NavigationService NavigationService;
         public static MediaPlayer Player = new MediaPlayer();
        // public static System.Media.SoundPlayer Player = new System.Media.SoundPlayer() {Stream=Properties.Resources.pirat};
-        public static System.Media.SoundPlayer ShotSound = new System.Media.SoundPlayer() { Stream=Properties.Resources.krik};
+        public static System.Media.SoundPlayer ShotSound = new System.Media.SoundPlayer() { Stream=Properties.Resources.boom};
+        public static System.Media.SoundPlayer ShotWaterSound = new System.Media.SoundPlayer() { Stream = Properties.Resources.water };
         public static string GifPath = "/Resources/drawn2.gif";
         public static MainPage MainPage;
         public static PlacingPage PlacingPage;
@@ -29,6 +30,16 @@ namespace Sea_Battleship
             //lala.Open(uri);
             //lala.Play();
             ShotSound.Play();
+        }
+
+        public static void PlayWaterSound()
+        {
+            //MediaPlayer lala = new MediaPlayer();
+            //string str = Properties.Resources.krik.ToString();
+            //Uri uri = new Uri(@"C:\Users\Пользователь\Desktop\Наиболее морской бой\Sea-Battleship\Sea Battleship\Resources\krik.wav", System.UriKind.Relative);
+            //lala.Open(uri);
+            //lala.Play();
+            ShotWaterSound.Play();
         }
 
         public enum State

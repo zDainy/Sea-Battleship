@@ -30,9 +30,12 @@ namespace Sea_Battleship
         private bool _isOnlineGame;
 
         bool isOnMyField = false;
+
         public PlayField()
         {
             InitializeComponent();
+            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Tick += Tick;
             Game gg = WindowConfig.game;
             _onlineGame = WindowConfig.OnlineGame;
             CellStatе[,] myArr;
@@ -234,6 +237,7 @@ namespace Sea_Battleship
                                 Opacity = 100,
                                 Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
                             });
+                            WindowConfig.PlayWaterSound();
                             break;
                     }
                 });
@@ -256,6 +260,7 @@ namespace Sea_Battleship
                                 Opacity = 100,
                                 Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
                             });
+                            WindowConfig.PlayWaterSound();
                             break;
                     }
                 });
@@ -341,49 +346,54 @@ namespace Sea_Battleship
             }
             else if (!_isOnlineGame)
             {
-                bool res = false;
-                MoveResult result;
-                do
+                if (!isEnemyShoot)
                 {
-                    result = z.Game.MakeAMove(X, Y); //ход первого игрока
-
-                    switch (result)
+                    bool res = false;
+                    MoveResult result;
+                    do
                     {
-                        case MoveResult.Hit:
+                        result = z.Game.MakeAMove(X, Y); //ход первого игрока
 
-                            ShipHitted((Image)sender);
+                        switch (result)
+                        {
+                            case MoveResult.Hit:
 
-                            ships.Check(X, Y, z, false);
-                            if (ships.IsAllDead())
-                            {
-                                EndOfGame(true);
-                            }
-                            res = false;
-                            break;
-                        case MoveResult.Miss:
-                            uriString = "/Resources/waterCrushed.png";
-                            SetCell(Grid.GetColumn(image), Grid.GetRow(image), FieldGrid, new Image()
-                            {
-                                Stretch = Stretch.Fill,
-                                Opacity = 100,
-                                Source = new BitmapImage(new Uri(uriString, UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                            });
-                            res = false;
-                            break;
+                                ShipHitted((Image)sender);
 
-                        case MoveResult.Destroyed:
-                            res = true;
-                            break;
-                        case MoveResult.Error:
-                            WindowConfig.game.ChangeTurn();
-                            res = true;
-                            break;
+                                ships.Check(X, Y, z, false);
+                                if (ships.IsAllDead())
+                                {
+                                    EndOfGame(true);
+                                }
+                                res = false;
+                                break;
+                            case MoveResult.Miss:
+                                uriString = "/Resources/waterCrushed.png";
+                                SetCell(Grid.GetColumn(image), Grid.GetRow(image), FieldGrid, new Image()
+                                {
+                                    Stretch = Stretch.Fill,
+                                    Opacity = 100,
+                                    Source = new BitmapImage(new Uri(uriString, UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                                });
+                                WindowConfig.PlayWaterSound();
+                                res = false;
+                                break;
+
+                            case MoveResult.Destroyed:
+                                res = true;
+                                break;
+                            case MoveResult.Error:
+                                WindowConfig.game.ChangeTurn();
+                                res = true;
+                                break;
+                        }
                     }
-                }
-                while (res);
-                if (result != MoveResult.Hit) //если не попал, ход второго игрока
-                {
-                    EnemyStep(z);
+                    while (res);
+                    if (result == MoveResult.Miss) //если не попал, ход второго игрока
+                    {
+                        EnemyStep(z);
+                        isEnemyShoot = true;
+                    }
                 }
 
             }
@@ -407,16 +417,18 @@ namespace Sea_Battleship
                 controller.Play();
             }
             catch
-            {
-
-            }
+            { 
+}
         }
-
 
         public void ChangeTurn(PlayPage z)
         {
             EnemyStep(z);
         }
+
+        DispatcherTimer timer = new DispatcherTimer();
+
+        bool isEnemyShoot = false;
 
         private void EnemyStep(PlayPage z)
         {
@@ -424,34 +436,38 @@ namespace Sea_Battleship
             controller.GotoFrame(0);
             WindowConfig.PlayPageCon.tickCount = 0;
             z.pr1.Value = 0;
-            Image image;
-            Point p = AI.MakeAMove(z.Game);
-            bool was = false;
-            do //ходит, пока не промахнётся
-            {
-                image = (Image)z.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
-                was = z.MyField.ships.Check(image, z, false);
-                if (was)
-                {
-                    ShipHitted(image);
-                    p = AI.MakeAMove(z.Game);
-                }
-                if (z.MyField.ships.IsAllDead())
-                {
-                    EndOfGame(false);
-                    break;
-                }
+            isEnemyShoot = false;
+            timer.Start();
+        }
 
-            }
-            while (was);
-            if (!was)
+        private void Tick(object sender, object e)
+        {
+            Image image;
+            Point p = AI.MakeAMove(WindowConfig.PlayPageCon.Game);
+            bool was = false;
+            image = (Image)WindowConfig.PlayPageCon.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
+            was = WindowConfig.PlayPageCon.MyField.ships.Check(image, WindowConfig.PlayPageCon, false);
+            if (was)
             {
-                SetShotOnField((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
+                ShipHitted(image);
+            }
+            else
+            {
+                SetShotOnField((int)p.X, (int)p.Y, WindowConfig.PlayPageCon.MyField.FieldGrid, new Image()
                 {
                     Stretch = Stretch.Fill,
                     Opacity = 100,
                     Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
                 });
+                WindowConfig.PlayWaterSound();
+                timer.Stop();
+                isEnemyShoot = false;
+            }
+            if (WindowConfig.PlayPageCon.MyField.ships.IsAllDead())
+            {
+                EndOfGame(false);
+                isEnemyShoot = false;
+                timer.Stop();
             }
         }
 
