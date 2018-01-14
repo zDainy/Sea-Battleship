@@ -39,10 +39,10 @@ namespace Sea_Battleship
             WindowConfig.OnlineGame = onlineGame;
             WindowConfig.IsLoaded = onlineGame.GameConfig.GameStatus == GameStatus.Loaded;
             OnlineGame = onlineGame;
-            PauseItem.IsEnabled = OnlineGame.PlayerRole == PlayerRole.Server;
-            SaveGameItem.IsEnabled = OnlineGame.PlayerRole == PlayerRole.Server;
             WindowConfig.GameState = WindowConfig.State.Online;
             InitializeComponent();
+            PauseItem.IsEnabled = OnlineGame.PlayerRole == PlayerRole.Server;
+            SaveGameItem.IsEnabled = OnlineGame.PlayerRole == PlayerRole.Server;
             WindowConfig.SetStartColor();
             IsPaused = false;
 
@@ -103,7 +103,8 @@ namespace Sea_Battleship
                 }
                 else
                 {
-                    EnemyField.SwitchTurn(true);
+                    if (OnlineGame.IsMyTurn)
+                        EnemyField.SwitchTurn(true);
                 }
             }
             else
@@ -209,6 +210,7 @@ namespace Sea_Battleship
                     new Network.GameStatus(GameStatus.Pause));
                 PauseItem.Header = "Снять паузу";
                 SetPause();
+                EnemyField.IsEnabled = false;
             }
             else
             {
@@ -216,6 +218,7 @@ namespace Sea_Battleship
                 OnlineGame.Connect.Server.SendResponse(OpearationTypes.GameStatus,
                     new Network.GameStatus(GameStatus.Game));
                 Unpause();
+                EnemyField.IsEnabled = true;
             }
         }
 
@@ -241,17 +244,17 @@ namespace Sea_Battleship
             timer.Start();
             if (OnlineGame.PlayerRole == PlayerRole.Server)
             {
-                WindowConfig.PlayPageCon.MyTurnLabel.Background =
+                MyTurnLabel.Background =
                     new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
-                WindowConfig.PlayPageCon.MyTurnLabel.Content = "Ваш ход";
+                MyTurnLabel.Content = "Ваш ход";
                 PauseItem.Header = "Пауза";
                 pr1.Visibility = Visibility.Visible;
             }
             else
             {
-                WindowConfig.PlayPageCon.MyTurnLabel.Background =
+                MyTurnLabel.Background =
                     new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E"));
-                WindowConfig.PlayPageCon.MyTurnLabel.Content = "Чужой ход";
+                MyTurnLabel.Content = "Чужой ход";
             }
         }
 
@@ -259,8 +262,9 @@ namespace Sea_Battleship
         {
             if (WindowConfig.GameState == WindowConfig.State.Online)
             {
-                // Пауза
+                Pause();
                 new SaveGameWindow().ShowDialog();
+                Pause();
             }
             else
             {
