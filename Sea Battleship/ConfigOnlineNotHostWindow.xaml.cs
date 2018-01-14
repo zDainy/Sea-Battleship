@@ -74,5 +74,32 @@ namespace Sea_Battleship
                 break;
             }
         }
+
+        private void Type_Click(object sender, RoutedEventArgs e)
+        {
+            RadioButton button = (RadioButton)sender;
+            Grid grid = (Grid)button.Parent;
+            switch (button.Content)
+            {
+                case "Новая":
+                    foreach (var el in grid.Children)
+                    {
+                        if ((el is RadioButton) && (((RadioButton)el).GroupName == "Placement"))
+                        {
+                            ((RadioButton)el).IsEnabled = true;
+                        }
+                    }
+                    break;
+                case "Сохранённая":
+                    foreach (var el in grid.Children)
+                    {
+                        if ((el is RadioButton)&& (((RadioButton)el).GroupName   == "Placement"))
+                        {
+                            ((RadioButton)el).IsEnabled = false;
+                        }
+                    }
+                    break;
+            }
+        }
     }
 }

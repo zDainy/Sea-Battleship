@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using WpfAnimatedGif;
 
 namespace Sea_Battleship
 {
@@ -94,16 +95,38 @@ namespace Sea_Battleship
         {
             bool isDead = false;
             bool was = false;
+
+
+            //var image = new BitmapImage();
+            //image.BeginInit();
+            //image.UriSource = (new Uri(WindowConfig.GifPath, UriKind.Relative));
+            //image.EndInit();
+            //Image image1 = new Image()
+            //{
+            //    Stretch = Stretch.Fill,
+            //    Opacity = 100,
+            //    //Source = new BitmapImage(new Uri(WindowConfig.GifPath, UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+            //};
+            //PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, image1);
+            //ImageBehavior.SetAnimatedSource(obj: image1, value: image);
+            //ImageBehavior.SetRepeatBehavior(image1, new System.Windows.Media.Animation.RepeatBehavior(1));
+            //ImageBehavior.SetAnimateInDesignMode(image1, true);
+            //var controller = ImageBehavior.GetAnimationController(image1);
+            //WindowConfig.ShotSound.Play();
+            //controller.Play();
+
+
+
             foreach (AShip sh in ShipList1)
             {
                 if (sh.isHere(X, Y, z, isOnline, out isDead))
                 {
-                    PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
-                    {
-                        Stretch = Stretch.Fill,
-                        Opacity = 100,
-                        Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                    });
+                    //PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
+                    //{
+                    //    Stretch = Stretch.Fill,
+                    //    Opacity = 100,
+                    //    Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                    //});
                     was = true;
                     break;
                 }
@@ -113,12 +136,12 @@ namespace Sea_Battleship
                 {
                     if (sh.isHere(X, Y, z, isOnline, out isDead))
                     {
-                        PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
-                        {
-                            Stretch = Stretch.Fill,
-                            Opacity = 100,
-                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                        });
+                        //PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
+                        //{
+                        //    Stretch = Stretch.Fill,
+                        //    Opacity = 100,
+                        //    Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        //});
                         was = true;
                         break;
                     }
@@ -128,13 +151,13 @@ namespace Sea_Battleship
                 {
                     if (sh.isHere(X, Y, z, isOnline, out isDead))
                     {
-                        PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
-                        {
-                            Stretch = Stretch.Fill,
-                            Opacity = 100,
-                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                        });
-                        was = true;
+                    //    PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
+                    //    {
+                    //        Stretch = Stretch.Fill,
+                    //        Opacity = 100,
+                    //        Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                    //    });
+                    //    was = true;
                         break;
                     }
                 }
@@ -143,12 +166,12 @@ namespace Sea_Battleship
                 {
                     if (sh.isHere(X, Y, z, isOnline, out isDead))
                     {
-                        PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
-                        {
-                            Stretch = Stretch.Fill,
-                            Opacity = 100,
-                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                        });
+                        //PlayField.SetCell((int)X, (int)Y, PlayField.FieldGrid, new Image()
+                        //{
+                        //    Stretch = Stretch.Fill,
+                        //    Opacity = 100,
+                        //    Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        //});
                         was = true;
                         break;
                     }
@@ -168,12 +191,12 @@ namespace Sea_Battleship
             {
                 if (sh.isHere(im, z, isOnline, out isDead))
                 {
-                    PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
-                    {
-                        Stretch = Stretch.Fill,
-                        Opacity = 100,
-                        Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                    });
+                    //PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
+                    //{
+                    //    Stretch = Stretch.Fill,
+                    //    Opacity = 100,
+                    //    Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                    //});
                     was = true;
                     break;
                 }
@@ -183,12 +206,12 @@ namespace Sea_Battleship
                 {
                     if (sh.isHere(im, z, isOnline, out isDead))
                     {
-                        PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
-                        {
-                            Stretch = Stretch.Fill,
-                            Opacity = 100,
-                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                        });
+                        //PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
+                        //{
+                        //    Stretch = Stretch.Fill,
+                        //    Opacity = 100,
+                        //    Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        //});
                         was = true;
                         break;
                     }
@@ -198,12 +221,12 @@ namespace Sea_Battleship
                 {
                     if (sh.isHere(im, z, isOnline, out isDead))
                     {
-                        PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
-                        {
-                            Stretch = Stretch.Fill,
-                            Opacity = 100,
-                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                        });
+                        //PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
+                        //{
+                        //    Stretch = Stretch.Fill,
+                        //    Opacity = 100,
+                        //    Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        //});
                         was = true;
                         break;
                     }
@@ -213,12 +236,12 @@ namespace Sea_Battleship
                 {
                     if (sh.isHere(im, z, isOnline, out isDead))
                     {
-                        PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
-                        {
-                            Stretch = Stretch.Fill,
-                            Opacity = 100,
-                            Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                        });
+                        //PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
+                        //{
+                        //    Stretch = Stretch.Fill,
+                        //    Opacity = 100,
+                        //    Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                        //});
                         was = true;
                         break;
                     }

@@ -12,6 +12,8 @@ using System.Threading;
 using Common;
 using System.Collections.Generic;
 using System.Windows.Navigation;
+using WpfAnimatedGif;
+using System.Windows.Threading;
 
 namespace Sea_Battleship
 {
@@ -342,6 +344,9 @@ namespace Sea_Battleship
                     switch (result)
                     {
                         case MoveResult.Hit:
+
+                            ShipHitted((Image)sender);
+
                             ships.Check(X, Y, z, false);
                             if (ships.IsAllDead())
                             {
@@ -378,6 +383,23 @@ namespace Sea_Battleship
             }
         }
 
+        private void ShipHitted(Image image1)
+        {
+            image1.MouseLeftButtonDown -= FieldCell_Click;
+            var image2 = new BitmapImage();
+            image2.BeginInit();
+            image2.UriSource = (new Uri(WindowConfig.GifPath, UriKind.Relative));
+            image2.EndInit();
+            image1.Opacity = 100;
+            ImageBehavior.SetAnimatedSource(image1, image2);
+            ImageBehavior.SetRepeatBehavior(image1, new System.Windows.Media.Animation.RepeatBehavior(1));
+            ImageBehavior.SetAnimateInDesignMode(image1, true);
+            var controller = ImageBehavior.GetAnimationController(image1);
+            WindowConfig.PlaySound();
+            controller.Play();
+        }
+
+
         public void ChangeTurn(PlayPage z)
         {
             EnemyStep(z);
@@ -395,6 +417,7 @@ namespace Sea_Battleship
                 was = z.MyField.ships.Check(image, z, false);
                 if (was)
                 {
+                    ShipHitted(image);
                     p = AI.MakeAMove(z.Game);
                 }
                 if (z.MyField.ships.IsAllDead())
