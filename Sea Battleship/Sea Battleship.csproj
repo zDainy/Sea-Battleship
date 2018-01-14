@@ -290,5 +290,11 @@
   <ItemGroup>
     <Resource Include="Resources\timer.gif" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\water.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\boom.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

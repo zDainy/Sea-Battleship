@@ -63,6 +63,15 @@ namespace Sea_Battleship.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
         /// </summary>
+        internal static System.IO.UnmanagedMemoryStream boom {
+            get {
+                return ResourceManager.GetStream("boom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
+        /// </summary>
         internal static System.IO.UnmanagedMemoryStream krik {
             get {
                 return ResourceManager.GetStream("krik", resourceCulture);
@@ -114,6 +123,15 @@ namespace Sea_Battleship.Properties {
         internal static System.IO.UnmanagedMemoryStream udar {
             get {
                 return ResourceManager.GetStream("udar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream water {
+            get {
+                return ResourceManager.GetStream("water", resourceCulture);
             }
         }
     }

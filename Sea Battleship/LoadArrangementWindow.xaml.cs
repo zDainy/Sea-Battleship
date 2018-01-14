@@ -53,7 +53,7 @@ namespace Sea_Battleship
                     i++;
                 }
             }
-        }
+        } 
 
 
         private void RetButton_Click(object sender, RoutedEventArgs e)

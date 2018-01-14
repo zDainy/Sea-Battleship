@@ -28,7 +28,7 @@ namespace Sea_Battleship
             WindowConfig.MainPage = this;
             WindowConfig.Player.Open(new Uri(Environment.CurrentDirectory+@"\pirat.wav"));
             WindowConfig.Player.Volume = 50;
-            WindowConfig.Player.Play();
+          //  WindowConfig.Player.Play();
             WindowConfig.game = null;
             WindowConfig.OnlineGame = null;
         }
