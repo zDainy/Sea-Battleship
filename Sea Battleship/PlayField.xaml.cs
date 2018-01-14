@@ -498,7 +498,8 @@ namespace Sea_Battleship
                 PlaceShips();
             foreach(Point p in hitShipList)
             {
-                if(isOnMyField)
+                _pw = (PlayPage)((Grid)Parent).Parent;
+                if (isOnMyField)
                     WindowConfig.PlayPageCon.MyField.Ships.CheckEnemy(p, WindowConfig.PlayPageCon, true);
                 else
                 ships.Check((int)p.X, (int)p.Y, _pw, true);
