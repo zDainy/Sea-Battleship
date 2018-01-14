@@ -213,6 +213,7 @@ namespace Sea_Battleship
                 IsPaused = false;
                 OnlineGame.Connect.Server.SendResponse(OpearationTypes.GameStatus,
                     new Network.GameStatus(GameStatus.Game));
+                Unpause();
             }
         }
 
