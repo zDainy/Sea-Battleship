@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using WpfAnimatedGif;
 
 namespace Sea_Battleship
 {
@@ -35,8 +36,48 @@ namespace Sea_Battleship
             WindowConfig.GameState = WindowConfig.State.Online;
             InitializeComponent();
             WindowConfig.SetStartColor();
+
+            //ImageBehavior.SetAnimatedSource(TimerImage, new BitmapImage(new Uri("/Resources/timer.gif", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache });
+            //ImageBehavior.SetAnimateInDesignMode(TimerImage, true);
+            GameSpeed gs = WindowConfig.GameState == WindowConfig.State.Online ? OnlineGame.GameConfig.GameSpeed : Game.GameConfig.GameSpeed;
+            switch (gs)
+            {
+                case GameSpeed.Fast:
+                    timer.Interval = new TimeSpan(0, 0, 0, 1, 250);
+                    break;
+                case GameSpeed.Medium:
+                    timer.Interval = new TimeSpan(0, 0, 0, 2, 500);
+                    break;
+                case GameSpeed.Slow:
+                    timer.Interval = new TimeSpan(0, 0, 0, 5);
+                    break;
+                case GameSpeed.Turtle:
+                    timer.Interval = new TimeSpan(0, 0, 0, 12, 500);
+                    break;
+            }
+
+          //  timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Tick += Tick;
+            timer.Start();
+
             InitTimer();
             Timer.Start();
+        }
+
+        DispatcherTimer timer = new DispatcherTimer();
+        public int tickCount = 0;
+
+        private void Tick(object sender, object e)
+        {
+            if (tickCount == 24)
+                tickCount = 0;
+            var controller = ImageBehavior.GetAnimationController(TimerImage);
+            if (controller != null)
+            {
+                controller.GotoFrame(tickCount);
+                controller.Pause();
+                tickCount++;
+            }
         }
 
         private void TimerTick(object sender, EventArgs e)
@@ -92,6 +133,25 @@ namespace Sea_Battleship
             MyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
             InitTimer();
             Timer.Start();
+
+            GameSpeed gs = WindowConfig.GameState == WindowConfig.State.Online ? OnlineGame.GameConfig.GameSpeed : Game.GameConfig.GameSpeed;
+            switch (gs)
+            {
+                case GameSpeed.Fast:
+                    timer.Interval = new TimeSpan(0, 0, 0, 1, 250);
+                    break;
+                case GameSpeed.Medium:
+                    timer.Interval = new TimeSpan(0, 0, 0, 2, 500);
+                    break;
+                case GameSpeed.Slow:
+                    timer.Interval = new TimeSpan(0, 0, 0, 5);
+                    break;
+                case GameSpeed.Turtle:
+                    timer.Interval = new TimeSpan(0, 0, 0, 12, 500);
+                    break;
+            }
+            timer.Tick += Tick;
+            timer.Start();
         }
 
         private void audioChanged(object sender, RoutedEventArgs e)

@@ -35,7 +35,7 @@
             </Menu>
             <Image Grid.Column="4" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"/>
         </Grid>
-        <Image MouseDown="Image_MouseDown" HorizontalAlignment="Left" Height="63" Margin="106,123,0,0" VerticalAlignment="Top" Width="67" Source="Resources/2.png"/>
+        <Image Name="Timer" MouseDown="Image_MouseDown"  HorizontalAlignment="Left" Height="141" Margin="106,45,0,0" VerticalAlignment="Top" Width="175" Source="Resources/2.png"/>
 
 
     </Grid>

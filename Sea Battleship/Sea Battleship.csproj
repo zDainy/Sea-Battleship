@@ -287,5 +287,8 @@
   <ItemGroup>
     <Resource Include="Resources\drawn2.gif" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\timer.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
