@@ -150,6 +150,9 @@ namespace Sea_Battleship
                 _onlineGame.IsOne = false;
                 WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
                 {
+                    var controller = ImageBehavior.GetAnimationController(WindowConfig.PlayPageCon.TimerImage);
+                    controller.GotoFrame(0);
+                    WindowConfig.PlayPageCon.tickCount = 0;
                     WindowConfig.PlayPageCon.pr1.Value = 0;
                     WindowConfig.PlayPageCon.pr1.Visibility = Visibility.Hidden;
                     WindowConfig.PlayPageCon.MyTurnLabel.Background =
@@ -163,6 +166,9 @@ namespace Sea_Battleship
                 _onlineGame.IsMyTurn = true;
                 WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
                 {
+                    var controller = ImageBehavior.GetAnimationController(WindowConfig.PlayPageCon.TimerImage);
+                    controller.GotoFrame(0);
+                    WindowConfig.PlayPageCon.tickCount = 0;
                     WindowConfig.PlayPageCon.pr1.Value = 0;
                     WindowConfig.PlayPageCon.pr1.Visibility = Visibility.Visible;
                     WindowConfig.PlayPageCon.MyTurnLabel.Background =
@@ -407,6 +413,9 @@ namespace Sea_Battleship
 
         private void EnemyStep(PlayPage z)
         {
+            var controller = ImageBehavior.GetAnimationController(WindowConfig.PlayPageCon.TimerImage);
+            controller.GotoFrame(0);
+            WindowConfig.PlayPageCon.tickCount = 0;
             z.pr1.Value = 0;
             Image image;
             Point p = AI.MakeAMove(z.Game);
