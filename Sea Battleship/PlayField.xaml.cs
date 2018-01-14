@@ -315,12 +315,18 @@ namespace Sea_Battleship
                         }
                         if ((int)comeVector.X == -2 && (int)comeVector.Y == -2)
                         {
-                            WindowConfig.PlayPageCon.IsPaused = true;
-                            WindowConfig.PlayPageCon.SetPause();
+                            WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
+                            {
+                                WindowConfig.PlayPageCon.IsPaused = true;
+                                WindowConfig.PlayPageCon.SetPause();
+                            });
                             shotRes = CellStatе.WoundedShip;
                             _onlineGame.WaitEnemyTurn();
-                            WindowConfig.PlayPageCon.Unpause();
-                            WindowConfig.PlayPageCon.IsPaused = false;
+                            WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
+                            {
+                                WindowConfig.PlayPageCon.Unpause();
+                                WindowConfig.PlayPageCon.IsPaused = false;
+                            });
                             continue;
                         }
                         shotRes = _onlineGame.CheckShot(comeVector);
