@@ -70,7 +70,8 @@ namespace Core
         Game,
         Pause,
         End,
-        Loaded
+        Loaded,
+        Break
     }
 
     /// <summary>
@@ -93,7 +94,8 @@ namespace Core
         Ship,
         WoundedShip,
         DestroyedShip,
-        BlankShot
+        BlankShot,
+        BreakShot
     }
 
     /// <summary>

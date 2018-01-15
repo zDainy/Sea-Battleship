@@ -122,15 +122,24 @@ namespace Sea_Battleship.Engine
 
         public CellStatе Turn(int x, int y)
         {
+            CellStatе cellRes;
             Connect.SendOperation(PlayerRole, OpearationTypes.Shot, new Shot(new Vector(x, y)));
             if (x == -1 && y == -1)
             {
                 return CellStatе.BlankShot;
             }
             var res = Connect.GetOperation(PlayerRole);
-            var shotRes = (ShotResult)res.Item2;
-            SetShotResult(shotRes.State, x, y);
-            return shotRes.State;
+            if (res.Item1 == OpearationTypes.ShotResult)
+            {
+                var shotRes = (ShotResult)res.Item2;
+                SetShotResult(shotRes.State, x, y);
+                cellRes = shotRes.State;
+            }
+            else
+            {
+                cellRes = CellStatе.BreakShot;
+            }
+            return cellRes;
         }
 
         public Vector WaitEnemyTurn()
@@ -148,6 +157,10 @@ namespace Sea_Battleship.Engine
                 if (gs.Status == GameStatus.Pause)
                 {
                     shotRes = new Vector(-2, -2);
+                }
+                else if (gs.Status == GameStatus.Break)
+                {
+                    shotRes = new Vector(-4,-4);
                 }
                 else
                 {
