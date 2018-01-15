@@ -261,7 +261,7 @@ namespace Sea_Battleship
                             PlayPage z = (PlayPage)((Grid)Parent).Parent;
                             var image = (Image)z.EnemyField.FieldGrid.Children[10 * y + x];
                             ShipHitted(image);
-                            if (_pw.MyField.Ships.IsAllDead())
+                            if (_pw.MyField.Ships.IsDeadCount == 10)
                                 EndOfGame(true);
                             break;
                         case CellStatе.WoundedWater:
