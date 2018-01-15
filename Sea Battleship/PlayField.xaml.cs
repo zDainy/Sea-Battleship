@@ -301,12 +301,16 @@ namespace Sea_Battleship
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("Соединение разорвано", "Противник отключился", MessageBoxButton.OK, MessageBoxImage.Warning);
-                LogService.Trace("Противник отключился");
-                WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
+                if (WindowConfig.PlayPageCon != null)
                 {
-                    WindowConfig.PlayPageCon.Exit();
-                });
+                    MessageBox.Show("Противник отключился", "Соединение разорвано", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    LogService.Trace("Противник отключился");
+
+                    WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
+                    {
+                        WindowConfig.PlayPageCon.Exit();
+                    });
+                }
             }
             catch (Exception e)
             {
@@ -364,12 +368,16 @@ namespace Sea_Battleship
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("Противник отключился", "Соединение разорвано", MessageBoxButton.OK, MessageBoxImage.Warning);
-                LogService.Trace("Противник отключился");
-                WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
+                if (WindowConfig.PlayPageCon != null)
                 {
-                    WindowConfig.PlayPageCon.Exit();
-                });
+                    MessageBox.Show("Противник отключился", "Соединение разорвано", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    LogService.Trace("Противник отключился");
+
+                    WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
+                    {
+                        WindowConfig.PlayPageCon.Exit();
+                    });
+                }
             }
             catch (Exception e)
             {
