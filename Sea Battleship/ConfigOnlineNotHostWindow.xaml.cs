@@ -44,10 +44,15 @@ namespace Sea_Battleship
                 }
                 Close();
             }
+            catch (IndexOutOfRangeException exception)
+            {
+                LogService.Trace($"Невозможно подключиться: {exception.Message}");
+                MessageBox.Show("Вы ввели неправильный ключ. Повторите попытку", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
             catch (Exception exception)
             {
                 LogService.Trace($"Невозможно подключиться: {exception.Message}");
-                MessageBox.Show(exception.Message, "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show($"Ошибка подключения к серверу", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
