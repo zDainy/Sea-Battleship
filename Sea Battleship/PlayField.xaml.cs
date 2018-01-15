@@ -284,13 +284,19 @@ namespace Sea_Battleship
             try
             {
                 var shotRes = _onlineGame.Turn((int)vect.X, (int)vect.Y);
-                if (shotRes != CellStatе.BlankShot)
+                if (shotRes == CellStatе.BreakShot)
                 {
-                    SetShotOnField((int) vect.X, (int) vect.Y, shotRes, false);
-                    if (shotRes == CellStatе.WoundedWater)
+                    MessageBox.Show("Ваш противник покинул игру", "Соединение разорвано", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
                     {
-                        SwitchTurn(false);
-                    }
+                        WindowConfig.PlayPageCon.Exit(true);
+                    });
+                }
+                if (shotRes == CellStatе.BlankShot) return;
+                SetShotOnField((int) vect.X, (int) vect.Y, shotRes, false);
+                if (shotRes == CellStatе.WoundedWater)
+                {
+                    SwitchTurn(false);
                 }
             }
             catch (NullReferenceException)
@@ -341,6 +347,15 @@ namespace Sea_Battleship
                             });
                             continue;
                         }
+                        if ((int)comeVector.X == -4 && (int)comeVector.Y == -4)
+                        {
+                            MessageBox.Show("Ваш противник покинул игру", "Соединение разорвано", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
+                            {
+                                WindowConfig.PlayPageCon.Exit(true);
+                            });
+                            break;
+                        }
                         shotRes = _onlineGame.CheckShot(comeVector);
                         SetShotOnField((int)comeVector.X, (int)comeVector.Y, shotRes, true);
                     } while (shotRes == CellStatе.WoundedShip);
@@ -349,7 +364,7 @@ namespace Sea_Battleship
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("Соединение разорвано", "Противник отключился", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Противник отключился", "Соединение разорвано", MessageBoxButton.OK, MessageBoxImage.Warning);
                 LogService.Trace("Противник отключился");
                 WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
                 {
@@ -449,39 +464,49 @@ namespace Sea_Battleship
 
         private void EnemyStep(PlayPage z)
         {
-            var controller = ImageBehavior.GetAnimationController(WindowConfig.PlayPageCon.TimerImage);
-            controller.GotoFrame(0);
-            WindowConfig.PlayPageCon.tickCount = 0;
-            z.pr1.Value = 0;
-            Image image;
-            Point p = AI.MakeAMove(z.Game);
-            bool was = false;
-            do //ходит, пока не промахнётся
+            try
             {
-                image = (Image)z.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
-                was = z.MyField.ships.Check(image, z, false);
-                if (was)
+                var controller = ImageBehavior.GetAnimationController(WindowConfig.PlayPageCon.TimerImage);
+                controller.GotoFrame(0);
+                WindowConfig.PlayPageCon.tickCount = 0;
+                z.pr1.Value = 0;
+                Image image;
+                Point p = AI.MakeAMove(z.Game);
+                bool was = false;
+                do //ходит, пока не промахнётся
                 {
-                    ShipHitted(image);
-                    p = AI.MakeAMove(z.Game);
-                }
-                if (z.MyField.ships.IsAllDead())
-                {
-                    EndOfGame(false);
-                    break;
-                }
+                    image = (Image) z.MyField.FieldGrid.Children[10 * (int) p.Y + (int) p.X];
+                    was = z.MyField.ships.Check(image, z, false);
+                    if (was)
+                    {
+                        ShipHitted(image);
+                        p = AI.MakeAMove(z.Game);
+                    }
+                    if (z.MyField.ships.IsAllDead())
+                    {
+                        EndOfGame(false);
+                        break;
+                    }
 
-            }
-            while (was);
-            if (!was)
-            {
-                SetShotOnField((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
+                } while (was);
+                if (!was)
                 {
-                    Stretch = Stretch.Fill,
-                    Opacity = 100,
-                    Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                });
+                    SetShotOnField((int) p.X, (int) p.Y, z.MyField.FieldGrid, new Image()
+                    {
+                        Stretch = Stretch.Fill,
+                        Opacity = 100,
+                        Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative))
+                        {
+                            CreateOptions = BitmapCreateOptions.IgnoreImageCache
+                        }
+                    });
+                }
             }
+            catch (Exception e)
+            {
+                
+            }
+            
         }
 
         private void _SizeChanged(object sender, SizeChangedEventArgs e)

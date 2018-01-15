@@ -192,16 +192,26 @@ namespace Sea_Battleship
             }
         }
 
-        public void Exit()
+        public void Exit(bool lastPlayer = false)
         {
             if (!(OnlineGame is null))
             {
                 if (OnlineGame.PlayerRole == PlayerRole.Server)
                 {
+                    if (!lastPlayer)
+                    {
+                        OnlineGame.Connect.Server.SendResponse(OpearationTypes.GameStatus,
+                            new Network.GameStatus(GameStatus.Break));
+                    }
                     OnlineGame.Connect.Server.Stop();
                 }
                 else
                 {
+                    if (!lastPlayer)
+                    {
+                        OnlineGame.Connect.Client.SendRequest(OpearationTypes.GameStatus,
+                            new Network.GameStatus(GameStatus.Break));
+                    }
                     OnlineGame.Connect.Client.Close();
                 }
                 tickCount = 0;
@@ -210,10 +220,14 @@ namespace Sea_Battleship
                 Timer.Stop();
                 OnlineGame = null;
             }
+            timer.Tick -= Tick;
+            Timer.Tick -= TimerTick;
+            timer = null;
+            Timer = null;
+
             WindowConfig.OnlineGame = null;
             WindowConfig.game = null;
             WindowConfig.IsLoaded = false;
-
 
             NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
         }
