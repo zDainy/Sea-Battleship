@@ -261,7 +261,7 @@ namespace Sea_Battleship
                             PlayPage z = (PlayPage)((Grid)Parent).Parent;
                             var image = (Image)z.EnemyField.FieldGrid.Children[10 * y + x];
                             ShipHitted(image);
-                            if (_pw.MyField.Ships.IsDeadCount == 10)
+                            if (_pw.EnemyField.Ships.IsAllDead())
                                 EndOfGame(true);
                             break;
                         case CellStatе.WoundedWater:
@@ -861,25 +861,20 @@ namespace Sea_Battleship
         {
             if (isPlayerWin)
             {
-                MessageBoxResult res = MessageBox.Show("Вы выиграли!", "Конец игры", MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.No, MessageBoxOptions.None);
-                if (!_isOnlineGame)
-                    WindowConfig.game = null;
-                else
-                    WindowConfig.OnlineGame = null;
-                WindowConfig.PlayPageCon.NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
-                WindowConfig.PlayPageCon = null;
+                MessageBox.Show("Вы выиграли!", "Конец игры", MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.No, MessageBoxOptions.None);
+                WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
+                {
+                    WindowConfig.PlayPageCon.Exit(true);
+                });
 
             }
             else
             {
-                MessageBoxResult res = MessageBox.Show("Вы проиграли...", "Конец игры", MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.No, MessageBoxOptions.None);
-
-                if (!_isOnlineGame)
-                    WindowConfig.game = null;
-                else
-                    WindowConfig.OnlineGame = null;
-                WindowConfig.PlayPageCon.NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
-                WindowConfig.PlayPageCon = null;
+                MessageBox.Show("Вы проиграли...", "Конец игры", MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.No, MessageBoxOptions.None);
+                WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
+                {
+                    WindowConfig.PlayPageCon.Exit(true);
+                });
 
             }
         }

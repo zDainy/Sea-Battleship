@@ -228,8 +228,8 @@ namespace Sea_Battleship
             WindowConfig.OnlineGame = null;
             WindowConfig.game = null;
             WindowConfig.IsLoaded = false;
-
             NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
+            WindowConfig.PlayPageCon = null;
         }
 
         private void SaveGameItem_Click(object sender, RoutedEventArgs e)
