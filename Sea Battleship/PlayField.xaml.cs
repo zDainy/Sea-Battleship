@@ -238,6 +238,7 @@ namespace Sea_Battleship
                     {
                         case CellStatе.WoundedShip:
                             _pw.MyField.Ships.CheckEnemy(new Point(x, y), _pw, true);
+                            WindowConfig.PlayWaterSound();
                             if (_pw.MyField.Ships.IsAllDead())
                                 EndOfGame(false);
                             break;
@@ -457,7 +458,7 @@ namespace Sea_Battleship
             }
         }
 
-        private void ShipHitted(Image image1)
+        public void ShipHitted(Image image1)
         {
             try
             {
@@ -591,16 +592,14 @@ namespace Sea_Battleship
             }
             if (isPlace)
                 PlaceShips();
+            PlaceHitted();
         }
 
         public void PlaceHitted()
         {
+            ships.SetAroundDead();
             foreach (Point p in hitShipList)
             {
-                //if (isOnMyField)
-                //    WindowConfig.PlayPageCon.MyField.Ships.CheckEnemy(p, WindowConfig.PlayPageCon, true);
-                //else
-                //    ships.Check((int)p.X, (int)p.Y, _pw, true);
 
                 Image img = new Image
                 {
@@ -612,6 +611,7 @@ namespace Sea_Battleship
                 //Grid.SetColumn(img, (int)p.X);
                 //Grid.SetRow(img, (int)p.Y);
             }
+           // ships.SetAroundDead();
         }
 
         private void PluckShip(int i, int j, CellStatе[,] cells, Ships Ships)
