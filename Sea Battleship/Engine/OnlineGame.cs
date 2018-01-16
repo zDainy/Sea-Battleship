@@ -3,6 +3,7 @@ using System.Threading;
 using System.Windows;
 using Core;
 using Network;
+using GameStatus = Core.GameStatus;
 using ShipArrangement = Core.ShipArrangement;
 
 namespace Sea_Battleship.Engine
@@ -31,6 +32,7 @@ namespace Sea_Battleship.Engine
         public void SetGameSettings(GameConfig config)
         {
             GameConfig = config;
+            GameConfig.Connection = ServerUtils.GetExternalIp() + ":27015";
         }
 
         private void InitGame(IPAddress ip)
@@ -71,7 +73,7 @@ namespace Sea_Battleship.Engine
             MyArrangement = arragment;
             if (PlayerRole == PlayerRole.Server)
             {
-                Connect.Server.SendResponse(OpearationTypes.StartConfig, new StartConfig(GameConfig.GameSpeed));
+                Connect.Server.SendResponse(OpearationTypes.StartConfig, new StartConfig(GameConfig.GameSpeed, Core.GameStatus.Game));
                 var res = Connect.Server.GetRequest();
                 Network.ShipArrangement clArrangement = (Network.ShipArrangement)res.Item2;
                 Connect.Server.SendResponse(OpearationTypes.ShipArrangement, new Network.ShipArrangement(arragment));
@@ -83,7 +85,19 @@ namespace Sea_Battleship.Engine
                 var res = Connect.Client.GetResponse();
                 StartConfig startConfig = (StartConfig)res.Item2;
                 GameConfig = new GameConfig(BotLevels.Easy, startConfig.GameSpeed);
-                Connect.Client.SendRequest(OpearationTypes.ShipArrangement, new Network.ShipArrangement(arragment));
+                if (startConfig.GameStatus == Core.GameStatus.Loaded)
+                {
+                    Connect.Client.SendRequest(OpearationTypes.GameStatus, new Network.GameStatus(Core.GameStatus.Game));
+                    GameConfig.GameStatus = Core.GameStatus.Loaded;
+                    var rArr = Connect.Client.GetResponse();
+                    Network.ShipArrangement myArr = (Network.ShipArrangement) rArr.Item2;
+                    MyArrangement = myArr.Arragment;
+                    Connect.Client.SendRequest(OpearationTypes.GameStatus, new Network.GameStatus(Core.GameStatus.Game));
+                }
+                else
+                {
+                    Connect.Client.SendRequest(OpearationTypes.ShipArrangement, new Network.ShipArrangement(arragment));
+                }
                 var resArr = Connect.Client.GetResponse();
                 Network.ShipArrangement enemyArrangementArrangement = (Network.ShipArrangement)resArr.Item2;
                 EnemyArrangement = enemyArrangementArrangement.Arragment;
@@ -91,17 +105,41 @@ namespace Sea_Battleship.Engine
             }
         }
 
+        public void LoadGame(Game game)
+        {
+            Game = game;
+            GameConfig = game.GameConfig;
+            GameConfig.GameStatus = Core.GameStatus.Loaded;
+            MyArrangement = game.ServerShipArrangement;
+            EnemyArrangement = game.ClientShipArrangement;
+            Connect.Server.SendResponse(OpearationTypes.StartConfig, new StartConfig(GameConfig.GameSpeed, Core.GameStatus.Loaded));
+            Connect.Server.GetRequest();
+            Connect.Server.SendResponse(OpearationTypes.ShipArrangement, new Network.ShipArrangement(EnemyArrangement));
+            Connect.Server.GetRequest();
+            Connect.Server.SendResponse(OpearationTypes.ShipArrangement, new Network.ShipArrangement(MyArrangement));
+            IsMyTurn = true;
+        }
+
         public CellStatе Turn(int x, int y)
         {
+            CellStatе cellRes;
             Connect.SendOperation(PlayerRole, OpearationTypes.Shot, new Shot(new Vector(x, y)));
             if (x == -1 && y == -1)
             {
                 return CellStatе.BlankShot;
             }
             var res = Connect.GetOperation(PlayerRole);
-            var shotRes = (ShotResult)res.Item2;
-            SetShotResult(shotRes.State, x, y);
-            return shotRes.State;
+            if (res.Item1 == OpearationTypes.ShotResult)
+            {
+                var shotRes = (ShotResult)res.Item2;
+                SetShotResult(shotRes.State, x, y);
+                cellRes = shotRes.State;
+            }
+            else
+            {
+                cellRes = CellStatе.BreakShot;
+            }
+            return cellRes;
         }
 
         public Vector WaitEnemyTurn()
@@ -112,6 +150,22 @@ namespace Sea_Battleship.Engine
             {
                 var shot = (Shot)res.Item2;
                 shotRes = shot.TargetPosition;
+            }
+            else if (res.Item1 == OpearationTypes.GameStatus)
+            {
+                Network.GameStatus gs = (Network.GameStatus) res.Item2;
+                if (gs.Status == GameStatus.Pause)
+                {
+                    shotRes = new Vector(-2, -2);
+                }
+                else if (gs.Status == GameStatus.Break)
+                {
+                    shotRes = new Vector(-4,-4);
+                }
+                else
+                {
+                    shotRes = new Vector(-3, -3);
+                }
             }
             return shotRes;
         }

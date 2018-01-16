@@ -24,7 +24,7 @@ namespace Sea_Battleship
         int _shipCount3 = 2;
         int _shipCount4 = 1;
         PlayField _playField;
-        private int isDeadCount = 0;
+        public int IsDeadCount { get; set; }
 
         public PlayField PlayField { get => _playField; set => _playField = value; }
         public int ShipCount3 { get => _shipCount3; set => _shipCount3 = value; }
@@ -39,6 +39,7 @@ namespace Sea_Battleship
 
         public Ships()
         {
+            IsDeadCount = 0;
         }
 
         public Ships(PlayField playField)
@@ -177,7 +178,7 @@ namespace Sea_Battleship
                     }
                 }
             if (isDead)
-                isDeadCount++;
+                IsDeadCount++;
             return was;
         }
 
@@ -247,7 +248,7 @@ namespace Sea_Battleship
                     }
                 }
             if (isDead)
-                isDeadCount++;
+                IsDeadCount++;
             return was;
         }
 

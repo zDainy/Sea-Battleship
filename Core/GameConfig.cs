@@ -8,7 +8,7 @@ namespace Core
         public BotLevels BotLvl { get; }
         public GameStatus GameStatus { get; set; }
         public GameSpeed GameSpeed { get; set; }
-        public string Connection { get; }
+        public string Connection { get; set; }
         public PlayerRole OnlineRole { get; }
 
         /// <summary>
@@ -69,7 +69,9 @@ namespace Core
     {
         Game,
         Pause,
-        End
+        End,
+        Loaded,
+        Break
     }
 
     /// <summary>
@@ -92,7 +94,8 @@ namespace Core
         Ship,
         WoundedShip,
         DestroyedShip,
-        BlankShot
+        BlankShot,
+        BreakShot
     }
 
     /// <summary>
@@ -119,6 +122,7 @@ namespace Core
     {
         Manualy,
         Randomly,
-        Strategily
+        Strategily,
+        Loaded
     }
 }

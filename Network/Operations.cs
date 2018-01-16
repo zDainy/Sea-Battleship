@@ -112,13 +112,13 @@ namespace Network
         /// Статус игры
         /// </summary>
         [DataMember]
-        public GameStatus Status { get; set; }
+        public Core.GameStatus Status { get; set; }
 
         /// <summary>
         /// Инициализирует объект состояния игры
         /// </summary>
         /// <param name="status">Состояние игры</param>
-        public GameStatus(GameStatus status)
+        public GameStatus(Core.GameStatus status)
         {
             Status = status;
         }
@@ -137,13 +137,17 @@ namespace Network
         [DataMember]
         public GameSpeed GameSpeed { get; set; }
 
+        [DataMember]
+        public Core.GameStatus GameStatus { get; set; }
+
         /// <summary>
         /// Инициализирует объект начальных настроек
         /// </summary>
         /// <param name="speed"></param>
-        public StartConfig(GameSpeed speed)
+        public StartConfig(GameSpeed speed, Core.GameStatus gameStatus )
         {
             GameSpeed = speed;
+            GameStatus = gameStatus;
         }
     }
 

@@ -32,18 +32,23 @@ namespace Sea_Battleship
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (WindowConfig.GameState == WindowConfig.State.Offline)
+            if (textBoxSave.Text != "")
             {
-                if (textBoxSave.Text != "")
+
+                if (WindowConfig.GameState == WindowConfig.State.Offline)
                 {
                     FileSystem.SaveGame(textBoxSave.Text, WindowConfig.game);
-                    MessageBox.Show("Игра сохранена");
-                    Close();
                 }
                 else
                 {
-                    MessageBox.Show("Введите название игры");
+                    FileSystem.SaveGame(textBoxSave.Text, WindowConfig.OnlineGame.Game);
                 }
+                MessageBox.Show("Игра сохранена");
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Введите название игры");
             }
         }
     }
