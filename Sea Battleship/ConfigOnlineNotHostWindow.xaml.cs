@@ -44,10 +44,15 @@ namespace Sea_Battleship
                 }
                 Close();
             }
+            catch (IndexOutOfRangeException exception)
+            {
+                LogService.Trace($"Невозможно подключиться: {exception.Message}");
+                MessageBox.Show("Вы ввели неправильный ключ. Повторите попытку", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
             catch (Exception exception)
             {
                 LogService.Trace($"Невозможно подключиться: {exception.Message}");
-                MessageBox.Show(exception.Message, "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show($"Ошибка подключения к серверу", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -96,6 +101,7 @@ namespace Sea_Battleship
                         if ((el is RadioButton)&& (((RadioButton)el).GroupName   == "Placement"))
                         {
                             ((RadioButton)el).IsEnabled = false;
+                            _placement = PlacementState.Randomly;
                         }
                     }
                     break;

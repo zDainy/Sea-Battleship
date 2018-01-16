@@ -475,8 +475,8 @@ namespace Sea_Battleship
                 controller.Play();
             }
             catch
-            {
-            }
+            { 
+}
         }
 
         public void ChangeTurn(PlayPage z)
@@ -490,37 +490,72 @@ namespace Sea_Battleship
 
         private void EnemyStep(PlayPage z)
         {
+<<<<<<< HEAD
+            var controller = ImageBehavior.GetAnimationController(WindowConfig.PlayPageCon.TimerImage);
+            controller.GotoFrame(0);
+            WindowConfig.PlayPageCon.tickCount = 0;
+            z.pr1.Value = 0;
+            isEnemyShoot = false;
+            timer.Start();
+        }
+
+        private void Tick(object sender, object e)
+        {
+            Image image;
+            Point p = AI.MakeAMove(WindowConfig.PlayPageCon.Game);
+            bool was = false;
+            image = (Image)WindowConfig.PlayPageCon.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
+            was = WindowConfig.PlayPageCon.MyField.ships.Check(image, WindowConfig.PlayPageCon, false);
+            if (was)
+            {
+                ShipHitted(image);
+            }
+            else
+            {
+                SetShotOnField((int)p.X, (int)p.Y, WindowConfig.PlayPageCon.MyField.FieldGrid, new Image()
+                {
+                    Stretch = Stretch.Fill,
+                    Opacity = 100,
+                    Source = new BitmapImage(new Uri("/Resources/waterCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
+                });
+                WindowConfig.PlayWaterSound();
+                timer.Stop();
+                isEnemyShoot = false;
+            }
+            if (WindowConfig.PlayPageCon.MyField.ships.IsAllDead())
+            {
+                EndOfGame(false);
+                isEnemyShoot = false;
+                timer.Stop();
+=======
             try
             {
                 var controller = ImageBehavior.GetAnimationController(WindowConfig.PlayPageCon.TimerImage);
                 controller.GotoFrame(0);
                 WindowConfig.PlayPageCon.tickCount = 0;
                 z.pr1.Value = 0;
-                isEnemyShoot = false;
-                timer.Start();
-            }
-            catch (Exception e)
-            {
-
-            }
-        }
-
-        private void Tick(object sender, object e)
-        {
-            try
-            {
                 Image image;
-                Point p = AI.MakeAMove(WindowConfig.PlayPageCon.Game);
+                Point p = AI.MakeAMove(z.Game);
                 bool was = false;
-                image = (Image)WindowConfig.PlayPageCon.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
-                was = WindowConfig.PlayPageCon.MyField.ships.Check(image, WindowConfig.PlayPageCon, false);
-                if (was)
+                do //ходит, пока не промахнётся
                 {
-                    ShipHitted(image);
-                }
-                else
+                    image = (Image)z.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
+                    was = z.MyField.ships.Check(image, z, false);
+                    if (was)
+                    {
+                        ShipHitted(image);
+                        p = AI.MakeAMove(z.Game);
+                    }
+                    if (z.MyField.ships.IsAllDead())
+                    {
+                        EndOfGame(false);
+                        break;
+                    }
+
+                } while (was);
+                if (!was)
                 {
-                    SetShotOnField((int)p.X, (int)p.Y, WindowConfig.PlayPageCon.MyField.FieldGrid, new Image()
+                    SetShotOnField((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
                     {
                         Stretch = Stretch.Fill,
                         Opacity = 100,
@@ -529,21 +564,12 @@ namespace Sea_Battleship
                             CreateOptions = BitmapCreateOptions.IgnoreImageCache
                         }
                     });
-                    WindowConfig.PlayWaterSound();
-                    timer.Stop();
-                    isEnemyShoot = false;
-                }
-                if (WindowConfig.PlayPageCon.MyField.ships.IsAllDead())
-                {
-                    EndOfGame(false);
-                    isEnemyShoot = false;
-                    timer.Stop();
-
                 }
             }
-            catch (Exception exc)
+            catch (Exception e)
             {
 
+>>>>>>> b83556a1d702136bda4467d53f68ce50eb3c1e97
             }
 
         }
@@ -591,16 +617,26 @@ namespace Sea_Battleship
             }
             if (isPlace)
                 PlaceShips();
-        }
-
-        public void PlaceHitted()
-        {
+<<<<<<< HEAD
             foreach (Point p in hitShipList)
             {
                 //if (isOnMyField)
                 //    WindowConfig.PlayPageCon.MyField.Ships.CheckEnemy(p, WindowConfig.PlayPageCon, true);
                 //else
                 //    ships.Check((int)p.X, (int)p.Y, _pw, true);
+=======
+        }
+
+        public void PlaceHitted()
+        {
+            foreach (Point p in hitShipList)
+            {
+                _pw = WindowConfig.PlayPageCon;
+                if (isOnMyField)
+                    WindowConfig.PlayPageCon.MyField.Ships.CheckEnemy(p, WindowConfig.PlayPageCon, true);
+                else
+                    ships.Check((int)p.X, (int)p.Y, _pw, true);
+>>>>>>> b83556a1d702136bda4467d53f68ce50eb3c1e97
 
                 Image img = new Image
                 {
@@ -729,27 +765,45 @@ namespace Sea_Battleship
             cells[i, j] = CellStatе.Water;
             if (i + 1 < 10 && (cells[i + 1, j] == CellStatе.Ship || cells[i + 1, j] == CellStatе.WoundedShip || cells[i + 1, j] == CellStatе.DestroyedShip))
             {
+<<<<<<< HEAD
+                if (cells[i+1, j] == CellStatе.WoundedShip || cells[i+1, j] == CellStatе.DestroyedShip)
+                {
+                    hitShipList.Add(new Point(i+1, j));
+=======
                 if (cells[i + 1, j] == CellStatе.WoundedShip || cells[i + 1, j] == CellStatе.DestroyedShip)
                 {
                     hitShipList.Add(new Point(i + 1, j));
+>>>>>>> b83556a1d702136bda4467d53f68ce50eb3c1e97
                     countHit++;
                 }
                 len++;
                 cells[i + 1, j] = CellStatе.Water;
                 if (i + 2 < 10 && (cells[i + 2, j] == CellStatе.Ship || cells[i + 2, j] == CellStatе.Ship || cells[i + 2, j] == CellStatе.DestroyedShip))
                 {
-                    if (cells[i + 2, j] == CellStatе.WoundedShip || cells[i + 2, j] == CellStatе.DestroyedShip)
+<<<<<<< HEAD
+                    if (cells[i+2, j] == CellStatе.WoundedShip || cells[i + 2, j] == CellStatе.DestroyedShip)
+                    {
+                        hitShipList.Add(new Point(i+2, j));
+=======
+                    if (cells[i + 2, j] == CellStatе.WoundedShip)
                     {
                         hitShipList.Add(new Point(i + 2, j));
+>>>>>>> b83556a1d702136bda4467d53f68ce50eb3c1e97
                         countHit++;
                     }
                     len++;
                     cells[i + 2, j] = CellStatе.Water;
                     if (i + 3 < 10 && (cells[i + 3, j] == CellStatе.Ship || cells[i + 3, j] == CellStatе.Ship || cells[i + 3, j] == CellStatе.DestroyedShip))
                     {
-                        if (cells[i + 3, j] == CellStatе.WoundedShip || cells[i + 3, j] == CellStatе.DestroyedShip)
+<<<<<<< HEAD
+                        if (cells[i+3, j] == CellStatе.WoundedShip  || cells[i + 3, j] == CellStatе.DestroyedShip)
+                        {
+                            hitShipList.Add(new Point(i+3, j));
+=======
+                        if (cells[i + 3, j] == CellStatе.WoundedShip)
                         {
                             hitShipList.Add(new Point(i + 3, j));
+>>>>>>> b83556a1d702136bda4467d53f68ce50eb3c1e97
                             countHit++;
                         }
                         len++;
