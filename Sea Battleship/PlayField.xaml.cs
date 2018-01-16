@@ -132,7 +132,6 @@ namespace Sea_Battleship
                     PlaceFromMassive(copyarr, Ships, true, true);
                 else
                 {
-                    
                     PlaceFromMassive(copyarr, ships, true);
                 }
             }
@@ -236,7 +235,7 @@ namespace Sea_Battleship
                     {
                         case CellStatе.WoundedShip:
                             _pw.MyField.Ships.CheckEnemy(new Point(x, y), _pw, true);
-                            if(_pw.MyField.Ships.IsAllDead())
+                            if (_pw.MyField.Ships.IsAllDead())
                                 EndOfGame(false);
                             break;
                         case CellStatе.WoundedWater:
@@ -293,7 +292,7 @@ namespace Sea_Battleship
                     });
                 }
                 if (shotRes == CellStatе.BlankShot) return;
-                SetShotOnField((int) vect.X, (int) vect.Y, shotRes, false);
+                SetShotOnField((int)vect.X, (int)vect.Y, shotRes, false);
                 if (shotRes == CellStatе.WoundedWater)
                 {
                     SwitchTurn(false);
@@ -483,7 +482,7 @@ namespace Sea_Battleship
                 bool was = false;
                 do //ходит, пока не промахнётся
                 {
-                    image = (Image) z.MyField.FieldGrid.Children[10 * (int) p.Y + (int) p.X];
+                    image = (Image)z.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
                     was = z.MyField.ships.Check(image, z, false);
                     if (was)
                     {
@@ -499,7 +498,7 @@ namespace Sea_Battleship
                 } while (was);
                 if (!was)
                 {
-                    SetShotOnField((int) p.X, (int) p.Y, z.MyField.FieldGrid, new Image()
+                    SetShotOnField((int)p.X, (int)p.Y, z.MyField.FieldGrid, new Image()
                     {
                         Stretch = Stretch.Fill,
                         Opacity = 100,
@@ -512,9 +511,9 @@ namespace Sea_Battleship
             }
             catch (Exception e)
             {
-                
+
             }
-            
+
         }
 
         private void _SizeChanged(object sender, SizeChangedEventArgs e)
@@ -528,7 +527,7 @@ namespace Sea_Battleship
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    if (cells[i, j] == CellStatе.Ship|| cells[i, j] == CellStatе.WoundedShip)
+                    if (cells[i, j] == CellStatе.Ship || cells[i, j] == CellStatе.WoundedShip)
                         PluckShip(i, j, cells, ships);
                 }
             }
@@ -561,14 +560,18 @@ namespace Sea_Battleship
             }
             if (isPlace)
                 PlaceShips();
-            foreach(Point p in hitShipList)
+        }
+
+        public void PlaceHitted()
+        {
+            foreach (Point p in hitShipList)
             {
                 _pw = WindowConfig.PlayPageCon;
                 if (isOnMyField)
                     WindowConfig.PlayPageCon.MyField.Ships.CheckEnemy(p, WindowConfig.PlayPageCon, true);
                 else
-                ships.Check((int)p.X, (int)p.Y, _pw, true);
-                
+                    ships.Check((int)p.X, (int)p.Y, _pw, true);
+
                 Image img = new Image
                 {
                     Stretch = Stretch.Fill,
@@ -680,42 +683,42 @@ namespace Sea_Battleship
             }
         }
 
-        List<Point> hitShipList = new List<Point>();
+        public List<Point> hitShipList = new List<Point>();
 
         private void PluckShip(int i, int j, CellStatе[,] cells, Ships Ships, bool isLoaded)
         {
             bool isDead = false;
             int countHit = 0;
-            if (cells[i, j] == CellStatе.WoundedShip|| cells[i, j] == CellStatе.DestroyedShip)
+            if (cells[i, j] == CellStatе.WoundedShip || cells[i, j] == CellStatе.DestroyedShip)
             {
                 hitShipList.Add(new Point(i, j));
                 countHit++;
             }
             int len = 1;
             cells[i, j] = CellStatе.Water;
-            if (i + 1 < 10 && (cells[i + 1, j] == CellStatе.Ship|| cells[i + 1, j] == CellStatе.WoundedShip || cells[i+1, j] == CellStatе.DestroyedShip))
+            if (i + 1 < 10 && (cells[i + 1, j] == CellStatе.Ship || cells[i + 1, j] == CellStatе.WoundedShip || cells[i + 1, j] == CellStatе.DestroyedShip))
             {
-                if (cells[i+1, j] == CellStatе.WoundedShip || cells[i, j] == CellStatе.DestroyedShip)
+                if (cells[i + 1, j] == CellStatе.WoundedShip || cells[i + 1, j] == CellStatе.DestroyedShip)
                 {
-                    hitShipList.Add(new Point(i, j));
+                    hitShipList.Add(new Point(i + 1, j));
                     countHit++;
                 }
                 len++;
                 cells[i + 1, j] = CellStatе.Water;
-                if (i + 2 < 10 && (cells[i + 2, j] == CellStatе.Ship|| cells[i + 2, j] == CellStatе.Ship || cells[i+2, j] == CellStatе.DestroyedShip))
+                if (i + 2 < 10 && (cells[i + 2, j] == CellStatе.Ship || cells[i + 2, j] == CellStatе.Ship || cells[i + 2, j] == CellStatе.DestroyedShip))
                 {
-                    if (cells[i+2, j] == CellStatе.WoundedShip)
+                    if (cells[i + 2, j] == CellStatе.WoundedShip)
                     {
-                        hitShipList.Add(new Point(i, j));
+                        hitShipList.Add(new Point(i + 2, j));
                         countHit++;
                     }
                     len++;
                     cells[i + 2, j] = CellStatе.Water;
-                    if (i + 3 < 10 && (cells[i + 3, j] == CellStatе.Ship|| cells[i + 3, j] == CellStatе.Ship || cells[i+3, j] == CellStatе.DestroyedShip))
+                    if (i + 3 < 10 && (cells[i + 3, j] == CellStatе.Ship || cells[i + 3, j] == CellStatе.Ship || cells[i + 3, j] == CellStatе.DestroyedShip))
                     {
-                        if (cells[i+3, j] == CellStatе.WoundedShip)
+                        if (cells[i + 3, j] == CellStatе.WoundedShip)
                         {
-                            hitShipList.Add(new Point(i, j));
+                            hitShipList.Add(new Point(i + 3, j));
                             countHit++;
                         }
                         len++;
@@ -759,16 +762,16 @@ namespace Sea_Battleship
                     });
                 }
             }
-            else if (j + 1 < 10 && (cells[i, j + 1] == CellStatе.Ship|| cells[i, j + 1] == CellStatе.WoundedShip || cells[i, j+1] == CellStatе.DestroyedShip))
+            else if (j + 1 < 10 && (cells[i, j + 1] == CellStatе.Ship || cells[i, j + 1] == CellStatе.WoundedShip || cells[i, j + 1] == CellStatе.DestroyedShip))
             {
-                if (cells[i, j+1] == CellStatе.WoundedShip)
+                if (cells[i, j + 1] == CellStatе.WoundedShip)
                 {
-                    hitShipList.Add(new Point(i, j+1));
+                    hitShipList.Add(new Point(i, j + 1));
                     countHit++;
                 }
                 len++;
                 cells[i, j + 1] = CellStatе.Water;
-                if (j + 2 < 10 && (cells[i, j + 2] == CellStatе.Ship|| cells[i, j + 2] == CellStatе.WoundedShip || cells[i, j+2] == CellStatе.DestroyedShip))
+                if (j + 2 < 10 && (cells[i, j + 2] == CellStatе.Ship || cells[i, j + 2] == CellStatе.WoundedShip || cells[i, j + 2] == CellStatе.DestroyedShip))
                 {
                     if (cells[i, j + 2] == CellStatе.WoundedShip)
                     {
@@ -777,7 +780,7 @@ namespace Sea_Battleship
                     }
                     len++;
                     cells[i, j + 2] = CellStatе.Water;
-                    if (j + 3 < 10 && (cells[i, j + 3] == CellStatе.Ship || cells[i, j + 3] == CellStatе.WoundedShip || cells[i, j+3] == CellStatе.DestroyedShip))
+                    if (j + 3 < 10 && (cells[i, j + 3] == CellStatе.Ship || cells[i, j + 3] == CellStatе.WoundedShip || cells[i, j + 3] == CellStatе.DestroyedShip))
                     {
                         if (cells[i, j + 3] == CellStatе.WoundedShip)
                         {

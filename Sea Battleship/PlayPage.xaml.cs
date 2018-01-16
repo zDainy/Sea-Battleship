@@ -41,6 +41,8 @@ namespace Sea_Battleship
             OnlineGame = onlineGame;
             WindowConfig.GameState = WindowConfig.State.Online;
             InitializeComponent();
+            MyField.PlaceHitted();
+            EnemyField.PlaceHitted();
             PauseItem.IsEnabled = OnlineGame.PlayerRole == PlayerRole.Server;
             SaveGameItem.IsEnabled = OnlineGame.PlayerRole == PlayerRole.Server;
             WindowConfig.SetStartColor();
