@@ -186,7 +186,6 @@ namespace Sea_Battleship
                     Exit();
                     break;
                 case MessageBoxResult.No:
-                    //наверно уведомить второго игрока
                     Exit();
                     break;
                 case MessageBoxResult.Cancel:
@@ -198,6 +197,8 @@ namespace Sea_Battleship
         {
             if (!(OnlineGame is null))
             {
+                if (IsPaused)
+                    Pause();
                 if (OnlineGame.PlayerRole == PlayerRole.Server)
                 {
                     if (!lastPlayer)
@@ -305,9 +306,15 @@ namespace Sea_Battleship
         {
             if (WindowConfig.GameState == WindowConfig.State.Online)
             {
-                Pause();
+                bool needUnPause = false;
+                if (!IsPaused)
+                {
+                    Pause();
+                    needUnPause = true;
+                }
                 new SaveGameWindow().ShowDialog();
-                Pause();
+                if (needUnPause)
+                    Pause();
             }
             else
             {
