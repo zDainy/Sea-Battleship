@@ -238,7 +238,7 @@ namespace Sea_Battleship
                     {
                         case CellStatе.WoundedShip:
                             _pw.MyField.Ships.CheckEnemy(new Point(x, y), _pw, true);
-                            WindowConfig.PlayWaterSound();
+                            WindowConfig.PlaySound();
                             if (_pw.MyField.Ships.IsAllDead())
                                 EndOfGame(false);
                             break;
