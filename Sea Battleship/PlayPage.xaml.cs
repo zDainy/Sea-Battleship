@@ -81,9 +81,11 @@ namespace Sea_Battleship
         private void Tick(object sender, object e)
         {
             if (tickCount == 24)
+            {
                 if (IsPaused)
                     Unpause();
                 tickCount = 0;
+            }
             var controller = ImageBehavior.GetAnimationController(TimerImage);
             if (controller != null)
             {
@@ -269,8 +271,10 @@ namespace Sea_Battleship
         public void SetPause()
         {
             BeforePauseInt = tickCount;
-            timer.Stop();
             tickCount = 0;
+            var controller = ImageBehavior.GetAnimationController(TimerImage);
+            controller?.GotoFrame(0);
+            timer.Stop();
             BeforeTimeSpan = timer.Interval;
             timer.Interval = new TimeSpan(0, 0, 0, 12, 500);
             timer.Start();
@@ -284,6 +288,8 @@ namespace Sea_Battleship
         {
             timer.Stop();
             tickCount = BeforePauseInt;
+            var controller = ImageBehavior.GetAnimationController(TimerImage);
+            controller?.GotoFrame(tickCount);
             timer.Interval = BeforeTimeSpan;
             timer.Start();
             if (OnlineGame.PlayerRole == PlayerRole.Server)
