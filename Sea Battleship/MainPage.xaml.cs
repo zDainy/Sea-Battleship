@@ -82,6 +82,7 @@ namespace Sea_Battleship
 
         private void CreateLobby_Click(object sender, RoutedEventArgs e)
         {
+            WindowConfig.NavigationService = NavigationService;
             WindowConfig.GameState = WindowConfig.State.Online;
             ConfigOnlineHostWindow window = new ConfigOnlineHostWindow();
             window.ShowDialog();
@@ -91,6 +92,7 @@ namespace Sea_Battleship
 
         private void ConnetToLobbyItem_Click(object sender, RoutedEventArgs e)
         {
+            WindowConfig.NavigationService = NavigationService;
             WindowConfig.GameState = WindowConfig.State.Online;
             ConfigOnlineNotHostWindow window = new ConfigOnlineNotHostWindow();
             window.ShowDialog();

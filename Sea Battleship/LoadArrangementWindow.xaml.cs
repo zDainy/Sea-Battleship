@@ -72,15 +72,11 @@ namespace Sea_Battleship
             }
             else
             {
-                //Место для говнокода
-                WindowConfig.PlacingPage.OnlineGame.CreateGame(_arrangementClient);
+                _onlineGame.CreateGame(arr);
                 PlayPage page = new PlayPage(_onlineGame);
                 WindowConfig.NavigationService.Navigate(page, UriKind.Relative);
             }
             Close();
-            //OnlineGame.CreateGame(arr);
-            //PlayPage window = new PlayPage(OnlineGame);
-            //  WindowConfig.MainPage.NavigationService.Navigate(window, UriKind.Relative);
         }
     }
 }
