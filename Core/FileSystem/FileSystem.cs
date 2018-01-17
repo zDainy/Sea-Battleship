@@ -556,5 +556,25 @@ namespace Core
             }
             return null;
         }
+
+        /// <summary>
+        /// Проверяет, существует ли расстановка с указанным именем.
+        /// </summary>
+        /// <param name="name">Имя расстановки.</param>
+        /// <returns></returns>
+        public static bool ArrangementExists(string name)
+        {
+            return (Directory.Exists("arr") && File.Exists("arr\\" + name + ".arr"));
+        }
+
+        /// <summary>
+        /// Проверяет, существует ли игра с указанным именем.
+        /// </summary>
+        /// <param name="name">Имя игры.</param>
+        /// <returns></returns>
+        public static bool GameExists(string name)
+        {
+            return (Directory.Exists("games") && File.Exists("games\\" + name + ".sb"));
+        }
     }
 }
