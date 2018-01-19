@@ -24,8 +24,8 @@
             <Menu Grid.Column="0" VerticalContentAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Background="{x:Null}" HorizontalAlignment="Center">
                 <MenuItem  Header ="Сохранить игру" Name="SaveGameItem" Click="SaveGameItem_Click" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="130" Background="{x:Null}" Height="25" >
                 </MenuItem>
-                <MenuItem  Header="Правила" Width="130" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
-                <MenuItem Header="Об авторах" Width="130" />
+                <MenuItem  Header="Правила" Name="RuleItem" Click="RuleItem_Click" Width="130" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+                <MenuItem Header="Об авторах" Name="AboutItem" Click="AboutItem_Click" Width="130" />
                 <MenuItem Header="Пауза" Name="PauseItem"  Width="130" Click="Pause_Click" />
                 <MenuItem Header="Выход" Name="ExitItem" Click="ExitItem_Click"/>
             </Menu>
