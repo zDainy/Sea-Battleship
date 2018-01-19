@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:Sea_Battleship"
       mc:Ignorable="d" 
       d:DesignHeight="300"
-      Title="PlacingPage" Width="888" Height="471">
+      Title="PlacingPage" Height="Auto">
     <Grid Name="CurGrid"  MouseMove="Grid_MouseMove" Margin="0">
         <Grid.Background>
             <ImageBrush ImageSource="Resources/main.jpg" Stretch="UniformToFill"/>
@@ -60,7 +60,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <Image Focusable="False"  Source="Resources/Water.jpg" Margin="150,49,0,0" Width="400" Height="400" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="None"/>
+        <Image Focusable="False"  Source="Resources/Water.jpg" Margin="150,49,0,0" Width="400" Height="400" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Fill"/>
 
         <StackPanel MouseLeftButtonDown="ship_MouseDown" MouseLeftButtonUp="ship_MouseUp" MouseRightButtonDown="ship_MouseRightButtonDown" Margin="582,80,0,0" VerticalAlignment="Top" Orientation="Horizontal" HorizontalAlignment="Left" Width="160" Height="40">
             <StackPanel.BindingGroup>

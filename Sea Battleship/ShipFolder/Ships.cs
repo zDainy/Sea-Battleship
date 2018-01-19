@@ -146,12 +146,6 @@ namespace Sea_Battleship
             {
                 if (sh.isHere(im, z, isOnline, out isDead))
                 {
-                    //PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
-                    //{
-                    //    Stretch = Stretch.Fill,
-                    //    Opacity = 100,
-                    //    Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                    //});
                     was = true;
                     break;
                 }
@@ -161,12 +155,6 @@ namespace Sea_Battleship
                 {
                     if (sh.isHere(im, z, isOnline, out isDead))
                     {
-                        //PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
-                        //{
-                        //    Stretch = Stretch.Fill,
-                        //    Opacity = 100,
-                        //    Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                        //});
                         was = true;
                         break;
                     }
@@ -176,12 +164,6 @@ namespace Sea_Battleship
                 {
                     if (sh.isHere(im, z, isOnline, out isDead))
                     {
-                        //PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
-                        //{
-                        //    Stretch = Stretch.Fill,
-                        //    Opacity = 100,
-                        //    Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                        //});
                         was = true;
                         break;
                     }
@@ -191,12 +173,6 @@ namespace Sea_Battleship
                 {
                     if (sh.isHere(im, z, isOnline, out isDead))
                     {
-                        //PlayField.SetCell((int)X, (int)Y, z.MyField.FieldGrid, new Image()
-                        //{
-                        //    Stretch = Stretch.Fill,
-                        //    Opacity = 100,
-                        //    Source = new BitmapImage(new Uri("/Resources/shipCrushed.png", UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
-                        //});
                         was = true;
                         break;
                     }
