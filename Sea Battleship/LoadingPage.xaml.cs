@@ -26,6 +26,7 @@ namespace Sea_Battleship
         public LoadingPage()
         {
             InitializeComponent();
+            WindowConfig.GetCurrentAudioImg(AudioImg);
             Label label;
             Button button;
             int i = 1;
@@ -43,7 +44,7 @@ namespace Sea_Battleship
                     label = new Label();
                     label.Content = str1;
                     button = new Button();
-                    button.Content = str1;
+                    button.Content = str1;  
                     button.Click += Button_Click;
                     LoadGrid.Children.Add(label);
                     LoadGrid.Children.Add(button);

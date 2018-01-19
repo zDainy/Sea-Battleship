@@ -35,12 +35,19 @@ namespace Sea_Battleship
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (WindowConfig.GameState == WindowConfig.State.Offline)
-            {
+            {                
                 if (textBoxSave.Text != "")
                 {
-                    FileSystem.SaveArrangement(textBoxSave.Text, arrangement);
-                    MessageBox.Show("Расстановка сохранена");
-                    Close();
+                    if (FileSystem.ArrangementExists(textBoxSave.Text))
+                    {
+                        MessageBox.Show("Расстановка с таким названием существует,\nпожалуйста, введите другое название");
+                    }
+                    else
+                    {
+                        FileSystem.SaveArrangement(textBoxSave.Text, arrangement);
+                        MessageBox.Show("Расстановка сохранена");
+                        Close();
+                    }
                 }
                 else
                 {

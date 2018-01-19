@@ -55,6 +55,7 @@ namespace Sea_Battleship
             ArrangementClient = arrangementClient;
             GameConfig = game;
             InitializeComponent();
+            WindowConfig.GetCurrentAudioImg(AudioImg);
             Init();
         }
 
@@ -63,6 +64,7 @@ namespace Sea_Battleship
             WindowConfig.PlacingPage = this;
             OnlineGame = game;
             InitializeComponent();
+            WindowConfig.GetCurrentAudioImg(AudioImg);
             Init();
         }
 

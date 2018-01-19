@@ -30,7 +30,7 @@
             <Menu Margin="0" Grid.Column="5" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
                 <MenuItem Name="ExitButton" Header="Выход" Click="ExitButton_Click" />
             </Menu>
-            <Image Grid.Column="6" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"></Image>
+            <Image Name="AudioImg" Grid.Column="6" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"  HorizontalAlignment="Stretch"></Image>
         </Grid>
 
         <Grid Name="gr" MouseRightButtonDown="ship_MouseRightButtonDown" HorizontalAlignment="Left" Margin="150,49,0,22" Width="400" ShowGridLines="True" Panel.ZIndex="1" Height="400">

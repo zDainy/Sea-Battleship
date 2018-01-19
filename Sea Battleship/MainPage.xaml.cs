@@ -25,10 +25,11 @@ namespace Sea_Battleship
         public MainPage()
         {
             InitializeComponent();
+            WindowConfig.GetCurrentAudioImg(AudioImg);
             WindowConfig.MainPage = this;
-            WindowConfig.Player.Open(new Uri(Environment.CurrentDirectory+@"\pirat.wav"));
-            WindowConfig.Player.Volume = 50;
-          //  WindowConfig.Player.Play();
+          //  WindowConfig.Player.Open(new Uri(Environment.CurrentDirectory+@"\pirat.wav"));
+          //  WindowConfig.Player.Volume = 50;
+          ////  WindowConfig.Player.Play();
             WindowConfig.game = null;
             WindowConfig.OnlineGame = null;
         }

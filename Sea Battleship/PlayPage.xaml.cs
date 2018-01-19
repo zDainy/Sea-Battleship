@@ -41,6 +41,7 @@ namespace Sea_Battleship
             OnlineGame = onlineGame;
             WindowConfig.GameState = WindowConfig.State.Online;
             InitializeComponent();
+            WindowConfig.GetCurrentAudioImg(AudioImg);
             MyField.PlaceHitted();
             EnemyField.PlaceHitted();
             PauseItem.IsEnabled = OnlineGame.PlayerRole == PlayerRole.Server;
@@ -69,13 +70,14 @@ namespace Sea_Battleship
 
           //  timer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += Tick;
-            timer.Start();
+           // timer.Start();
 
             InitTimer();
             Timer.Start();
+            timer.Start();
         }
 
-        DispatcherTimer timer = new DispatcherTimer();
+        public DispatcherTimer timer = new DispatcherTimer();
         public int tickCount = 0;
 
         private void Tick(object sender, object e)
@@ -85,6 +87,10 @@ namespace Sea_Battleship
                 if (IsPaused)
                     Unpause();
                 tickCount = 0;
+                if(WindowConfig.GameState == WindowConfig.State.Offline)
+                {
+                    WindowConfig.SetSwitchColorOff(false);
+                }
             }
             var controller = ImageBehavior.GetAnimationController(TimerImage);
             if (controller != null)
@@ -146,6 +152,7 @@ namespace Sea_Battleship
             WindowConfig.game = game;
             WindowConfig.GameState = WindowConfig.State.Offline;
             InitializeComponent();
+            WindowConfig.GetCurrentAudioImg(AudioImg);
             Game = game;
             PauseItem.IsEnabled = false;
             MyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
@@ -175,7 +182,6 @@ namespace Sea_Battleship
         private void audioChanged(object sender, RoutedEventArgs e)
         {
             WindowConfig.AudioChanged((Image)sender);
-
         }
 
         private void ExitItem_Click(object sender, RoutedEventArgs e)

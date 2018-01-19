@@ -34,17 +34,23 @@ namespace Sea_Battleship
         {
             if (textBoxSave.Text != "")
             {
-
-                if (WindowConfig.GameState == WindowConfig.State.Offline)
+                if (FileSystem.GameExists(textBoxSave.Text))
                 {
-                    FileSystem.SaveGame(textBoxSave.Text, WindowConfig.game);
+                    MessageBox.Show("Игра с таким названием существует,\nпожалуйста, введите другое название");
                 }
                 else
                 {
-                    FileSystem.SaveGame(textBoxSave.Text, WindowConfig.OnlineGame.Game);
+                    if (WindowConfig.GameState == WindowConfig.State.Offline)
+                    {
+                        FileSystem.SaveGame(textBoxSave.Text, WindowConfig.game);
+                    }
+                    else
+                    {
+                        FileSystem.SaveGame(textBoxSave.Text, WindowConfig.OnlineGame.Game);
+                    }
+                    MessageBox.Show("Игра сохранена");
+                    Close();
                 }
-                MessageBox.Show("Игра сохранена");
-                Close();
             }
             else
             {
