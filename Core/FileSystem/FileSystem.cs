@@ -128,23 +128,36 @@ namespace Core
         /// <returns></returns>
         public static ShipArrangement LoadArrangement(string name)
         {
-            name += ".arr";
-            if (!File.Exists("arr\\" + name)) throw new LoadingArrangementException();
-            FileStream fileStream = new FileStream("arr\\" + name, FileMode.Open);
-            byte[] bytes = new byte[68];
-            fileStream.Read(bytes, 0, bytes.Length);
-            Encoding e = Encoding.ASCII;
-            string s = e.GetString(bytes);
-            fileStream.Close();
-            ShipArrangement res = new ShipArrangement();
-            bool[,] arrangement = loadArrangement(s);
-
-            for (int i = 0; i < 10; i++)
+            ShipArrangement res = null;
+            try
             {
-                for (int j = 0; j < 10; j++)
+                name += ".arr";
+                if (!File.Exists("arr\\" + name)) throw new LoadingArrangementException();
+                FileStream fileStream = new FileStream("arr\\" + name, FileMode.Open);
+                byte[] bytes = new byte[68];
+                fileStream.Read(bytes, 0, bytes.Length);
+                Encoding e = Encoding.ASCII;
+                string s = e.GetString(bytes);
+                fileStream.Close();
+                res = new ShipArrangement();
+                bool[,] arrangement = loadArrangement(s);
+                for (int i = 0; i < 10; i++)
                 {
-                    res.SetCellState((arrangement[i, j]) ? CellStatе.Ship : CellStatе.Water, i, j);
+                    for (int j = 0; j < 10; j++)
+                    {
+                        res.SetCellState((arrangement[i, j]) ? CellStatе.Ship : CellStatе.Water, i, j);
+                    }
                 }
+            }
+            catch (LoadingArrangementException e)
+            {
+                Common.LogService.Trace($"Неверный формат файла: {name}");
+                throw new LoadingArrangementException("Неверный формат файла");
+            }
+            catch (Exception e)
+            {
+                Common.LogService.Trace(e.Message);
+                throw new LoadingArrangementException(e.Message);
             }
             return res;
         }
@@ -518,15 +531,30 @@ namespace Core
         /// </summary>
         public static Game LoadGame(string name)
         {
-            name += ".sb";
-            if (!File.Exists("games\\" + name)) throw new GameLoadingException();
-            FileStream fileStream = new FileStream("games\\" + name, FileMode.Open);
-            byte[] bytes = new byte[200];
-            fileStream.Read(bytes, 0, bytes.Length);
-            Encoding e = Encoding.ASCII;
-            string s = e.GetString(bytes);
-            fileStream.Close();
-            return loadGame(s);
+            Game res = null;
+            try
+            {
+                name += ".sb";
+                if (!File.Exists("games\\" + name)) throw new GameLoadingException();
+                FileStream fileStream = new FileStream("games\\" + name, FileMode.Open);
+                byte[] bytes = new byte[200];
+                fileStream.Read(bytes, 0, bytes.Length);
+                Encoding e = Encoding.ASCII;
+                string s = e.GetString(bytes);
+                fileStream.Close();
+                res = loadGame(s);
+            }
+            catch (GameLoadingException e)
+            {
+                Common.LogService.Trace($"Неверный формат файла {name}");
+                throw new GameLoadingException("Неверный формат файла");
+            }
+            catch (Exception e)
+            {
+                Common.LogService.Trace(e.Message);
+                throw new GameLoadingException(e.Message);
+            }
+            return res;
         }
 
         public static List<string> SavedArrangementList()
