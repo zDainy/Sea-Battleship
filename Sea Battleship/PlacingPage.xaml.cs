@@ -378,17 +378,20 @@ namespace Sea_Battleship
 
         public void Exit(bool lastPlayer = false)
         {
-            if (OnlineGame.PlayerRole == PlayerRole.Server)
+            if (_onlineGame != null)
             {
-                OnlineGame.Connect.Server.SendResponse(OpearationTypes.GameStatus,
-                    new Network.GameStatus(GameStatus.Break));
-                OnlineGame.Connect.Server.Stop();
-            }
-            else
-            {
-                OnlineGame.Connect.Client.SendRequest(OpearationTypes.GameStatus,
-                    new Network.GameStatus(GameStatus.Break));
-                OnlineGame.Connect.Client.Close();
+                if (OnlineGame.PlayerRole == PlayerRole.Server)
+                {
+                    OnlineGame.Connect.Server.SendResponse(OpearationTypes.GameStatus,
+                        new Network.GameStatus(GameStatus.Break));
+                    OnlineGame.Connect.Server.Stop();
+                }
+                else
+                {
+                    OnlineGame.Connect.Client.SendRequest(OpearationTypes.GameStatus,
+                        new Network.GameStatus(GameStatus.Break));
+                    OnlineGame.Connect.Client.Close();
+                }
             }
             WindowConfig.OnlineGame = null;
             WindowConfig.game = null;
