@@ -25,10 +25,11 @@ namespace Sea_Battleship
         public MainPage()
         {
             InitializeComponent();
+            WindowConfig.GetCurrentAudioImg(AudioImg);
             WindowConfig.MainPage = this;
-            WindowConfig.Player.Open(new Uri(Environment.CurrentDirectory+@"\pirat.wav"));
-            WindowConfig.Player.Volume = 50;
-          //  WindowConfig.Player.Play();
+          //  WindowConfig.Player.Open(new Uri(Environment.CurrentDirectory+@"\pirat.wav"));
+          //  WindowConfig.Player.Volume = 50;
+          ////  WindowConfig.Player.Play();
             WindowConfig.game = null;
             WindowConfig.OnlineGame = null;
         }
@@ -66,12 +67,6 @@ namespace Sea_Battleship
         {
             try
             {
-                
-                //Page p = new Page();
-                //p.Content = new Uri(Properties.Resources.hello);
-                //NavigationService.Content = new Uri(uriString: Properties.Resources.Spravka);
-                //NavigationService.Navigate(@"/Resources/Spravka.html");
-                // MainFrame.Content = new Uri("/Resources/1n3.png", UriKind.Relative);
                  System.Diagnostics.Process.Start("C:/Users/Пользователь/Desktop/Наиболее морской бой/Sea-Battleship/Sea Battleship/Resources/Spravka.html");
             }
             catch

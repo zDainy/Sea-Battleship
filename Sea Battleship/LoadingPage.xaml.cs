@@ -26,6 +26,7 @@ namespace Sea_Battleship
         public LoadingPage()
         {
             InitializeComponent();
+            WindowConfig.GetCurrentAudioImg(AudioImg);
             Label label;
             Button button;
             int i = 1;
@@ -43,7 +44,7 @@ namespace Sea_Battleship
                     label = new Label();
                     label.Content = str1;
                     button = new Button();
-                    button.Content = str1;
+                    button.Content = str1;  
                     button.Click += Button_Click;
                     LoadGrid.Children.Add(label);
                     LoadGrid.Children.Add(button);
@@ -85,6 +86,23 @@ namespace Sea_Battleship
                 PlayPage playPage = new PlayPage(WindowConfig.game);
                 NavigationService.Navigate(playPage, UriKind.Relative);
             }
+        }
+
+        private void RuleItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("C:/Users/Пользователь/Desktop/Наиболее морской бой/Sea-Battleship/Sea Battleship/Resources/Spravka.html");
+            }
+            catch
+            {
+                MessageBox.Show("Справка отсутствует");
+            }
+        }
+
+        private void AboutItem_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Игру создали студенты группы 6403:\nКотов Алексей\nОнисич Степан\nШибаева Александра", "Об авторах", MessageBoxButton.OK);
         }
     }
 }

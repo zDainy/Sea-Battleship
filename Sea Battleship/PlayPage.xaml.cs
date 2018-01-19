@@ -41,6 +41,7 @@ namespace Sea_Battleship
             OnlineGame = onlineGame;
             WindowConfig.GameState = WindowConfig.State.Online;
             InitializeComponent();
+            WindowConfig.GetCurrentAudioImg(AudioImg);
             MyField.PlaceHitted();
             EnemyField.PlaceHitted();
             PauseItem.IsEnabled = OnlineGame.PlayerRole == PlayerRole.Server;
@@ -69,13 +70,14 @@ namespace Sea_Battleship
 
           //  timer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += Tick;
-            timer.Start();
+           // timer.Start();
 
             InitTimer();
             Timer.Start();
+            timer.Start();
         }
 
-        DispatcherTimer timer = new DispatcherTimer();
+        public DispatcherTimer timer = new DispatcherTimer();
         public int tickCount = 0;
 
         private void Tick(object sender, object e)
@@ -85,6 +87,10 @@ namespace Sea_Battleship
                 if (IsPaused)
                     Unpause();
                 tickCount = 0;
+                if(WindowConfig.GameState == WindowConfig.State.Offline)
+                {
+                    WindowConfig.SetSwitchColorOff(false);
+                }
             }
             var controller = ImageBehavior.GetAnimationController(TimerImage);
             if (controller != null)
@@ -146,6 +152,7 @@ namespace Sea_Battleship
             WindowConfig.game = game;
             WindowConfig.GameState = WindowConfig.State.Offline;
             InitializeComponent();
+            WindowConfig.GetCurrentAudioImg(AudioImg);
             Game = game;
             PauseItem.IsEnabled = false;
             MyTurnLabel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
@@ -175,7 +182,6 @@ namespace Sea_Battleship
         private void audioChanged(object sender, RoutedEventArgs e)
         {
             WindowConfig.AudioChanged((Image)sender);
-
         }
 
         private void ExitItem_Click(object sender, RoutedEventArgs e)
@@ -326,6 +332,23 @@ namespace Sea_Battleship
             {
                 new SaveGameWindow().ShowDialog();
             }
+        }
+
+        private void RuleItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("C:/Users/Пользователь/Desktop/Наиболее морской бой/Sea-Battleship/Sea Battleship/Resources/Spravka.html");
+            }
+            catch
+            {
+                MessageBox.Show("Справка отсутствует");
+            }
+        }
+
+        private void AboutItem_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Игру создали студенты группы 6403:\nКотов Алексей\nОнисич Степан\nШибаева Александра", "Об авторах", MessageBoxButton.OK);
         }
     }
 }

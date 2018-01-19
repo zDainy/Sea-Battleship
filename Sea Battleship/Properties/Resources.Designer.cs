@@ -79,6 +79,15 @@ namespace Sea_Battleship.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream loser {
+            get {
+                return ResourceManager.GetStream("loser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap no_audio {
@@ -132,6 +141,15 @@ namespace Sea_Battleship.Properties {
         internal static System.IO.UnmanagedMemoryStream water {
             get {
                 return ResourceManager.GetStream("water", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.IO.UnmanagedMemoryStream, аналогичного System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Winner {
+            get {
+                return ResourceManager.GetStream("Winner", resourceCulture);
             }
         }
     }

@@ -24,12 +24,12 @@
             <Menu Grid.Column="0" VerticalContentAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Background="{x:Null}" HorizontalAlignment="Center">
                 <MenuItem  Header ="Сохранить игру" Name="SaveGameItem" Click="SaveGameItem_Click" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="130" Background="{x:Null}" Height="25" >
                 </MenuItem>
-                <MenuItem  Header="Правила" Width="130" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
-                <MenuItem Header="Об авторах" Width="130" />
+                <MenuItem  Header="Правила" Name="RuleItem" Click="RuleItem_Click" Width="130" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+                <MenuItem Header="Об авторах" Name="AboutItem" Click="AboutItem_Click" Width="130" />
                 <MenuItem Header="Пауза" Name="PauseItem"  Width="130" Click="Pause_Click" />
                 <MenuItem Header="Выход" Name="ExitItem" Click="ExitItem_Click"/>
             </Menu>
-            <Image Grid.Column="5" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"/>
+            <Image Name="AudioImg" Grid.Column="5" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"/>
         </Grid>
         <!--<local:PlayField IsHiddenField="False" HorizontalAlignment="Left" Height="191" Margin="71,93,0,0" VerticalAlignment="Top" Width="191"/>-->
 
@@ -38,7 +38,7 @@
         <Grid Height="31" Margin="0,418,0,0" VerticalAlignment="Bottom" IsEnabled="False">
             <Label Name="MyTurnLabel" Content="Ваш ход" Background="#FF00287E" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1"/>
         </Grid>
-        <ProgressBar Name="pr1" Height="30" Margin="0" VerticalAlignment="Bottom"/>
+        <ProgressBar Visibility="Hidden" Name="pr1" Height="30" Margin="0" VerticalAlignment="Bottom"/>
         <Image gif:ImageBehavior.AnimateInDesignMode="False" gif:ImageBehavior.RepeatBehavior="20" gif:ImageBehavior.AutoStart="False" gif:ImageBehavior.AnimatedSource="/Resources/timer.gif"  Name="TimerImage"  Height="100" Margin="0,35,0,0" VerticalAlignment="Top" Width="100" HorizontalAlignment="Center"/>
     </Grid>
 </Page>

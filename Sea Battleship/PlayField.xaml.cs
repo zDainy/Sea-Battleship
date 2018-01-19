@@ -191,7 +191,6 @@ namespace Sea_Battleship
             }
         }
 
-
         public Ships Ships { get => ships; set => ships = value; }
 
         // public bool IsHiddenField { get => isHiddenField; set => isHiddenField = value; }
@@ -281,7 +280,6 @@ namespace Sea_Battleship
                 });
             }
         }
-
 
         private void OnlineMyTurn(object obj)
         {
@@ -435,6 +433,7 @@ namespace Sea_Battleship
                                     Source = new BitmapImage(new Uri(uriString, UriKind.Relative)) { CreateOptions = BitmapCreateOptions.IgnoreImageCache }
                                 });
                                 WindowConfig.PlayWaterSound();
+                                WindowConfig.SetSwitchColorOff(false);
                                 res = false;
                                 break;
 
@@ -511,10 +510,15 @@ namespace Sea_Battleship
             try
             {
                 Image image;
-                Point p = AI.MakeAMove(WindowConfig.PlayPageCon.Game);
                 bool was = false;
-                image = (Image)WindowConfig.PlayPageCon.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
-                was = WindowConfig.PlayPageCon.MyField.ships.Check(image, WindowConfig.PlayPageCon, false);
+                Point p;
+                do
+                {
+                    p = AI.MakeAMove(WindowConfig.PlayPageCon.Game);
+                    image = (Image)WindowConfig.PlayPageCon.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
+                    was = WindowConfig.PlayPageCon.MyField.ships.Check(image, WindowConfig.PlayPageCon, false);
+                } while ((WindowConfig.game.ServerShipArrangement.GetCellState(new Vector(p.X, p.Y)) == CellStatе.DestroyedShip) && image.Source.ToString().Contains(WindowConfig.GifPath));
+
                 if (was)
                 {
                     ShipHitted(image);
@@ -531,6 +535,7 @@ namespace Sea_Battleship
                         }
                     });
                     WindowConfig.PlayWaterSound();
+                    WindowConfig.SetSwitchColorOff(true);
                     timer.Stop();
                     isEnemyShoot = false;
                 }
@@ -539,7 +544,6 @@ namespace Sea_Battleship
                     EndOfGame(false);
                     isEnemyShoot = false;
                     timer.Stop();
-
                 }
             }
             catch (Exception exc)
@@ -900,8 +904,13 @@ namespace Sea_Battleship
 
         private void EndOfGame(bool isPlayerWin)
         {
+            WindowConfig.PlayPageCon.Timer.Stop();
+            WindowConfig.PlayPageCon.timer.Stop();
+
+            timer.Stop();
             if (isPlayerWin)
             {
+                WindowConfig.PlayWinnerSound();
                 MessageBox.Show("Вы выиграли!", "Конец игры", MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.No, MessageBoxOptions.None);
                 WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
                 {
@@ -911,6 +920,7 @@ namespace Sea_Battleship
             }
             else
             {
+                WindowConfig.PlayLoserSound();
                 MessageBox.Show("Вы проиграли...", "Конец игры", MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.No, MessageBoxOptions.None);
                 WindowConfig.PlayPageCon.Dispatcher.Invoke(() =>
                 {
