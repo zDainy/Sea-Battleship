@@ -92,7 +92,7 @@ namespace Sea_Battleship
         {
             try
             {
-                System.Diagnostics.Process.Start("C:/Users/Пользователь/Desktop/Наиболее морской бой/Sea-Battleship/Sea Battleship/Resources/Spravka.html");
+                System.Diagnostics.Process.Start("Spravka.html");
             }
             catch
             {

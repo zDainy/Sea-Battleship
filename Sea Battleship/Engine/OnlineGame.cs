@@ -84,6 +84,8 @@ namespace Sea_Battleship.Engine
             {
                 var res = Connect.Client.GetResponse();
                 StartConfig startConfig = (StartConfig)res.Item2;
+                if (startConfig == null)
+                    throw new CookieException();
                 GameConfig = new GameConfig(BotLevels.Easy, startConfig.GameSpeed);
                 if (startConfig.GameStatus == Core.GameStatus.Loaded)
                 {

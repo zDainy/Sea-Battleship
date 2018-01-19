@@ -3,6 +3,7 @@ using Sea_Battleship.Engine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,6 +15,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Network;
+using GameStatus = Core.GameStatus;
+using ShipArrangement = Core.ShipArrangement;
 
 namespace Sea_Battleship
 {
@@ -64,6 +68,7 @@ namespace Sea_Battleship
             WindowConfig.PlacingPage = this;
             OnlineGame = game;
             InitializeComponent();
+            //ExitButton.IsEnabled = false;
             WindowConfig.GetCurrentAudioImg(AudioImg);
             Init();
         }
@@ -373,6 +378,18 @@ namespace Sea_Battleship
 
         public void Exit(bool lastPlayer = false)
         {
+            if (OnlineGame.PlayerRole == PlayerRole.Server)
+            {
+                OnlineGame.Connect.Server.SendResponse(OpearationTypes.GameStatus,
+                    new Network.GameStatus(GameStatus.Break));
+                OnlineGame.Connect.Server.Stop();
+            }
+            else
+            {
+                OnlineGame.Connect.Client.SendRequest(OpearationTypes.GameStatus,
+                    new Network.GameStatus(GameStatus.Break));
+                OnlineGame.Connect.Client.Close();
+            }
             WindowConfig.OnlineGame = null;
             WindowConfig.game = null;
             WindowConfig.IsLoaded = false;
@@ -460,7 +477,7 @@ namespace Sea_Battleship
                 if (!(OnlineGame is null))
                 {
                     OnlineGame.CreateGame(CreateShipArrangement());
-                   // new PlayWindow(_onlineGame) { Owner = Owner }.Show();
+                    // new PlayWindow(_onlineGame) { Owner = Owner }.Show();
                     PlayPage page = new PlayPage(OnlineGame);
                     NavigationService.Navigate(page, UriKind.Relative);
                 }
@@ -470,9 +487,16 @@ namespace Sea_Battleship
                     WindowConfig.game = new Game(arr, ArrangementClient, GameConfig);
                     PlayPage page = new PlayPage(WindowConfig.game);
                     NavigationService.Navigate(page, UriKind.Relative);
-                   //new PlayWindow(new Game(arr, _arrangementClient, _gameConfig)) { Owner = Owner }.Show();
+                    //new PlayWindow(new Game(arr, _arrangementClient, _gameConfig)) { Owner = Owner }.Show();
                 }
-               // Close();
+                // Close();
+            }
+            catch (CookieException)
+            {
+                MessageBox.Show("Нет подключения", "Соединение разорвано", MessageBoxButton.OK, MessageBoxImage.Warning);
+                WindowConfig.OnlineGame = null;
+                WindowConfig.game = null;
+                NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
             }
             catch
             {
@@ -543,7 +567,7 @@ namespace Sea_Battleship
         {
             try
             {
-                System.Diagnostics.Process.Start("C:/Users/Пользователь/Desktop/Наиболее морской бой/Sea-Battleship/Sea Battleship/Resources/Spravka.html");
+                System.Diagnostics.Process.Start("Spravka.html");
             }
             catch
             {
