@@ -510,10 +510,15 @@ namespace Sea_Battleship
             try
             {
                 Image image;
-                Point p = AI.MakeAMove(WindowConfig.PlayPageCon.Game);
                 bool was = false;
-                image = (Image)WindowConfig.PlayPageCon.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
-                was = WindowConfig.PlayPageCon.MyField.ships.Check(image, WindowConfig.PlayPageCon, false);
+                Point p;
+                do
+                {
+                    p = AI.MakeAMove(WindowConfig.PlayPageCon.Game);
+                    image = (Image)WindowConfig.PlayPageCon.MyField.FieldGrid.Children[10 * (int)p.Y + (int)p.X];
+                    was = WindowConfig.PlayPageCon.MyField.ships.Check(image, WindowConfig.PlayPageCon, false);
+                } while ((WindowConfig.game.ServerShipArrangement.GetCellState(new Vector(p.X, p.Y)) == CellStatе.DestroyedShip) && image.Source.ToString().Contains(WindowConfig.GifPath));
+
                 if (was)
                 {
                     ShipHitted(image);
