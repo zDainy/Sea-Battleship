@@ -85,7 +85,7 @@ namespace Sea_Battleship
             if (tickCount == 24)
             {
                 if (IsPaused)
-                    Unpause();
+                    Pause();
                 tickCount = 0;
                 if(WindowConfig.GameState == WindowConfig.State.Offline)
                 {
