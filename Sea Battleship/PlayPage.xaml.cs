@@ -333,5 +333,22 @@ namespace Sea_Battleship
                 new SaveGameWindow().ShowDialog();
             }
         }
+
+        private void RuleItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("C:/Users/Пользователь/Desktop/Наиболее морской бой/Sea-Battleship/Sea Battleship/Resources/Spravka.html");
+            }
+            catch
+            {
+                MessageBox.Show("Справка отсутствует");
+            }
+        }
+
+        private void AboutItem_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Игру создали студенты группы 6403:\nКотов Алексей\nОнисич Степан\nШибаева Александра", "Об авторах", MessageBoxButton.OK);
+        }
     }
 }

@@ -360,8 +360,23 @@ namespace Sea_Battleship
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-            //Owner.Show();
-            //Close();
+            MessageBoxResult res = MessageBox.Show("Вы уверены, что хотите выйти в главное меню?", "", MessageBoxButton.YesNo);
+            switch (res)
+            {
+                case MessageBoxResult.Yes:
+                    Exit();
+                    break;
+                case MessageBoxResult.No:
+                    break;
+            }
+        }
+
+        public void Exit(bool lastPlayer = false)
+        {
+            WindowConfig.OnlineGame = null;
+            WindowConfig.game = null;
+            WindowConfig.IsLoaded = false;
+            NavigationService.Navigate(new Uri("MainPage.xaml", UriKind.Relative));
         }
 
         private void ChangeOrientation()
@@ -526,7 +541,14 @@ namespace Sea_Battleship
 
         private void RuleItem_Click(object sender, RoutedEventArgs e)
         {
-            //ArrangeLoad(null);
+            try
+            {
+                System.Diagnostics.Process.Start("C:/Users/Пользователь/Desktop/Наиболее морской бой/Sea-Battleship/Sea Battleship/Resources/Spravka.html");
+            }
+            catch
+            {
+                MessageBox.Show("Справка отсутствует");
+            }
         }
 
         private void PluckShip(int i, int j, CellStatе[,] cells)
@@ -754,6 +776,11 @@ namespace Sea_Battleship
                 listItem.PointList = new List<Point>();
                 listItem.PointList.Add(new Point(i, j));
             }
+        }
+
+        private void AboutItem_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Игру создали студенты группы 6403:\nКотов Алексей\nОнисич Степан\nШибаева Александра", "Об авторах", MessageBoxButton.OK);
         }
     }
 }

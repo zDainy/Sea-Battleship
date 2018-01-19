@@ -20,8 +20,8 @@
                 <ColumnDefinition Width="30 px"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Menu Grid.Column="0" VerticalContentAlignment="Center"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Background="{x:Null}" HorizontalAlignment="Center">
-                <MenuItem  Header ="Правила" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="150" Background="{x:Null}" Height="25" />
-                <MenuItem Header="Об авторах" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+                <MenuItem  Header ="Правила" Name="RuleItem" Click="RuleItem_Click" HeaderStringFormat="" VerticalContentAlignment="Stretch" Padding="0" HorizontalContentAlignment="Stretch" Width="150" Background="{x:Null}" Height="25" />
+                <MenuItem Header="Об авторах" Name="AboutItem" Click="AboutItem_Click" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
                 <MenuItem Header="Назад" Name="BackClick" Click="BackClick_Click"/>
             </Menu>
             <Image Grid.Column="3" Name="AudioImg" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"></Image>

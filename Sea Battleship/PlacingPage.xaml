@@ -5,8 +5,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Sea_Battleship"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
-      Title="PlacingPage" Width="894" Height="471">
+      d:DesignHeight="300"
+      Title="PlacingPage" Width="888" Height="471">
     <Grid Name="CurGrid"  MouseMove="Grid_MouseMove" Margin="0">
         <Grid.Background>
             <ImageBrush ImageSource="Resources/main.jpg" Stretch="UniformToFill"/>
@@ -25,9 +25,7 @@
                 <MenuItem Name="SaveArrItem" Click="SaveArrItem_Click" Header="Сохранить расстановку" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
                 <MenuItem Name="LoadArrItem" Click="LoadArrItem_Click" Header="Загрузить расстановку" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
                 <MenuItem Header="Правила" Name="RuleItem" Click="RuleItem_Click" />
-                <MenuItem Header="Об авторах" />
-            </Menu>
-            <Menu Margin="0" Grid.Column="5" VerticalContentAlignment="Stretch" MinHeight="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Background="{x:Null}" VerticalAlignment="Center">
+                <MenuItem Header="Об авторах" Name="AboutItem" Click="AboutItem_Click"/>
                 <MenuItem Name="ExitButton" Header="Выход" Click="ExitButton_Click" />
             </Menu>
             <Image Name="AudioImg" Grid.Column="6" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"  HorizontalAlignment="Stretch"></Image>
