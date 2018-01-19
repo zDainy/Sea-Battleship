@@ -8,7 +8,7 @@
         Title="WaitingWindow" Height="94" Width="188" WindowStyle="None">
     <Grid>
         <Label Content="Ожидание другого игрока" Margin="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Panel.ZIndex="1"/>
-        <Image gif:ImageBehavior.AnimatedSource="Resources/14.gif"  Stretch="UniformToFill" Margin="0" VerticalAlignment="Center"/>
+    
 
     </Grid>
 </Window>
