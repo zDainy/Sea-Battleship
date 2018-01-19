@@ -13,7 +13,8 @@ namespace Sea_Battleship
     {
         public static NavigationService NavigationService;
         public static MediaPlayer Player = new MediaPlayer();
-       // public static System.Media.SoundPlayer Player = new System.Media.SoundPlayer() {Stream=Properties.Resources.pirat};
+        public static System.Media.SoundPlayer WinnerSound = new System.Media.SoundPlayer() { Stream = Properties.Resources.Winner };
+        public static System.Media.SoundPlayer LoserSound = new System.Media.SoundPlayer() {Stream=Properties.Resources.loser};
         public static System.Media.SoundPlayer ShotSound = new System.Media.SoundPlayer() { Stream=Properties.Resources.boom};
         public static System.Media.SoundPlayer ShotWaterSound = new System.Media.SoundPlayer() { Stream = Properties.Resources.water };
         public static string GifPath = "/Resources/drawn2.gif";
@@ -24,22 +25,20 @@ namespace Sea_Battleship
 
         public static void PlaySound()
         {
-            //MediaPlayer lala = new MediaPlayer();
-            //string str = Properties.Resources.krik.ToString();
-            //Uri uri = new Uri(@"C:\Users\Пользователь\Desktop\Наиболее морской бой\Sea-Battleship\Sea Battleship\Resources\krik.wav", System.UriKind.Relative);
-            //lala.Open(uri);
-            //lala.Play();
             ShotSound.Play();
         }
 
         public static void PlayWaterSound()
         {
-            //MediaPlayer lala = new MediaPlayer();
-            //string str = Properties.Resources.krik.ToString();
-            //Uri uri = new Uri(@"C:\Users\Пользователь\Desktop\Наиболее морской бой\Sea-Battleship\Sea Battleship\Resources\krik.wav", System.UriKind.Relative);
-            //lala.Open(uri);
-            //lala.Play();
             ShotWaterSound.Play();
+        }
+        public static void PlayWinnerSound()
+        {
+            WinnerSound.Play();
+        }
+        public static void PlayLoserSound()
+        {
+            LoserSound.Play();
         }
 
         public enum State
@@ -59,6 +58,26 @@ namespace Sea_Battleship
             set => _audio = value;
         }
 
+        public static void GetCurrentAudioImg(Image image)
+        {
+            if (!Audio)
+            {
+                image.Source =
+                    new BitmapImage(new Uri("/Resources/no-audio.png", UriKind.Relative))
+                    {
+                        CreateOptions = BitmapCreateOptions.IgnoreImageCache
+                    };
+            }
+            else
+            {
+                image.Source =
+                    new BitmapImage(new Uri("/Resources/audio.png", UriKind.Relative))
+                    {
+                        CreateOptions = BitmapCreateOptions.IgnoreImageCache
+                    };
+            }
+        }
+
         public static void AudioChanged(Image image)
         {
             if (Audio)
@@ -68,7 +87,7 @@ namespace Sea_Battleship
                     {
                         CreateOptions = BitmapCreateOptions.IgnoreImageCache
                     };
-                Player.Stop();
+                Player.Pause();
                 Audio = false;
             }
             else
@@ -101,6 +120,28 @@ namespace Sea_Battleship
                 {
                     PlayPageCon.MyTurnLabel.Background =
                         new SolidColorBrush((Color) ColorConverter.ConvertFromString("#FF93FF3A"));
+                });
+            }
+        }
+
+        public static void SetSwitchColorOff(bool isMy)
+        {
+            if (!isMy)
+            {
+                PlayPageCon.Dispatcher.Invoke(() =>
+                {
+                    PlayPageCon.MyTurnLabel.Background =
+                        new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF00287E"));
+                    PlayPageCon.MyTurnLabel.Content = "Чужой ход";
+                });
+            }
+            else
+            {
+                PlayPageCon.Dispatcher.Invoke(() =>
+                {
+                    PlayPageCon.MyTurnLabel.Background =
+                        new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF93FF3A"));
+                    PlayPageCon.MyTurnLabel.Content = "Ваш ход";
                 });
             }
         }

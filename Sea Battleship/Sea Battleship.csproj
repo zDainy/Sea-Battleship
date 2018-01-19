@@ -295,5 +295,11 @@
   <ItemGroup>
     <None Include="Resources\boom.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\loser.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Winner.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

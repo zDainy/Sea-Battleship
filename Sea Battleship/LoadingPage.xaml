@@ -24,7 +24,7 @@
                 <MenuItem Header="Об авторах" Width="151" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
                 <MenuItem Header="Назад" Name="BackClick" Click="BackClick_Click"/>
             </Menu>
-            <Image Grid.Column="3" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"></Image>
+            <Image Grid.Column="3" Name="AudioImg" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"></Image>
         </Grid>
         <Grid Name="LoadGrid" HorizontalAlignment="Center" Margin="88,61,88,51" VerticalAlignment="Center" MinWidth="360" MinHeight="250" Width="456" Height="337" >
             <Grid.ColumnDefinitions>

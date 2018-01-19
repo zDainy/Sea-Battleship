@@ -33,7 +33,7 @@
                 <MenuItem Header="Правила" Name="RuleItem" Click="MenuItem_Click" Width="151"/>
                 <MenuItem Header="Об авторах" Name="AboutItem" Click="AboutItem_Click" />
             </Menu>
-            <Image Grid.Column="4" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"/>
+            <Image Grid.Column="4" Name="AudioImg" Source="Resources/audio.png" AutomationProperties.Name="AudioButton" MouseDown="audioChanged" VerticalAlignment="Center"/>
         </Grid>
 
 
